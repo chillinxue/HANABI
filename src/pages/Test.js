@@ -258,6 +258,7 @@ function Test() {
     return (
         <Wrapper>
             <SearchGroup>
+                <button>搜尋地圖</button>
                 <MapLabel>搜尋路徑</MapLabel>
                 <input
                     type='text'
