@@ -7,6 +7,8 @@ import AutoComplete from './pages/AutoComplete';
 import Test from './pages/Test';
 import GoogleLogin from './pages/GoogleLogin';
 import App from './App';
+import GoogleMap from './pages/GoogleMap';
+import GetPlaceSaved from './pages/GetPlaceSaved';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -15,9 +17,10 @@ root.render(
             <Route path='/' element={<App />}>
                 <Route path='PocTest' element={<PocTest />} />
                 <Route path='Test' element={<Test />} />
-                {/* <Route path='GoogleMap' element={<GoogleMap />} /> */}
+                <Route path='GoogleMap' element={<GoogleMap />} />
                 <Route path='AutoComplete' element={<AutoComplete />} />
                 <Route path='GoogleLogin' element={<GoogleLogin />} />
+                <Route path='GetPlaceSaved' element={<GetPlaceSaved />} />
                 <Route path='*' element={<Navigate to='/' replace />} />
             </Route>
         </Routes>

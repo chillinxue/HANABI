@@ -4,8 +4,6 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 
-// // TODO: Replace the following with your app's Firebase project configuration
-// // See: https://support.google.com/firebase/answer/7015592
 const firebaseConfig = {
     apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
     authDomain: 'hanabi-f5ee3.firebaseapp.com',
@@ -19,8 +17,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// // // Initialize Firestore and get a reference to the service
-const db = getFirestore(app);
+export const db = getFirestore(app);
 
 console.log(db);
 // 文章收藏collection
@@ -56,7 +53,8 @@ const SearchButton = styled.button`
 const MapLabel = styled.div`
     font-size: 20px;
 `;
-
+const SearchBarContainer = styled.div``;
+const SearchBar = styled.input``;
 function Test() {
     let cachedScripts = [];
     function useScript(src) {
@@ -115,11 +113,14 @@ function Test() {
     const toInputRef = useRef(null); // 新增終點 ref
     const [to, setTo] = useState(''); // 新增終點 state
     const [favorites, setFavorites] = useState([]);
+    const [typeSaved, setTypeSaved] = useState(null);
     const [locationInfo, setLocationInfo] = useState(null);
     const marker = new window.google.maps.Marker({
         position: { lat: 35.503593, lng: 138.7634713 },
         map: map,
     });
+
+    // fromInputRef.current
 
     const infowindow = new window.google.maps.InfoWindow({
         content: '<div>InfoWindow Content</div>',
@@ -129,14 +130,14 @@ function Test() {
         infowindow.open(map, marker);
     });
 
-    async function uploadItems(id) {
+    async function uploadItems(id, type) {
         //存入user sub-collection Places
         try {
             const itemsRef = doc(db, 'users', 'Email', 'SavedPlaces', id);
             await setDoc(itemsRef, {
                 placeId: id,
                 // placeId: 'ChIJf36T5fuLGGARRp-5Th8KvWc',
-                type: 'hotel',
+                type: type,
             });
             // console.log('Item uploaded with ID: ', docRef.id);
         } catch (e) {
@@ -242,8 +243,7 @@ function Test() {
             const favoriteList = [...favorites, locationInfo];
             setFavorites(favoriteList);
             // console.log(favoriteList[favoriteList.length - 1].place_id);
-            uploadItems(favoriteList[favoriteList.length - 1].place_id);
-            // console.log('hihihihih');
+            uploadItems(favoriteList[favoriteList.length - 1].place_id, typeSaved);
         }
     }
 
@@ -258,7 +258,10 @@ function Test() {
     return (
         <Wrapper>
             <SearchGroup>
-                <button>搜尋地圖</button>
+                <SearchBarContainer>
+                    <SearchBar placeholder='Where to?'></SearchBar>
+                    <button>搜尋地圖</button>
+                </SearchBarContainer>
                 <MapLabel>搜尋路徑</MapLabel>
                 <input
                     type='text'
@@ -273,6 +276,13 @@ function Test() {
                     className='form-control'
                 />
                 <SearchButton onClick={() => calcRoute()}>搜尋</SearchButton>
+                <select name='layerSaved' id='placeSaved' onChange={(e) => setTypeSaved(e.target.value)}>
+                    <option value=''>--選擇存取資料夾--</option>
+                    <option value='Hotel'>飯店</option>
+                    <option value='attraction'>景點</option>
+                    <option value='restaurant'>餐廳</option>
+                    <option value='transportation'>交通</option>
+                </select>
                 <SearchButton onClick={() => addToFavorites()}>加入最愛</SearchButton> {/* 新增加入最愛按鈕 */}
             </SearchGroup>
             <GoogleMap>

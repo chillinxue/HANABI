@@ -11,7 +11,7 @@ const OutSide = styled.div`
     `;
 const SearchBar = styled.input``;
 
-export default function mapSearch() {
+export default function MapSearch() {
     return (
         <>
             <OutSide>

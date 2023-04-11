@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Header from './components/Header/Header';
 import Test from './pages/Test';
+import { Outlet } from 'react-router-dom';
 
 const OutSide = styled.div``;
 
@@ -10,7 +11,8 @@ function App() {
         <>
             <OutSide>
                 <Header></Header>
-                <Test></Test>
+                {/* <Test></Test> */}
+                <Outlet />
             </OutSide>
         </>
     );
