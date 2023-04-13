@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import GetPlaceSaved from './GetPlaceSaved';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
@@ -29,6 +30,25 @@ const Wrapper = styled.div`
     margin: 50px 100px;
     margin-bottom: 150px;
 `;
+const GoogleMapContainer = styled.div`
+    display: flex;
+`;
+const MapSavedContainer = styled.div`
+    border: 1px black solid;
+    width: 500px;
+    paddig: 10px;
+`;
+// const SavedBox = styled.div`
+//     width: 100%;
+//     height: 60px;
+//     border: 1px black solid;
+// `;
+// const SavedBoxName = styled.div`
+//     border: 1px black solid;
+// `;
+// const SavedBoxAddress = styled.div`
+//     border: 1px black solid;
+// `;
 const GoogleMap = styled.div`
     display: flex;
     gap: 50px;
@@ -115,6 +135,8 @@ function Test() {
     const [favorites, setFavorites] = useState([]);
     const [typeSaved, setTypeSaved] = useState(null);
     const [locationInfo, setLocationInfo] = useState(null);
+    const [places, setPlaces] = useState(null);
+
     const marker = new window.google.maps.Marker({
         position: { lat: 35.503593, lng: 138.7634713 },
         map: map,
@@ -130,13 +152,17 @@ function Test() {
         infowindow.open(map, marker);
     });
 
-    async function uploadItems(id, type) {
+    async function uploadItems(name, id, address, rating, url, website, type) {
         //存入user sub-collection Places
         try {
             const itemsRef = doc(db, 'users', 'Email', 'SavedPlaces', id);
             await setDoc(itemsRef, {
+                name: name,
                 placeId: id,
-                // placeId: 'ChIJf36T5fuLGGARRp-5Th8KvWc',
+                formatted_address: address,
+                rating: rating,
+                url: url,
+                website: website,
                 type: type,
             });
             // console.log('Item uploaded with ID: ', docRef.id);
@@ -243,7 +269,16 @@ function Test() {
             const favoriteList = [...favorites, locationInfo];
             setFavorites(favoriteList);
             // console.log(favoriteList[favoriteList.length - 1].place_id);
-            uploadItems(favoriteList[favoriteList.length - 1].place_id, typeSaved);
+            uploadItems(
+                locationInfo.name,
+                locationInfo.place_id,
+                locationInfo.formatted_address,
+                locationInfo.rating,
+                locationInfo.url,
+                locationInfo.website,
+                typeSaved
+            );
+            console.log(locationInfo.place_id);
         }
     }
 
@@ -254,7 +289,7 @@ function Test() {
         console.log('locationInfo:', locationInfo.geometry.location.lat);
     } else {
     }
-
+    console.log('places', places);
     return (
         <Wrapper>
             <SearchGroup>
@@ -285,9 +320,21 @@ function Test() {
                 </select>
                 <SearchButton onClick={() => addToFavorites()}>加入最愛</SearchButton> {/* 新增加入最愛按鈕 */}
             </SearchGroup>
-            <GoogleMap>
-                <div id='map' style={{ height: '700px', width: '1280px', border: `20px solid #88C8EC` }} />
-            </GoogleMap>
+            <GoogleMapContainer>
+                <MapSavedContainer>
+                    <GetPlaceSaved>
+                        {/* {places && (
+                        <SavedBox>
+                            <SavedBoxName>學</SavedBoxName>
+                            <SavedBoxAddress></SavedBoxAddress>
+                        </SavedBox>
+                         )}  */}
+                    </GetPlaceSaved>
+                </MapSavedContainer>
+                <GoogleMap>
+                    <div id='map' style={{ height: '700px', width: '1280px', border: `20px solid #88C8EC` }} />
+                </GoogleMap>
+            </GoogleMapContainer>
             <div>
                 <h2>我的最愛地點</h2>
                 {/* {console.log('favorites 下', favorites.name)} */}
