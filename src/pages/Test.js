@@ -75,6 +75,7 @@ const MapLabel = styled.div`
 `;
 const SearchBarContainer = styled.div``;
 const SearchBar = styled.input``;
+
 function Test() {
     let cachedScripts = [];
     function useScript(src) {
@@ -313,7 +314,7 @@ function Test() {
                 <SearchButton onClick={() => calcRoute()}>搜尋</SearchButton>
                 <select name='layerSaved' id='placeSaved' onChange={(e) => setTypeSaved(e.target.value)}>
                     <option value=''>--選擇存取資料夾--</option>
-                    <option value='Hotel'>飯店</option>
+                    <option value='hotel'>飯店</option>
                     <option value='attraction'>景點</option>
                     <option value='restaurant'>餐廳</option>
                     <option value='transportation'>交通</option>
@@ -335,9 +336,9 @@ function Test() {
                     <div id='map' style={{ height: '700px', width: '1280px', border: `20px solid #88C8EC` }} />
                 </GoogleMap>
             </GoogleMapContainer>
-            <div>
+            {/* <div>
                 <h2>我的最愛地點</h2>
-                {/* {console.log('favorites 下', favorites.name)} */}
+                {console.log('favorites 下', favorites.name)}
                 {console.log(typeof favorites)}
                 {favorites.length > 0 && (
                     <>
@@ -346,7 +347,7 @@ function Test() {
                         ))}
                     </>
                 )}
-            </div>
+            </div> */}
         </Wrapper>
     );
 }

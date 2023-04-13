@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
 import { db } from './Test';
 import { doc, onSnapshot } from 'firebase/firestore';
 import styled from 'styled-components';
@@ -9,6 +9,31 @@ const GetPlaceSavedContainer = styled.div`
     display: flex;
     flex-direction: column;
 `;
+const GetPlaceSavedFilter = styled.div`
+    display: flex;
+    gap: 1px;
+`;
+const HotelLayerContainer = styled.div`
+    border: 1px black solid;
+    padding: 1px;
+`;
+const AttractionLayerContainer = styled.div`
+    border: 1px black solid;
+    padding: 1px;
+`;
+const RestaurantLayerContainer = styled.div`
+    border: 1px black solid;
+    padding: 1px;
+`;
+const TransportationLayerContainer = styled.div`
+    border: 1px black solid;
+    padding: 1px;
+`;
+const SearchLayerContainer = styled.div`
+    border: 1px black solid;
+    padding: 1px;
+`;
+
 const SavedBox = styled.div`
     width: 100%;
     height: fit-content;
@@ -17,64 +42,49 @@ const SavedBox = styled.div`
 `;
 const SavedBoxName = styled.div``;
 const SavedBoxAddress = styled.div``;
+const DeleteSaveBox = styled.button``;
+
 export default function GetPlaceSaved() {
     const [places, setPlaces] = useState(null);
-    // const apiKey = 'YOUR_API_KEY';
-    // const placeId = 'YOUR_PLACE_ID';
-
-    // fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address&key=${apiKey}`)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     const { name, formatted_address } = data.result;
-    //     console.log(`名稱：${name}`);
-    //     console.log(`地址：${formatted_address}`);
-    //   })
-    //   .catch(error => console.log(error));
 
     useEffect(() => {
-        async function getPlaces() {
-            const q = query(collection(db, 'users', 'Email', 'SavedPlaces'));
+        const placeRef = collection(db, 'users', 'Email', 'SavedPlaces');
+        const unsub = onSnapshot(placeRef, (snapshot) => {
             const placeList = [];
-
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                // console.log(doc.id, ' => ', doc.data());
-                placeList.push(doc.data());
+            snapshot.docs.forEach((doc) => {
+                placeList.push({ id: doc.id, ...doc.data() });
             });
+            setPlaces(placeList);
+        });
 
-            const placeRef = collection(db, 'users', 'Email', 'SavedPlaces');
-
-            const unsub = onSnapshot(placeRef, (snapshot) => {
-                const placeList = [];
-                snapshot.docs.forEach((doc) => {
-                    placeList.push(doc.data());
-                });
-                // console.log(placeList);
-                setPlaces(placeList);
-                console.log(snapshot);
-                console.log('Current data: ', placeList);
-            });
-            return () => {
-                unsub();
-            };
-
-            // const unsub = onSnapshot(placeRef), (doc) => {
-            // });
-        }
-        getPlaces();
+        return () => {
+            unsub();
+        };
     }, []);
 
-    console.log('places in placedsave', places);
+    const handleDelete = async (id) => {
+        const placeRef = doc(db, 'users', 'Email', 'SavedPlaces', id);
+        await deleteDoc(placeRef);
+    };
+
     return (
         <>
             <GetPlaceSavedContainer>
                 {places &&
                     places.map((data, index) => (
-                        <SavedBox to={``}>
-                            <SavedBoxName src=''>{data.name}</SavedBoxName>
+                        <SavedBox key={index}>
+                            <SavedBoxName>{data.name}</SavedBoxName>
                             <SavedBoxAddress>{data.formatted_address}</SavedBoxAddress>
+                            <DeleteSaveBox onClick={() => handleDelete(data.id)}>Delete</DeleteSaveBox>
                         </SavedBox>
                     ))}
+                <GetPlaceSavedFilter>
+                    <HotelLayerContainer>Hotel</HotelLayerContainer>
+                    <AttractionLayerContainer>Attraction</AttractionLayerContainer>
+                    <RestaurantLayerContainer>Restaurant</RestaurantLayerContainer>
+                    <TransportationLayerContainer>Transportation</TransportationLayerContainer>
+                    <SearchLayerContainer>Search</SearchLayerContainer>
+                </GetPlaceSavedFilter>
             </GetPlaceSavedContainer>
         </>
     );
