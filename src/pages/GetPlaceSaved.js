@@ -3,10 +3,17 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from './Test';
 import { doc, onSnapshot } from 'firebase/firestore';
 import styled from 'styled-components';
+
+const GetPlaceSavedContainer = styled.div`
+    padding: 10px 10px;
+    display: flex;
+    flex-direction: column;
+`;
 const SavedBox = styled.div`
     width: 100%;
     height: fit-content;
     border: 1px black solid;
+    margin-bottom: 10px;
 `;
 const SavedBoxName = styled.div``;
 const SavedBoxAddress = styled.div``;
@@ -60,7 +67,7 @@ export default function GetPlaceSaved() {
     console.log('places in placedsave', places);
     return (
         <>
-            <div>
+            <GetPlaceSavedContainer>
                 {places &&
                     places.map((data, index) => (
                         <SavedBox to={``}>
@@ -68,7 +75,7 @@ export default function GetPlaceSaved() {
                             <SavedBoxAddress>{data.formatted_address}</SavedBoxAddress>
                         </SavedBox>
                     ))}
-            </div>
+            </GetPlaceSavedContainer>
         </>
     );
 }
