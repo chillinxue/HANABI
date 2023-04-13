@@ -13,19 +13,7 @@ const GetPlaceSavedFilter = styled.div`
     display: flex;
     gap: 1px;
 `;
-const HotelLayerContainer = styled.div`
-    border: 1px black solid;
-    padding: 1px;
-`;
-const AttractionLayerContainer = styled.div`
-    border: 1px black solid;
-    padding: 1px;
-`;
-const RestaurantLayerContainer = styled.div`
-    border: 1px black solid;
-    padding: 1px;
-`;
-const TransportationLayerContainer = styled.div`
+const PlaceTypeButton = styled.div`
     border: 1px black solid;
     padding: 1px;
 `;
@@ -46,10 +34,14 @@ const DeleteSaveBox = styled.button``;
 
 export default function GetPlaceSaved() {
     const [places, setPlaces] = useState(null);
+    const [placeType, setPlaceType] = useState(null);
 
     useEffect(() => {
         const placeRef = collection(db, 'users', 'Email', 'SavedPlaces');
-        const unsub = onSnapshot(placeRef, (snapshot) => {
+        const typeFilter = placeType ? where('type', '==', placeType) : null;
+        const q = query(placeRef, typeFilter);
+
+        const unsub = onSnapshot(q, (snapshot) => {
             const placeList = [];
             snapshot.docs.forEach((doc) => {
                 placeList.push({ id: doc.id, ...doc.data() });
@@ -60,7 +52,7 @@ export default function GetPlaceSaved() {
         return () => {
             unsub();
         };
-    }, []);
+    }, [placeType]);
 
     const handleDelete = async (id) => {
         const placeRef = doc(db, 'users', 'Email', 'SavedPlaces', id);
@@ -79,11 +71,11 @@ export default function GetPlaceSaved() {
                         </SavedBox>
                     ))}
                 <GetPlaceSavedFilter>
-                    <HotelLayerContainer>Hotel</HotelLayerContainer>
-                    <AttractionLayerContainer>Attraction</AttractionLayerContainer>
-                    <RestaurantLayerContainer>Restaurant</RestaurantLayerContainer>
-                    <TransportationLayerContainer>Transportation</TransportationLayerContainer>
-                    <SearchLayerContainer>Search</SearchLayerContainer>
+                    <PlaceTypeButton onClick={() => setPlaceType('hotel')}>Hotel</PlaceTypeButton>
+                    <PlaceTypeButton onClick={() => setPlaceType('attraction')}>Attraction</PlaceTypeButton>
+                    <PlaceTypeButton onClick={() => setPlaceType('restaurant')}>Restaurant</PlaceTypeButton>
+                    <PlaceTypeButton onClick={() => setPlaceType('transportation')}>Transportation</PlaceTypeButton>
+                    <SearchLayerContainer onClick={() => setPlaceType()}>Search</SearchLayerContainer>
                 </GetPlaceSavedFilter>
             </GetPlaceSavedContainer>
         </>
