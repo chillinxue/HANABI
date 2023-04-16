@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
 
-console.log(db);
+// console.log(db);
 // 文章收藏collection
 
 const Wrapper = styled.div`
@@ -38,18 +38,7 @@ const MapSavedContainer = styled.div`
     width: 500px;
     paddig: 10px;
 `;
-// const SavedBox = styled.div`
-//     width: 100%;
-//     height: 60px;
-//     border: 1px black solid;
-// `;
-// const SavedBoxName = styled.div`
-//     border: 1px black solid;
-// `;
-// const SavedBoxAddress = styled.div`
-//     border: 1px black solid;
-// `;
-const GoogleMap = styled.div`
+const MapContainer = styled.div`
     display: flex;
     gap: 50px;
     width: 100%;
@@ -74,7 +63,7 @@ const MapLabel = styled.div`
     font-size: 20px;
 `;
 const SearchBarContainer = styled.div``;
-const SearchBar = styled.input``;
+const SingleSearchBar = styled.input``;
 
 function Test() {
     let cachedScripts = [];
@@ -136,23 +125,14 @@ function Test() {
     const [favorites, setFavorites] = useState([]);
     const [typeSaved, setTypeSaved] = useState(null);
     const [locationInfo, setLocationInfo] = useState(null);
-    const [places, setPlaces] = useState(null);
-
-    const marker = new window.google.maps.Marker({
-        position: { lat: 35.503593, lng: 138.7634713 },
-        map: map,
-    });
+    const [places, setPlaces] = useState();
+    const inputRef = useRef(null);
+    const [address, setAddress] = useState('');
+    const [latLngResults, setLatLngResults] = useState([]);
+    const cachedPlaces = useMemo(() => places, [places]);
+    const [markers, setMarkers] = useState([]);
 
     // fromInputRef.current
-
-    const infowindow = new window.google.maps.InfoWindow({
-        content: '<div>InfoWindow Content</div>',
-    });
-    console.log();
-    marker.addListener('click', () => {
-        infowindow.open(map, marker);
-    });
-
     async function uploadItems(name, id, address, rating, url, website, type) {
         //存入user sub-collection Places
         try {
@@ -171,19 +151,38 @@ function Test() {
             console.error('Error uploading item: ', e);
         }
     }
+    async function fetchData() {
+        const apiKey = 'AIzaSyCszxEdzSyD5fLI9-m_nRiUr6GEbeIfTG4';
+        const addresses = cachedPlaces.map((place) => place.formatted_address);
+        const promises = addresses.map(async (address) => {
+            const response = await fetch(
+                `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`
+            );
+            const data = await response.json();
+            const { lat, lng } = data.results[0].geometry.location;
+            return { lat, lng };
+        });
+        const results = await Promise.all(promises);
+        setLatLngResults(results);
+        console.log(latLngResults);
 
+        const allmarkers = results.map(({ lat, lng }) => {
+            return new window.google.maps.Marker({
+                position: { lat, lng },
+                map,
+                title: address,
+            });
+        });
+
+        setMarkers(allmarkers);
+    }
     useEffect(() => {
         if (loaded) {
             //load到才會執行
-            const myLatLng = [
-                { lat: 35.503593, lng: 138.7634713 },
-                { lat: 35.487404, lng: 138.795665 },
-                { lat: 35.503593, lng: 138.7634713 },
-                { lat: 35.4988753, lng: 138.76763 },
-            ];
+            const myLatLng = [{ lat: 35.682518, lng: 139.765804 }];
             const map = new window.google.maps.Map(document.getElementById('map'), {
                 //div render map
-                zoom: 20, //zoom in
+                zoom: 10, //zoom in
                 center: myLatLng[0], //初始經緯度 （替換）
                 mapTypeId: window.google.maps.MapTypeId.ROADMAP, //一般地圖
             });
@@ -200,36 +199,63 @@ function Test() {
                 setTo(toAutocomplete.getPlace().formatted_address);
                 toInputRef.current.value = toAutocomplete.getPlace().formatted_address;
             });
+            const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current);
 
-            const icons = {
-                red: {
-                    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/library_maps.png',
-                    scaledSize: new window.google.maps.Size(50, 50),
-                },
-                blue: {
-                    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-                    scaledSize: new window.google.maps.Size(50, 50),
-                },
-                green: {
-                    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/parking_lot_maps.png',
-                    scaledSize: new window.google.maps.Size(50, 50),
-                },
-            };
-            myLatLng.forEach((location, index) => {
-                const marker = new window.google.maps.Marker({
-                    position: location,
-                    map,
-                    icon: icons[index % 3 === 0 ? 'red' : index % 3 === 1 ? 'blue' : 'green'],
-                });
+            autocomplete.addListener('place_changed', () => {
+                const place = autocomplete.getPlace();
+                setAddress(place.formatted_address);
             });
             setDataMap(map);
-            console.log(toInputRef);
+            // console.log(toInputRef);
+            console.log(latLngResults);
         }
     }, [loaded]);
     if (!loaded) {
         return;
     }
 
+    // function selectedMap() {
+    //     const myLatLng = props.latLng;
+
+    //     const map = new window.google.maps.Map(document.getElementById('map'), {
+    //         zoom: 15,
+    //         center: myLatLng[3],
+    //     });
+
+    //     const infoWindow = new window.google.maps.InfoWindow();
+    //     // const icons = {
+    //     //   url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/library_maps.png",
+    //     //   scaledSize: new window.google.maps.Size(50, 50)
+    //     // };
+
+    //     myLatLng.forEach((location, index) => {
+    //         // barType.map((bar: string) => console.log(bar));
+    //         const marker = new window.google.maps.Marker({
+    //             position: location,
+    //             map,
+    //             // icon: icons,
+    //         });
+    //         // 綁定 click 事件
+    //         marker.addListener('click', () => {
+    //             const barAddress = props.bars[index].address; // 從 props 中取得 bars 數據
+    //             const barName = props.bars[index].name;
+    //             const barTel = props.bars[index].tel;
+    //             // 設定 info window 的內容
+    //             infoWindow.setContent(`
+    //           Bar Name: ${barName}  <br />
+    //           Address: ${barAddress} <br />
+    //           Tel: ${barTel}
+    //         `);
+    //             // 開啟 info window
+    //             infoWindow.open(map, marker);
+    //         });
+    //     });
+
+    //     setDataMap(map);
+    // }
+
+    console.log(places);
+    console.log(latLngResults);
     //create a DirectionsService object to use the route method and get a result for our request
     const directionsService = new window.google.maps.DirectionsService(); //路線計算
 
@@ -249,10 +275,10 @@ function Test() {
         };
 
         directionsService.route(request, function (result, status) {
-            console.log(status);
+            // console.log(status);
             if (status == window.google.maps.DirectionsStatus.OK) {
                 directionsDisplay.setDirections(result); //寫路線的功能
-                console.log(result);
+                // console.log(result);
             } else {
                 //delete route from map
                 directionsDisplay.setDirections({ routes: [] });
@@ -283,20 +309,20 @@ function Test() {
         }
     }
 
-    console.log('favorites:', favorites);
-    console.log(favorites.name);
+    // console.log('favorites:', favorites);
+    // console.log(favorites.name);
     // console.log('LoactionInfo:', locationInfo);
     if (locationInfo !== null) {
-        console.log('locationInfo:', locationInfo.geometry.location.lat);
+        // console.log('locationInfo:', locationInfo.geometry);
     } else {
     }
-    console.log('places', places);
+    // console.log('places', places);
     return (
         <Wrapper>
             <SearchGroup>
                 <SearchBarContainer>
-                    <SearchBar placeholder='Where to?'></SearchBar>
-                    <button>搜尋地圖</button>
+                    <SingleSearchBar id='SingleSearchBar' placeholder='Where to?'></SingleSearchBar>
+                    <button onClick={fetchData}>搜尋地圖</button>
                 </SearchBarContainer>
                 <MapLabel>搜尋路徑</MapLabel>
                 <input
@@ -323,7 +349,18 @@ function Test() {
             </SearchGroup>
             <GoogleMapContainer>
                 <MapSavedContainer>
-                    <GetPlaceSaved>
+                    <input
+                        type='checkbox'
+                        onChange={(e) => {
+                            if (e.target.checked) {
+                                fetchData();
+                            } else {
+                                markers.forEach((marker) => marker.setMap(null));
+                            }
+                        }}
+                    />
+                    <label>顯示於地圖上</label>
+                    <GetPlaceSaved places={places} setPlaces={setPlaces}>
                         {/* {places && (
                         <SavedBox>
                             <SavedBoxName>學</SavedBoxName>
@@ -332,9 +369,9 @@ function Test() {
                          )}  */}
                     </GetPlaceSaved>
                 </MapSavedContainer>
-                <GoogleMap>
+                <MapContainer>
                     <div id='map' style={{ height: '700px', width: '1280px', border: `20px solid #88C8EC` }} />
-                </GoogleMap>
+                </MapContainer>
             </GoogleMapContainer>
             {/* <div>
                 <h2>我的最愛地點</h2>
