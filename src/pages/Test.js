@@ -131,6 +131,7 @@ function Test() {
     const [latLngResults, setLatLngResults] = useState([]);
     const cachedPlaces = useMemo(() => places, [places]);
     const [markers, setMarkers] = useState([]);
+    const [showMarkers, setShowMarkers] = useState(false);
 
     // fromInputRef.current
     async function uploadItems(name, id, address, rating, url, website, type) {
@@ -163,23 +164,39 @@ function Test() {
             return { lat, lng };
         });
         const results = await Promise.all(promises);
-        setLatLngResults(results);
-        console.log(latLngResults);
+        console.log(results);
 
-        const allmarkers = results.map(({ lat, lng }) => {
-            return new window.google.maps.Marker({
+        const filteredResults = results.filter(({ lat, lng }, index) => {
+            const address = addresses[index];
+            const place = places.find((place) => place.formatted_address === address);
+            return !!place; // true: 保留，false: 過濾掉
+        });
+
+        console.log(filteredResults);
+
+        const allmarkers = filteredResults.map(({ lat, lng }, index) => {
+            const place = places.find(({ formatted_address }) => formatted_address === addresses[index]);
+            const title = `${place.name} (${place.formatted_address})`;
+            const marker = new window.google.maps.Marker({
                 position: { lat, lng },
-                map,
-                title: address,
+                title,
             });
+            marker.setMap(map);
+            return marker;
         });
 
         setMarkers(allmarkers);
     }
+
     useEffect(() => {
         if (loaded) {
             //load到才會執行
-            const myLatLng = [{ lat: 35.682518, lng: 139.765804 }];
+            const myLatLng = [
+                { lat: 35.682518, lng: 139.765804 },
+                { lat: 35.487404, lng: 138.795665 },
+                { lat: 35.503593, lng: 138.7634713 },
+                { lat: 35.4988753, lng: 138.76763 },
+            ];
             const map = new window.google.maps.Map(document.getElementById('map'), {
                 //div render map
                 zoom: 10, //zoom in
@@ -208,6 +225,60 @@ function Test() {
             setDataMap(map);
             // console.log(toInputRef);
             console.log(latLngResults);
+
+            if (map) {
+                // 创建信息窗口
+                const infoWindow = new window.google.maps.InfoWindow();
+
+                // 创建事件监听器
+                const clickListener = window.google.maps.event.addListener(map, 'click', async (event) => {
+                    // 获取点击位置的经纬度
+                    const lat = event.latLng.lat();
+                    const lng = event.latLng.lng();
+
+                    // 使用 Places API 获取有关该位置的 place_id
+                    const placesService = new window.google.maps.places.PlacesService(map);
+                    const request = {
+                        location: { lat, lng },
+                        radius: 50,
+                    };
+                    const results = await new Promise((resolve) => {
+                        placesService.nearbySearch(request, (results) => {
+                            resolve(results);
+                        });
+                    });
+                    const placeId = results.length ? results[0].place_id : null;
+
+                    // 如果找到了 place_id，则使用 Places API 获取该地点的详细信息
+                    if (placeId) {
+                        const placesRequest = {
+                            placeId,
+                            fields: ['name', 'formatted_address', 'formatted_phone_number', 'rating'],
+                        };
+                        const placeResult = await new Promise((resolve) => {
+                            placesService.getDetails(placesRequest, (placeResult) => {
+                                resolve(placeResult);
+                            });
+                        });
+
+                        // 在信息窗口中显示有关该位置的详细信息
+                        infoWindow.setContent(`
+                      <div>
+                        <h3>${placeResult.name}</h3>
+                        <p>Address: ${placeResult.formatted_address}</p>
+                        <p>Phone: ${placeResult.formatted_phone_number}</p>
+                        <p>Rating: ${placeResult.rating}</p>
+                      </div>
+                    `);
+                        infoWindow.setPosition({ lat, lng });
+                        infoWindow.open(map);
+                        console.log(placeResult);
+                    }
+                });
+
+                // 在组件卸载时移除事件监听器
+                return () => window.google.maps.event.removeListener(clickListener);
+            }
         }
     }, [loaded]);
     if (!loaded) {
@@ -224,7 +295,7 @@ function Test() {
 
     //     const infoWindow = new window.google.maps.InfoWindow();
     //     // const icons = {
-    //     //   url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/library_maps.png",
+    //     //   url:/Users/rain_shoes/Desktop/Visual Studio Code-1.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.html "https://developers.google.com/maps/documentation/javascript/examples/full/images/library_maps.png",
     //     //   scaledSize: new window.google.maps.Size(50, 50)
     //     // };
 
@@ -360,7 +431,7 @@ function Test() {
                         }}
                     />
                     <label>顯示於地圖上</label>
-                    <GetPlaceSaved places={places} setPlaces={setPlaces}>
+                    <GetPlaceSaved places={places} setPlaces={setPlaces} setShowMarkers={setShowMarkers}>
                         {/* {places && (
                         <SavedBox>
                             <SavedBoxName>學</SavedBoxName>
