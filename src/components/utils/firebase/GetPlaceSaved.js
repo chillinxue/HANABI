@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
-import { db } from './Test';
+import { db } from '../../../pages/Test';
 import { doc, onSnapshot } from 'firebase/firestore';
 import styled from 'styled-components';
 
@@ -8,6 +8,7 @@ const GetPlaceSavedContainer = styled.div`
     padding: 10px 10px;
     display: flex;
     flex-direction: column;
+    border-box: box-sizing;
 `;
 const GetPlaceSavedFilter = styled.div`
     display: flex;
@@ -86,7 +87,7 @@ export default function GetPlaceSaved({ places, setPlaces }) {
 
     return (
         <>
-            <GetPlaceSavedContainer>
+            <GetPlaceSavedContainer style={{ overflow: 'scroll', maxHeight: '410px' }}>
                 {showSearchInput && (
                     <SearchLayerInput
                         placeholder='Search places'
@@ -102,14 +103,14 @@ export default function GetPlaceSaved({ places, setPlaces }) {
                             <DeleteSaveBox onClick={() => handleDelete(data.id)}>Delete</DeleteSaveBox>
                         </SavedBox>
                     ))}
-                <GetPlaceSavedFilter>
-                    <AllLayerContainer onClick={() => handleFilter(null)}>ALL</AllLayerContainer>
-                    <PlaceTypeButton onClick={() => handleFilter('hotel')}>Hotel</PlaceTypeButton>
-                    <PlaceTypeButton onClick={() => handleFilter('attraction')}>Attraction</PlaceTypeButton>
-                    <PlaceTypeButton onClick={() => handleFilter('restaurant')}>Restaurant</PlaceTypeButton>
-                    <PlaceTypeButton onClick={() => handleFilter('transportation')}>Transportation</PlaceTypeButton>
-                </GetPlaceSavedFilter>
             </GetPlaceSavedContainer>
+            <GetPlaceSavedFilter>
+                <AllLayerContainer onClick={() => handleFilter(null)}>ALL</AllLayerContainer>
+                <PlaceTypeButton onClick={() => handleFilter('hotel')}>Hotel</PlaceTypeButton>
+                <PlaceTypeButton onClick={() => handleFilter('attraction')}>Attraction</PlaceTypeButton>
+                <PlaceTypeButton onClick={() => handleFilter('restaurant')}>Restaurant</PlaceTypeButton>
+                <PlaceTypeButton onClick={() => handleFilter('transportation')}>Transportation</PlaceTypeButton>
+            </GetPlaceSavedFilter>
         </>
     );
 }

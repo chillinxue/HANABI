@@ -7,8 +7,9 @@ import AutoComplete from './pages/AutoComplete';
 import Test from './pages/Test';
 import GoogleLogin from './pages/GoogleLogin';
 import App from './App';
-import GetPlaceSaved from './pages/GetPlaceSaved';
+import GetPlaceSaved from './components/utils/firebase/GetPlaceSaved';
 import Home from './pages/Home/Home';
+import Trips from './pages/Trips/Trips';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -16,6 +17,7 @@ root.render(
         <Routes>
             <Route path='/' element={<App />}>
                 <Route path='Home' element={<Home />} />
+                <Route path='Trips' element={<Trips />} />
                 <Route path='PocTest' element={<PocTest />} />
                 <Route path='Test' element={<Test />} />
                 <Route path='AutoComplete' element={<AutoComplete />} />

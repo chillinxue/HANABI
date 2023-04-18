@@ -1,19 +1,19 @@
-import React from 'react';
 import styled from 'styled-components';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 const OutSideContainer = styled.div`
-    border:1px black
-    width:100%
-    padding:0px 32px;
+    width: 100%;
     display: flex;
     justify-content: center;
-    flex
     align-items: center;
-    `;
+`;
 const OutSide = styled.div``;
 const SearchBar = styled.input``;
 
-export default function AllSearch() {
+export default function MenuSearchBar() {
+    // const inputRef = useRef(null);
+    // const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current);
+
     return (
         <>
             <OutSideContainer>

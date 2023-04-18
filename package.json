@@ -10,6 +10,7 @@
         "google-map-react": "^2.2.0",
         "google-maps-api-loader": "^1.1.1",
         "react": "^18.2.0",
+        "react-datepicker": "^4.11.0",
         "react-dom": "^18.2.0",
         "react-google-autocomplete": "^2.7.3",
         "react-modal": "^3.16.1",

@@ -8,7 +8,6 @@ const SearchContainer = styled.div`
     border: 1px solid black;
     width: 100%;
     height: 100px;
-    margin: 20px;
     display: flex;
     justify-content: center;
     align-items: center;

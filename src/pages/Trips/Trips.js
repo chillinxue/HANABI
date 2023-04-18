@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import MenuSearchBar from '../../components/SearchBar/MenuSearchBar';
+import PosterMenu from '../../components/PosterMenu/PosterMenu';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
-import GetPlaceSaved from '../components/utils/firebase/GetPlaceSaved';
+import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
+import Modal from 'react-modal';
+import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
@@ -20,52 +24,94 @@ const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
 
-// console.log(db);
-// 文章收藏collection
-
-const Wrapper = styled.div`
+const Outside = styled.div``;
+const SearchContainer = styled.div`
+    border: 1px solid black;
+    width: 100%;
+    height: 100px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    margin: 50px 100px;
-    margin-bottom: 150px;
+    align-items: center;
+    margin-top: 20px;
 `;
-const GoogleMapContainer = styled.div`
+const RouteMapContainer = styled.div`
+    border: 1px solid black;
+    height: 500px;
     display: flex;
+    margin-top: 20px;
 `;
-const MapSavedContainer = styled.div`
+const RouteContainer = styled.div`
+    border: 1px solid black;
+    width: 200px;
+    height: 500px;
+`;
+const FavoritesContainer = styled.div`
     border: 1px black solid;
     width: 500px;
-    paddig: 10px;
+    padding: 10px;
+    border-box: box-sizing;
 `;
-const MapContainer = styled.div`
+const MapOutContainer = styled.div``;
+const MapContainer = styled.div``;
+const PlanOutContainer = styled.div`
+    border: 1px solid black;
     display: flex;
-    gap: 50px;
     width: 100%;
-    margin-top: 60px;
+    height: 500px;
+    padding: 20px;
+    border-box: box-sizing;
+    gap: 20px;
+    margin-top: 20px;
 `;
-const SearchGroup = styled.div`
+const PlanLeftContainer = styled.div`
+    border: 1px solid black;
+    width: 500px;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
 `;
-const SearchButton = styled.button`
-    width: 300px;
+const PlanRightContainer = styled.div`
+    width: 100%;
+`;
+const TripsBox = styled.div`
+    border: 1px solid black;
+    width: 100%;
     height: 50px;
-    font-size: 18px;
-    background-color: #88c8ec;
-    color: white;
-    &:hover {
-        background-color: #88c8ec;
-    }
 `;
-const MapLabel = styled.div`
-    font-size: 20px;
+const TripInfoContainer = styled.div`
+    border: 1px solid black;
+    width: 100%;
+    height: 100%;
+    border-box: box-sizing;
 `;
-const SearchBarContainer = styled.div``;
-const SingleSearchBar = styled.input``;
 
-function Test() {
+const TripDateContainer = styled.div`
+    display: flex;
+    gap: 10px;
+`;
+const DateBox = styled.div`
+    width: fit-content;
+    height: 20px;
+    border: 1px solid black;
+`;
+const TripDetailContainer = styled.div`
+    border: 1px solid black;
+    height: 50px;
+    display: flex;
+    margin: 5px;
+`;
+const TripDetailTime = styled.div`
+    border: 1px solid black;
+    margin: 5px;
+`;
+const TripDetailAddress = styled.div`
+    border: 1px solid black;
+    width: 100%;
+    margin: 5px;
+`;
+
+export default function Trips() {
     let cachedScripts = [];
     function useScript(src) {
         // Keeping track of script loaded and error state   //load SDK 初始資料 （收）
@@ -122,10 +168,12 @@ function Test() {
     const fromInputRef = useRef(null); // 新增起點 ref
     const toInputRef = useRef(null); // 新增終點 ref
     const [to, setTo] = useState(''); // 新增終點 state
-    const [favorites, setFavorites] = useState([]);
-    const [typeSaved, setTypeSaved] = useState(null);
     const [locationInfo, setLocationInfo] = useState(null);
     const [places, setPlaces] = useState();
+    // const inputRef = useRef(null);
+
+    const [favorites, setFavorites] = useState([]);
+    const [typeSaved, setTypeSaved] = useState(null);
     const inputRef = useRef(null);
     const [address, setAddress] = useState('');
     const [latLngResults, setLatLngResults] = useState([]);
@@ -133,7 +181,15 @@ function Test() {
     const [markers, setMarkers] = useState([]);
     const [showMarkers, setShowMarkers] = useState(false);
 
-    // fromInputRef.current
+    const [modalOpen, setModalOpen] = useState(false);
+    const openModal = () => {
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
     async function uploadItems(name, id, address, rating, url, website, type) {
         //存入user sub-collection Places
         try {
@@ -196,16 +252,30 @@ function Test() {
 
         setMarkers(allmarkers);
     }
+    function addToFavorites() {
+        if (to) {
+            // setFavorites((prevFavorites) => [...prevFavorites, to]);
+            console.log(locationInfo);
+            const favoriteList = [...favorites, locationInfo];
+            setFavorites(favoriteList);
+            // console.log(favoriteList[favoriteList.length - 1].place_id);
+            uploadItems(
+                locationInfo.name,
+                locationInfo.place_id,
+                locationInfo.formatted_address,
+                locationInfo.rating,
+                locationInfo.url,
+                locationInfo.website,
+                typeSaved
+            );
+            console.log(locationInfo.place_id);
+        }
+    }
 
     useEffect(() => {
         if (loaded) {
             //load到才會執行
-            const myLatLng = [
-                { lat: 35.682518, lng: 139.765804 },
-                { lat: 35.487404, lng: 138.795665 },
-                { lat: 35.503593, lng: 138.7634713 },
-                { lat: 35.4988753, lng: 138.76763 },
-            ];
+            const myLatLng = [{ lat: 35.682518, lng: 139.765804 }];
             const map = new window.google.maps.Map(document.getElementById('map'), {
                 //div render map
                 zoom: 10, //zoom in
@@ -225,14 +295,7 @@ function Test() {
                 toInputRef.current.value = toAutocomplete.getPlace().formatted_address;
                 setLocationInfo(toAutocomplete.getPlace());
             });
-            const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current);
-
-            autocomplete.addListener('place_changed', () => {
-                const place = autocomplete.getPlace();
-                setAddress(place.formatted_address);
-            });
             setDataMap(map);
-            // console.log(toInputRef);
             console.log(latLngResults);
         }
     }, [loaded]);
@@ -241,7 +304,6 @@ function Test() {
     }
 
     console.log(places);
-    console.log(latLngResults);
     //create a DirectionsService object to use the route method and get a result for our request
     const directionsService = new window.google.maps.DirectionsService(); //路線計算
 
@@ -275,103 +337,95 @@ function Test() {
         });
     }
 
-    function addToFavorites() {
-        if (to) {
-            // setFavorites((prevFavorites) => [...prevFavorites, to]);
-            console.log(locationInfo);
-            const favoriteList = [...favorites, locationInfo];
-            setFavorites(favoriteList);
-            // console.log(favoriteList[favoriteList.length - 1].place_id);
-            uploadItems(
-                locationInfo.name,
-                locationInfo.place_id,
-                locationInfo.formatted_address,
-                locationInfo.rating,
-                locationInfo.url,
-                locationInfo.website,
-                typeSaved
-            );
-            console.log(locationInfo.place_id);
-        }
-    }
-
-    // console.log('favorites:', favorites);
-    // console.log(favorites.name);
-    // console.log('LoactionInfo:', locationInfo);
     if (locationInfo !== null) {
         // console.log('locationInfo:', locationInfo.geometry);
     } else {
     }
-    // console.log('places', places);
     return (
-        <Wrapper>
-            <SearchGroup>
-                <SearchBarContainer>
-                    <SingleSearchBar id='SingleSearchBar' placeholder='Where to?'></SingleSearchBar>
-                    <button onClick={fetchData}>搜尋地圖</button>
-                </SearchBarContainer>
-                <MapLabel>搜尋路徑</MapLabel>
-                <input
-                    type='text'
-                    ref={fromInputRef} // 使用 ref
-                    placeholder='你在哪裏?'
-                    className='form-control'
-                />
-                <input
-                    type='text'
-                    ref={toInputRef} // 使用 ref
-                    placeholder='你要去哪裡?'
-                    className='form-control'
-                />
-                <SearchButton onClick={() => calcRoute()}>搜尋</SearchButton>
-                <select name='layerSaved' id='placeSaved' onChange={(e) => setTypeSaved(e.target.value)}>
-                    <option value=''>--選擇存取資料夾--</option>
-                    <option value='hotel'>飯店</option>
-                    <option value='attraction'>景點</option>
-                    <option value='restaurant'>餐廳</option>
-                    <option value='transportation'>交通</option>
-                </select>
-                <SearchButton onClick={() => addToFavorites()}>加入最愛</SearchButton> {/* 新增加入最愛按鈕 */}
-            </SearchGroup>
-            <GoogleMapContainer>
-                <MapSavedContainer>
-                    <input
-                        type='checkbox'
-                        onChange={(e) => {
-                            if (e.target.checked) {
-                                fetchData();
-                            } else {
-                                markers.forEach((marker) => marker.setMap(null));
-                            }
-                        }}
-                    />
-                    <label>顯示於地圖上</label>
-                    <GetPlaceSaved places={places} setPlaces={setPlaces} setShowMarkers={setShowMarkers}>
-                        {/* {places && (
-                        <SavedBox>
-                            <SavedBoxName>學</SavedBoxName>
-                            <SavedBoxAddress></SavedBoxAddress>
-                        </SavedBox>
-                         )}  */}
-                    </GetPlaceSaved>
-                </MapSavedContainer>
-                <MapContainer>
-                    <div id='map' style={{ height: '700px', width: '1280px', border: `20px solid #88C8EC` }} />
-                </MapContainer>
-            </GoogleMapContainer>
-            {/* <div>
-                <h2>我的最愛地點</h2>
-                {console.log('favorites 下', favorites.name)}
-                {console.log(typeof favorites)}
-                {favorites.length > 0 && (
-                    <>
-                        {favorites.map((favorite, index) => (
-                            <h3 key={index}>{favorite.name}</h3>
-                        ))}
-                    </>
-                )}
-            </div> */}
-        </Wrapper>
+        <>
+            <Outside>
+                <PosterMenu></PosterMenu>
+                <SearchContainer>
+                    <MenuSearchBar></MenuSearchBar>
+                </SearchContainer>
+                <RouteMapContainer>
+                    <RouteContainer>
+                        <input
+                            type='text'
+                            ref={fromInputRef} // 使用 ref
+                            placeholder='你在哪裏?'
+                            className='form-control'
+                        />
+                        <input
+                            type='text'
+                            ref={toInputRef} // 使用 ref
+                            placeholder='你要去哪裡?'
+                            className='form-control'
+                        />
+                        <button onClick={() => calcRoute()}>搜尋路線</button>
+                    </RouteContainer>
+                    <FavoritesContainer>
+                        <select name='layerSaved' id='placeSaved' onChange={(e) => setTypeSaved(e.target.value)}>
+                            <option value=''>--選擇存取資料夾--</option>
+                            <option value='hotel'>飯店</option>
+                            <option value='attraction'>景點</option>
+                            <option value='restaurant'>餐廳</option>
+                            <option value='transportation'>交通</option>
+                        </select>
+                        <input
+                            type='checkbox'
+                            onChange={(e) => {
+                                if (e.target.checked) {
+                                    fetchData();
+                                } else {
+                                    markers.forEach((marker) => marker.setMap(null));
+                                }
+                            }}
+                        />
+                        <label>顯示於地圖上</label>
+                        <GetPlaceSaved
+                            places={places}
+                            setPlaces={setPlaces}
+                            setShowMarkers={setShowMarkers}
+                        ></GetPlaceSaved>
+                    </FavoritesContainer>
+                    <MapOutContainer
+                        id='map'
+                        style={{ height: '100%', width: '100%', border: `1px solid #88C8EC` }}
+                    ></MapOutContainer>
+                </RouteMapContainer>
+                <PlanOutContainer>
+                    <PlanLeftContainer>
+                        <button onClick={openModal}>Add new Trip</button>
+                        <TripsBox>TripsBox</TripsBox>
+                        <TripsBox></TripsBox>
+                    </PlanLeftContainer>
+                    <PlanRightContainer>
+                        <TripInfoContainer>
+                            TripInfoContainer
+                            <TripDateContainer>
+                                <DateBox>6/9</DateBox>
+                                <DateBox>6/10</DateBox>
+                            </TripDateContainer>
+                            <TripDetailContainer>
+                                <TripDetailTime>TripDetailTime</TripDetailTime>
+                                <TripDetailAddress>TripDetailAdress</TripDetailAddress>
+                            </TripDetailContainer>
+                            <TripDetailContainer>
+                                <TripDetailTime>TripDetailTime</TripDetailTime>
+                                <TripDetailAddress>TripDetailAdress</TripDetailAddress>
+                            </TripDetailContainer>
+                        </TripInfoContainer>
+                    </PlanRightContainer>
+                </PlanOutContainer>
+            </Outside>
+            {modalOpen ? (
+                // <div>
+                //     <ModalOverlay onClick={closeModal} />
+                //     <ModalContainer onClick={(e) => e.stopPropagation()}></ModalContainer>
+                // </div>
+                <AddTripPopUpModal modalOpen={modalOpen} setModalOpen={setModalOpen}></AddTripPopUpModal>
+            ) : null}
+        </>
     );
 }
-export default Test;
