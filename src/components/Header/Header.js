@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../Context/AuthContext';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const OutSide = styled.div`
     width: 100%;
@@ -28,6 +30,14 @@ const FavoritesContainer = styled.div``;
 const LoginContainer = styled.div``;
 
 export default function Header() {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    const { signIn, logOut } = useContext(AuthContext);
+    // if (isLogin) {
+    //     return <button onClick={logout}>LOGOUsT</button>;
+    // }
+    // return <button onClick={login}>LOGIN</button>;
+
     return (
         <>
             <OutSide>
@@ -51,7 +61,8 @@ export default function Header() {
                             <button>Favorites</button>
                         </FavoritesContainer>
                         <LoginContainer to='/GoogleLogin'>
-                            <button>Login</button>
+                            <button onClick={() => signIn(auth, provider)}>Login</button>
+                            <button onClick={() => logOut(auth)}>Logout</button>
                         </LoginContainer>
                     </BarContainer>
                 </Nav>

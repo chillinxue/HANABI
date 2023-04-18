@@ -2,52 +2,49 @@ import { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Auth, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { collection, setDoc, doc, getDoc } from 'firebase/firestore';
-import { db } from '../App';
+import { db } from '../pages/Trips/Trips';
 import { DocumentData } from 'firebase/firestore';
 
-export interface User {
-    name: string;
-    email: string;
-    userUID: string;
-}
+// export interface User {
+//     name: string;
+//     email: string;
+//     userUID: string;
+// }
 
-interface AuthContextType {
-    isLogin: boolean;
-    user: User;
-    loading: boolean;
-    userUID: string;
-    signIn: (auth: Auth, provider: GoogleAuthProvider) => Promise<void>;
-    logOut: (auth: Auth) => Promise<void>;
-}
+// interface AuthContextType {
+//     isLogin: boolean;
+//     user: User;
+//     loading: boolean;
+//     userUID: string;
+//     signIn: (auth: Auth, provider: GoogleAuthProvider) => Promise<void>;
+//     logOut: (auth: Auth) => Promise<void>;
+// }
 
-export const AuthContext =
-    createContext <
-    AuthContextType >
-    {
-        isLogin: false,
-        user: {
-            name: '',
-            email: '',
-            userUID: '',
-        },
-        loading: false,
+export const AuthContext = createContext({
+    isLogin: false,
+    user: {
+        name: '',
+        email: '',
         userUID: '',
-        signIn: async () => {},
-        logOut: async () => {},
-    };
-const initialUserData: User = {
+    },
+    loading: false,
+    userUID: '',
+    signIn: async () => {},
+    logOut: async () => {},
+});
+const initialUserData = {
     name: '',
     email: '',
     userUID: '',
 };
-export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthContextProvider = ({ children }) => {
     const [isLogin, setIsLogin] = useState(false);
-    const [user, setUser] = useState < User > initialUserData;
-    const [loading, setLoading] = useState < boolean > true;
-    const [userUID, setUserUID] = useState < string > '';
+    const [user, setUser] = useState(initialUserData);
+    const [loading, setLoading] = useState(true);
+    const [userUID, setUserUID] = useState('');
     const navigate = useNavigate();
 
-    async function getUsers(userUID: string) {
+    async function getUsers(userUID) {
         const docRef = doc(db, 'users', userUID);
         const docSnap = await getDoc(docRef);
         return docSnap.data();
@@ -62,9 +59,9 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
                 setUserUID(user.uid);
                 if (getUser) {
                     setIsLogin(true);
-                    // console.log("有");
+                    console.log('有');
 
-                    const data: User = {
+                    const data = {
                         name: getUser.name || '',
                         email: getUser.email || '',
                         userUID: getUser.userUID || '',
@@ -72,9 +69,9 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
                     setUser(data);
                     setUserUID(user.uid);
                 } else {
-                    // console.log("沒有");
+                    console.log('沒有');
                     setIsLogin(true);
-                    const data: User = {
+                    const data = {
                         name: user.displayName || '',
                         email: user.email || '',
                         userUID: user.uid || '',
@@ -88,7 +85,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
         });
     }, []);
 
-    async function setUserDoc(data: DocumentData) {
+    async function setUserDoc(data) {
         const docRef = doc(db, 'users', `${data.userUID}`);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
@@ -101,10 +98,10 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
         }
     }
 
-    const signIn = async (auth: ReturnType<typeof getAuth>, provider: GoogleAuthProvider) => {
+    const signIn = async (auth, provider) => {
         const res = await signInWithPopup(auth, provider);
         const user = res.user;
-        const data: User = {
+        const data = {
             name: user.displayName || '',
             email: user.email || '',
             userUID: user.uid || '',
@@ -113,10 +110,10 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
         setUser(data);
         setUserUID(data.userUID);
         setIsLogin(true);
-        navigate(`/question`, { replace: true });
+        navigate(`/`, { replace: true });
     };
 
-    const logOut = async (auth: Auth): Promise<void> => {
+    const logOut = async (auth) => {
         setLoading(false);
         await signOut(auth);
         setUser(initialUserData);

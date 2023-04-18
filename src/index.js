@@ -10,22 +10,25 @@ import App from './App';
 import GetPlaceSaved from './components/utils/firebase/GetPlaceSaved';
 import Home from './pages/Home/Home';
 import Trips from './pages/Trips/Trips';
+import { AuthContextProvider } from './Context/AuthContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
     <BrowserRouter>
-        <Routes>
-            <Route path='/' element={<App />}>
-                <Route path='Home' element={<Home />} />
-                <Route path='Trips' element={<Trips />} />
-                <Route path='PocTest' element={<PocTest />} />
-                <Route path='Test' element={<Test />} />
-                <Route path='AutoComplete' element={<AutoComplete />} />
-                <Route path='GoogleLogin' element={<GoogleLogin />} />
-                <Route path='GetPlaceSaved' element={<GetPlaceSaved />} />
-                <Route path='*' element={<Navigate to='/' replace />} />
-            </Route>
-        </Routes>
+        <AuthContextProvider>
+            <Routes>
+                <Route path='/' element={<App />}>
+                    <Route path='Home' element={<Home />} />
+                    <Route path='Trips' element={<Trips />} />
+                    <Route path='PocTest' element={<PocTest />} />
+                    <Route path='Test' element={<Test />} />
+                    <Route path='AutoComplete' element={<AutoComplete />} />
+                    <Route path='GoogleLogin' element={<GoogleLogin />} />
+                    <Route path='GetPlaceSaved' element={<GetPlaceSaved />} />
+                    <Route path='*' element={<Navigate to='/' replace />} />
+                </Route>
+            </Routes>
+        </AuthContextProvider>
     </BrowserRouter>
 );
 

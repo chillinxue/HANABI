@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import MenuSearchBar from '../../components/SearchBar/MenuSearchBar';
 import PosterMenu from '../../components/PosterMenu/PosterMenu';
 import { initializeApp } from 'firebase/app';
@@ -8,6 +8,7 @@ import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
 import Modal from 'react-modal';
 import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
+import { AuthContext } from '../../Context/AuthContext';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
@@ -112,6 +113,7 @@ const TripDetailAddress = styled.div`
 `;
 
 export default function Trips() {
+    const { userUID } = useContext(AuthContext);
     let cachedScripts = [];
     function useScript(src) {
         // Keeping track of script loaded and error state   //load SDK 初始資料 （收）
@@ -193,8 +195,10 @@ export default function Trips() {
     async function uploadItems(name, id, address, rating, url, website, type) {
         //存入user sub-collection Places
         try {
-            const itemsRef = doc(db, 'users', 'Email', 'SavedPlaces', id);
-            await setDoc(itemsRef, {
+            const itemsRef = doc(db, 'users', 'QDNhm2ZlP8fS761Is6bEwVjsE9o1');
+            console.log(itemsRef);
+            console.log(name, id, address, rating, url, website, type);
+            await addDoc(collection(itemsRef, 'SavedPlaces'), {
                 name: name,
                 placeId: id,
                 formatted_address: address,
@@ -372,6 +376,7 @@ export default function Trips() {
                             <option value='restaurant'>餐廳</option>
                             <option value='transportation'>交通</option>
                         </select>
+                        <button onClick={() => addToFavorites()}>加入最愛</button> {/* 新增加入最愛按鈕 */}
                         <input
                             type='checkbox'
                             onChange={(e) => {

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
 import { db } from '../../../pages/Test';
 import { doc, onSnapshot } from 'firebase/firestore';
 import styled from 'styled-components';
-
+import { AuthContext } from '../../../Context/AuthContext';
 const GetPlaceSavedContainer = styled.div`
     padding: 10px 10px;
     display: flex;
@@ -41,10 +41,12 @@ export default function GetPlaceSaved({ places, setPlaces }) {
     const [placeType, setPlaceType] = useState(null);
     const [searchInput, setSearchInput] = useState('');
     const [showSearchInput, setShowSearchInput] = useState(true);
+    const { userUID } = useContext(AuthContext);
 
     useEffect(() => {
-        const placeRef = collection(db, 'users', 'Email', 'SavedPlaces');
+        const placeRef = collection(db, 'users', 'QDNhm2ZlP8fS761Is6bEwVjsE9o1', 'SavedPlaces');
         let q = placeRef;
+        // let q;
 
         // Filter by place type
         if (placeType) {
@@ -70,7 +72,7 @@ export default function GetPlaceSaved({ places, setPlaces }) {
     }, [placeType, searchInput]);
 
     const handleDelete = async (id) => {
-        const placeRef = doc(db, 'users', 'Email', 'SavedPlaces', id);
+        const placeRef = doc(db, 'users', 'QDNhm2ZlP8fS761Is6bEwVjsE9o1', 'SavedPlaces', id);
         await deleteDoc(placeRef);
     };
 
