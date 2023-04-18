@@ -169,7 +169,7 @@ function Test() {
         const filteredResults = results.filter(({ lat, lng }, index) => {
             const address = addresses[index];
             const place = places.find((place) => place.formatted_address === address);
-            return !!place; // true: 保留，false: 過濾掉
+            return !!place;
         });
 
         console.log(filteredResults);
@@ -181,6 +181,15 @@ function Test() {
                 position: { lat, lng },
                 title,
             });
+
+            const infowindow = new window.google.maps.InfoWindow({
+                content: `<div><strong>${place.name}</strong><br>${place.formatted_address}<br>Phone: ${place.formatted_phone_number}<br>Rating: ${place.rating}<br>Website: ${place.website}</div>`,
+            });
+            console.log(place);
+            marker.addListener('click', () => {
+                infowindow.open(map, marker);
+            });
+
             marker.setMap(map);
             return marker;
         });
@@ -209,12 +218,12 @@ function Test() {
 
             fromAutocomplete.addListener('place_changed', () => {
                 setFrom(fromAutocomplete.getPlace().formatted_address);
-                setLocationInfo(fromAutocomplete.getPlace());
             });
 
             toAutocomplete.addListener('place_changed', () => {
                 setTo(toAutocomplete.getPlace().formatted_address);
                 toInputRef.current.value = toAutocomplete.getPlace().formatted_address;
+                setLocationInfo(toAutocomplete.getPlace());
             });
             const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current);
 
@@ -225,105 +234,11 @@ function Test() {
             setDataMap(map);
             // console.log(toInputRef);
             console.log(latLngResults);
-
-            if (map) {
-                // 创建信息窗口
-                const infoWindow = new window.google.maps.InfoWindow();
-
-                // 创建事件监听器
-                const clickListener = window.google.maps.event.addListener(map, 'click', async (event) => {
-                    // 获取点击位置的经纬度
-                    const lat = event.latLng.lat();
-                    const lng = event.latLng.lng();
-
-                    // 使用 Places API 获取有关该位置的 place_id
-                    const placesService = new window.google.maps.places.PlacesService(map);
-                    const request = {
-                        location: { lat, lng },
-                        radius: 50,
-                    };
-                    const results = await new Promise((resolve) => {
-                        placesService.nearbySearch(request, (results) => {
-                            resolve(results);
-                        });
-                    });
-                    const placeId = results.length ? results[0].place_id : null;
-
-                    // 如果找到了 place_id，则使用 Places API 获取该地点的详细信息
-                    if (placeId) {
-                        const placesRequest = {
-                            placeId,
-                            fields: ['name', 'formatted_address', 'formatted_phone_number', 'rating'],
-                        };
-                        const placeResult = await new Promise((resolve) => {
-                            placesService.getDetails(placesRequest, (placeResult) => {
-                                resolve(placeResult);
-                            });
-                        });
-
-                        // 在信息窗口中显示有关该位置的详细信息
-                        infoWindow.setContent(`
-                      <div>
-                        <h3>${placeResult.name}</h3>
-                        <p>Address: ${placeResult.formatted_address}</p>
-                        <p>Phone: ${placeResult.formatted_phone_number}</p>
-                        <p>Rating: ${placeResult.rating}</p>
-                      </div>
-                    `);
-                        infoWindow.setPosition({ lat, lng });
-                        infoWindow.open(map);
-                        console.log(placeResult);
-                    }
-                });
-
-                // 在组件卸载时移除事件监听器
-                return () => window.google.maps.event.removeListener(clickListener);
-            }
         }
     }, [loaded]);
     if (!loaded) {
         return;
     }
-
-    // function selectedMap() {
-    //     const myLatLng = props.latLng;
-
-    //     const map = new window.google.maps.Map(document.getElementById('map'), {
-    //         zoom: 15,
-    //         center: myLatLng[3],
-    //     });
-
-    //     const infoWindow = new window.google.maps.InfoWindow();
-    //     // const icons = {
-    //     //   url:/Users/rain_shoes/Desktop/Visual Studio Code-1.app/Contents/Resources/app/out/vs/code/electron-sandbox/workbench/workbench.html "https://developers.google.com/maps/documentation/javascript/examples/full/images/library_maps.png",
-    //     //   scaledSize: new window.google.maps.Size(50, 50)
-    //     // };
-
-    //     myLatLng.forEach((location, index) => {
-    //         // barType.map((bar: string) => console.log(bar));
-    //         const marker = new window.google.maps.Marker({
-    //             position: location,
-    //             map,
-    //             // icon: icons,
-    //         });
-    //         // 綁定 click 事件
-    //         marker.addListener('click', () => {
-    //             const barAddress = props.bars[index].address; // 從 props 中取得 bars 數據
-    //             const barName = props.bars[index].name;
-    //             const barTel = props.bars[index].tel;
-    //             // 設定 info window 的內容
-    //             infoWindow.setContent(`
-    //           Bar Name: ${barName}  <br />
-    //           Address: ${barAddress} <br />
-    //           Tel: ${barTel}
-    //         `);
-    //             // 開啟 info window
-    //             infoWindow.open(map, marker);
-    //         });
-    //     });
-
-    //     setDataMap(map);
-    // }
 
     console.log(places);
     console.log(latLngResults);
@@ -393,7 +308,7 @@ function Test() {
             <SearchGroup>
                 <SearchBarContainer>
                     <SingleSearchBar id='SingleSearchBar' placeholder='Where to?'></SingleSearchBar>
-                    <button onClick={fetchData}>搜尋地圖</button>
+                    <button>搜尋地圖</button>
                 </SearchBarContainer>
                 <MapLabel>搜尋路徑</MapLabel>
                 <input
