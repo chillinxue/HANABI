@@ -8,12 +8,14 @@ import Test from './pages/Test';
 import GoogleLogin from './pages/GoogleLogin';
 import App from './App';
 import GetPlaceSaved from './pages/GetPlaceSaved';
+import Home from './pages/Home/Home';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
     <BrowserRouter>
         <Routes>
             <Route path='/' element={<App />}>
+                <Route path='Home' element={<Home />} />
                 <Route path='PocTest' element={<PocTest />} />
                 <Route path='Test' element={<Test />} />
                 <Route path='AutoComplete' element={<AutoComplete />} />

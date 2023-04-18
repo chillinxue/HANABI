@@ -9,6 +9,7 @@ const RecommendContainer = styled.div`
     align-items: center;
     border: 1px black;
     gap: 20px;
+    margin: 20px;
 `;
 const TokyoContainer = styled.div`
     width: 200px;

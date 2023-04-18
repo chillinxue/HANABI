@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Header from './components/Header/Header';
-import PlacesRecommend from './components/PlacesRecommend/PlacesRecommend';
 import { Outlet } from 'react-router-dom';
 
 const OutSide = styled.div``;
@@ -11,7 +10,6 @@ function App() {
         <>
             <OutSide>
                 <Header></Header>
-                <PlacesRecommend></PlacesRecommend>
                 <Outlet />
             </OutSide>
         </>
