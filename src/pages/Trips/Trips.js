@@ -350,6 +350,7 @@ export default function Trips() {
         // console.log('locationInfo:', locationInfo.geometry);
     } else {
     }
+    
     return (
         <>
             <Outside>

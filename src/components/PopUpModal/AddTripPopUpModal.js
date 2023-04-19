@@ -1,12 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import { db } from '../../pages/Trips/Trips';
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+// import firebase from 'firebase/app';
+// import 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import { AuthContext } from '../../Context/AuthContext';
+import { v4 as uuidv4 } from 'uuid';
+
+// import { StrictMode } from 'react';
+// import { createRoot } from 'react-dom/client';
+
+const firebaseConfig = {
+    apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
+    authDomain: 'hanabi-f5ee3.firebaseapp.com',
+    projectId: 'hanabi-f5ee3',
+    storageBucket: 'hanabi-f5ee3.appspot.com',
+    messagingSenderId: '602379997527',
+    appId: '1:602379997527:web:108c1f46f5e8788fe6ae12',
+    measurementId: 'G-Q9NRVJV8NH',
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+export const db = getFirestore(app);
 
 const ModalContainer = styled.div`
     position: fixed;
@@ -53,6 +73,9 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
     const [selectedStartedDate, setSelectedStartedDate] = useState(null);
     const [selectedEndedDate, setSelectedEndedDate] = useState(null);
     const [dateRange, setDateRange] = useState([]);
+    const { userUID } = useContext(AuthContext);
+    const [trips, setTrips] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const generateDateRange = (startDate, endDate) => {
@@ -85,6 +108,31 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
         }
     };
 
+    function handleSaveTrip() {
+        const tripname = document.getElementById('tripname').value.trim();
+        console.log(tripname);
+        if (tripname.length === 0) {
+            alert('請輸入旅行名稱');
+            return;
+        }
+        if (dateRange.length === 0) {
+            alert('請選擇旅遊期間');
+            return;
+        }
+        const tripRef = doc(db, 'users', userUID, 'trips', uuidv4());
+        setDoc(tripRef, {
+            tripname: tripname,
+            dateRange: dateRange,
+        })
+            .then(() => {
+                console.log(`成功儲存旅行 ${tripname}`);
+                closeModal();
+            })
+            .catch((error) => {
+                console.error(`儲存旅行 ${tripname} 時發生錯誤`, error);
+            });
+    }
+
     const openModal = () => {
         setModalOpen(true);
     };
@@ -92,7 +140,6 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
     const closeModal = () => {
         setModalOpen(false);
     };
-
     return (
         <div>
             <ModalOverlay onClick={closeModal} />
@@ -116,6 +163,7 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
                             onClick={() => {
                                 console.log(dateRange);
                                 closeModal();
+                                handleSaveTrip();
                             }}
                         >
                             開始規劃旅程
