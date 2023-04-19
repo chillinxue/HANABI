@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import MenuPopUpModal from '../PopUpModal/MenuPopUpModal';
+import { Link } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
@@ -47,7 +48,9 @@ export default function PosterMenu() {
                         <RestaurantSearchContainer onClick={openModal}>餐廳</RestaurantSearchContainer>
                         <BlogSearchContainer>旅遊故事</BlogSearchContainer>
                         <AirplaneSearchContainer>航班狀態</AirplaneSearchContainer>
-                        <RouteSearchContainer>路線搜尋</RouteSearchContainer>
+                        <Link to='/Trips'>
+                            <RouteSearchContainer>路線搜尋</RouteSearchContainer>
+                        </Link>
                     </MenuContainer>
                 </PosterContainer>
             </OutSide>

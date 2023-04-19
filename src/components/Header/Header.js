@@ -45,18 +45,21 @@ export default function Header() {
                 <Nav>
                     <Logo>HANABi🎇</Logo>
                     <BarContainer>
-                        <HomeContainer Link to='/Home'>
-                            <button>
-                                <Link to='/home'></Link>
-                                Home
-                            </button>
-                        </HomeContainer>
-                        <TripsContainer to='/Trips'>
-                            <button to='/Trips'>Trips</button>
-                        </TripsContainer>
-                        <BlogContainer>
-                            <button>BLOG</button>
-                        </BlogContainer>
+                        <Link to='/home'>
+                            <HomeContainer>
+                                <button>Home</button>
+                            </HomeContainer>
+                        </Link>
+                        <Link to='/Trips'>
+                            <TripsContainer>
+                                <button>Trips</button>
+                            </TripsContainer>
+                        </Link>
+                        <Link to='/Blog'>
+                            <BlogContainer>
+                                <button>BLOG</button>
+                            </BlogContainer>
+                        </Link>
                         <FavoritesContainer>
                             <button>Favorites</button>
                         </FavoritesContainer>
