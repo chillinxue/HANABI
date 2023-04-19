@@ -4,6 +4,7 @@ import { Auth, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup,
 import { collection, setDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../pages/Trips/Trips';
 import { DocumentData } from 'firebase/firestore';
+import { useLocation } from 'react-router-dom';
 
 // export interface User {
 //     name: string;
@@ -43,6 +44,7 @@ export const AuthContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [userUID, setUserUID] = useState('');
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     async function getUsers(userUID) {
         const docRef = doc(db, 'users', userUID);
@@ -110,7 +112,7 @@ export const AuthContextProvider = ({ children }) => {
         setUser(data);
         setUserUID(data.userUID);
         setIsLogin(true);
-        navigate(`/`, { replace: true });
+        navigate(pathname, { replace: true });
     };
 
     const logOut = async (auth) => {

@@ -185,6 +185,11 @@ export default function Trips() {
 
     const [modalOpen, setModalOpen] = useState(false);
     const openModal = () => {
+        if (!userUID) {
+            // 如果用戶未登入，則顯示警告框
+            alert('請先登入');
+            return;
+        }
         setModalOpen(true);
     };
 
@@ -195,10 +200,10 @@ export default function Trips() {
     async function uploadItems(name, id, address, rating, url, website, type) {
         //存入user sub-collection Places
         try {
-            // const itemsRef = doc(db, 'users', userUID);
-            // console.log(itemsRef);
+            const itemsRef = doc(db, 'users', userUID);
+            console.log(itemsRef);
             console.log(name, id, address, rating, url, website, type);
-            await addDoc(collection(db, 'users', userUID, 'SavedPlaces'), {
+            await addDoc(collection(itemsRef, 'SavedPlaces'), {
                 name: name,
                 placeId: id,
                 formatted_address: address,

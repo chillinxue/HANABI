@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
-import { db } from '../../../pages/Test';
+import { db } from '../../../pages/Trips/Trips';
 import { doc, onSnapshot } from 'firebase/firestore';
 import styled from 'styled-components';
 import { AuthContext } from '../../../Context/AuthContext';
@@ -76,28 +76,6 @@ export default function GetPlaceSaved({ places, setPlaces }) {
         return () => {
             unsub();
         };
-
-        // // Filter by place type
-        // if (placeType) {
-        //     q = query(placeRef, where('type', '==', placeType));
-        // }
-
-        // // Filter by search input
-        // if (searchInput) {
-        //     q = query(q, where('name', '>=', searchInput), where('name', '<=', searchInput + '\uf8ff'));
-        // }
-
-        // const unsub = onSnapshot(q, (snapshot) => {
-        //     const placeList = [];
-        //     snapshot.docs.forEach((doc) => {
-        //         placeList.push({ id: doc.id, ...doc.data() });
-        //     });
-        //     setPlaces(placeList);
-        // });
-
-        // return () => {
-        //     unsub();
-        // };
     }, [placeType, searchInput, userUID]);
 
     const handleDelete = async (id) => {
