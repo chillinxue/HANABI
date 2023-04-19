@@ -42,15 +42,21 @@ export default function GetPlaceSaved({ places, setPlaces }) {
     const [searchInput, setSearchInput] = useState('');
     const [showSearchInput, setShowSearchInput] = useState(true);
     const { userUID } = useContext(AuthContext);
+    console.log(userUID);
 
     useEffect(() => {
-        const placeRef = collection(db, 'users', 'QDNhm2ZlP8fS761Is6bEwVjsE9o1', 'SavedPlaces');
-        let q = placeRef;
+        if (!userUID) {
+            return;
+        }
+        const placeRef = collection(db, 'users', userUID, 'SavedPlaces');
+        // let q = placeRef;
         // let q;
+        // Initialize the base query
+        let q = query(placeRef);
 
         // Filter by place type
         if (placeType) {
-            q = query(placeRef, where('type', '==', placeType));
+            q = query(q, where('type', '==', placeType));
         }
 
         // Filter by search input
@@ -58,6 +64,7 @@ export default function GetPlaceSaved({ places, setPlaces }) {
             q = query(q, where('name', '>=', searchInput), where('name', '<=', searchInput + '\uf8ff'));
         }
 
+        // Listen to query snapshots
         const unsub = onSnapshot(q, (snapshot) => {
             const placeList = [];
             snapshot.docs.forEach((doc) => {
@@ -69,10 +76,32 @@ export default function GetPlaceSaved({ places, setPlaces }) {
         return () => {
             unsub();
         };
-    }, [placeType, searchInput]);
+
+        // // Filter by place type
+        // if (placeType) {
+        //     q = query(placeRef, where('type', '==', placeType));
+        // }
+
+        // // Filter by search input
+        // if (searchInput) {
+        //     q = query(q, where('name', '>=', searchInput), where('name', '<=', searchInput + '\uf8ff'));
+        // }
+
+        // const unsub = onSnapshot(q, (snapshot) => {
+        //     const placeList = [];
+        //     snapshot.docs.forEach((doc) => {
+        //         placeList.push({ id: doc.id, ...doc.data() });
+        //     });
+        //     setPlaces(placeList);
+        // });
+
+        // return () => {
+        //     unsub();
+        // };
+    }, [placeType, searchInput, userUID]);
 
     const handleDelete = async (id) => {
-        const placeRef = doc(db, 'users', 'QDNhm2ZlP8fS761Is6bEwVjsE9o1', 'SavedPlaces', id);
+        const placeRef = doc(db, 'users', userUID, 'SavedPlaces', id);
         await deleteDoc(placeRef);
     };
 

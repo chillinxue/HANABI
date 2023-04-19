@@ -27,6 +27,7 @@ const ModalOverlay = styled.div`
     bottom: 0;
     z-index: 1;
 `;
+
 export default function MenuPopUpModal({ modalIsOpen, setModalIsOpen }) {
     const openModal = () => {
         setModalIsOpen(true);
