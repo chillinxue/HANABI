@@ -9,6 +9,7 @@
         "firebase": "^9.19.1",
         "google-map-react": "^2.2.0",
         "google-maps-api-loader": "^1.1.1",
+        "rc-time-picker": "^3.7.3",
         "react": "^18.2.0",
         "react-datepicker": "^4.11.0",
         "react-dom": "^18.2.0",

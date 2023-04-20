@@ -97,10 +97,14 @@ const DateBox = styled.div`
     border: 1px solid black;
 `;
 const TripDetailContainer = styled.div`
+    display: flex;
     border: 1px solid black;
     height: 50px;
     display: flex;
     margin: 5px;
+`;
+const TripDetailBox = styled.div`
+    display: flex;
 `;
 const TripDetailTime = styled.div`
     border: 1px solid black;
@@ -198,6 +202,13 @@ export default function Trips() {
     };
 
     const [trips, setTrips] = useState([]); //抓到旅行資料
+    const initialSelectedDates = trips && trips.length > 0 ? trips[0].dateRange : [];
+    const [selectedDates, setSelectedDates] = useState(initialSelectedDates);
+
+    const handleTripClick = (index) => {
+        const tripDates = trips[index].dateRange;
+        setSelectedDates(tripDates);
+    };
     useEffect(() => {
         if (!userUID) {
             return;
@@ -424,28 +435,27 @@ export default function Trips() {
                 <PlanOutContainer>
                     <PlanLeftContainer>
                         <button onClick={openModal}>Add new Trip</button>
-                        {trips && trips.map((data, index) => <TripsBox>{data.tripname}</TripsBox>)}
+                        {trips &&
+                            trips.map((data, index) => (
+                                <TripsBox key={index} onClick={() => handleTripClick(index)}>
+                                    {data.tripname}
+                                </TripsBox>
+                            ))}
                     </PlanLeftContainer>
                     <PlanRightContainer>
                         <TripInfoContainer>
-                            TripInfoContainer
                             <TripDateContainer>
-                                {trips &&
-                                    trips.map((trip) =>
-                                        trip.dateRange.map((date, index) => (
-                                            <DateBox key={index}>
-                                                {date.split('/')[1]}/{date.split('/')[2]}
-                                            </DateBox>
-                                        ))
-                                    )}
+                                {selectedDates.map((date, index) => (
+                                    <DateBox key={index}>
+                                        {date.split('/')[1]}/{date.split('/')[2]}
+                                    </DateBox>
+                                ))}
                             </TripDateContainer>
                             <TripDetailContainer>
-                                <TripDetailTime>TripDetailTime</TripDetailTime>
-                                <TripDetailAddress>TripDetailAdress</TripDetailAddress>
-                            </TripDetailContainer>
-                            <TripDetailContainer>
-                                <TripDetailTime>TripDetailTime</TripDetailTime>
-                                <TripDetailAddress>TripDetailAdress</TripDetailAddress>
+                                <TripDetailBox>
+                                    <TripDetailTime>TripDetailTime</TripDetailTime>
+                                    <TripDetailAddress>TripDetailAdress</TripDetailAddress>
+                                </TripDetailBox>
                             </TripDetailContainer>
                         </TripInfoContainer>
                     </PlanRightContainer>
