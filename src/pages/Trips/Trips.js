@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import MenuSearchBar from '../../components/SearchBar/MenuSearchBar';
 import PosterMenu from '../../components/PosterMenu/PosterMenu';
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, onSnapshot } from 'firebase/firestore';
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
 import Modal from 'react-modal';
@@ -197,6 +197,22 @@ export default function Trips() {
         setModalOpen(false);
     };
 
+    const [trips, setTrips] = useState([]); //抓到旅行資料
+    useEffect(() => {
+        if (!userUID) {
+            return;
+        }
+        const tripsRef = collection(db, `users/${userUID}/trips`);
+        const unsubscribe = onSnapshot(tripsRef, (snapshot) => {
+            const newTrips = snapshot.docs.map((doc) => doc.data());
+            setTrips(newTrips);
+            console.log(newTrips); // 在此處添加console.log
+        });
+        return () => unsubscribe();
+    }, [userUID]);
+    console.log('userUID: ', userUID);
+    console.log(trips);
+
     async function uploadItems(name, id, address, rating, url, website, type) {
         //存入user sub-collection Places
         try {
@@ -350,7 +366,7 @@ export default function Trips() {
         // console.log('locationInfo:', locationInfo.geometry);
     } else {
     }
-    
+
     return (
         <>
             <Outside>
@@ -408,15 +424,20 @@ export default function Trips() {
                 <PlanOutContainer>
                     <PlanLeftContainer>
                         <button onClick={openModal}>Add new Trip</button>
-                        <TripsBox>TripsBox</TripsBox>
-                        <TripsBox></TripsBox>
+                        {trips && trips.map((data, index) => <TripsBox>{data.tripname}</TripsBox>)}
                     </PlanLeftContainer>
                     <PlanRightContainer>
                         <TripInfoContainer>
                             TripInfoContainer
                             <TripDateContainer>
-                                <DateBox>6/9</DateBox>
-                                <DateBox>6/10</DateBox>
+                                {trips &&
+                                    trips.map((trip) =>
+                                        trip.dateRange.map((date, index) => (
+                                            <DateBox key={index}>
+                                                {date.split('/')[1]}/{date.split('/')[2]}
+                                            </DateBox>
+                                        ))
+                                    )}
                             </TripDateContainer>
                             <TripDetailContainer>
                                 <TripDetailTime>TripDetailTime</TripDetailTime>

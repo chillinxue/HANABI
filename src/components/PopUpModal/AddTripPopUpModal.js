@@ -119,10 +119,11 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
             alert('請選擇旅遊期間');
             return;
         }
+        const formattedDateRange = dateRange.map((date) => date.toLocaleDateString());
         const tripRef = doc(db, 'users', userUID, 'trips', uuidv4());
         setDoc(tripRef, {
             tripname: tripname,
-            dateRange: dateRange,
+            dateRange: formattedDateRange,
         })
             .then(() => {
                 console.log(`成功儲存旅行 ${tripname}`);
