@@ -35,6 +35,7 @@ const SavedBox = styled.div`
 const SavedBoxName = styled.div``;
 const SavedBoxAddress = styled.div``;
 const DeleteSaveBox = styled.button``;
+const AddToTrip = styled.button``;
 
 export default function GetPlaceSaved({ places, setPlaces }) {
     // const [places, setPlaces] = useState(null);
@@ -110,6 +111,7 @@ export default function GetPlaceSaved({ places, setPlaces }) {
                             <SavedBoxName>{data.name}</SavedBoxName>
                             <SavedBoxAddress>{data.formatted_address}</SavedBoxAddress>
                             <DeleteSaveBox onClick={() => handleDelete(data.id)}>Delete</DeleteSaveBox>
+                            <AddToTrip>Add to Current Trip</AddToTrip>
                         </SavedBox>
                     ))}
             </GetPlaceSavedContainer>

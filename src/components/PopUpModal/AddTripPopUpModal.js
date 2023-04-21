@@ -69,7 +69,7 @@ const AddTripRightContainer = styled.div`
     border: 1px solid black;
     width: 50%;
 `;
-export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
+export default function AddPopUpModal({ modalOpen, setModalOpen }) {
     const [selectedStartedDate, setSelectedStartedDate] = useState(null);
     const [selectedEndedDate, setSelectedEndedDate] = useState(null);
     const [dateRange, setDateRange] = useState([]);
@@ -110,6 +110,7 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
 
     function handleSaveTrip() {
         const tripname = document.getElementById('tripname').value.trim();
+
         console.log(tripname);
         if (tripname.length === 0) {
             alert('請輸入旅行名稱');
@@ -119,11 +120,29 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
             alert('請選擇旅遊期間');
             return;
         }
+        const tripId = uuidv4();
+        const tripRef = doc(db, 'users', userUID, 'trips', tripId);
+
         const formattedDateRange = dateRange.map((date) => date.toLocaleDateString());
-        const tripRef = doc(db, 'users', userUID, 'trips', uuidv4());
+
+        const dates = {};
+        formattedDateRange.forEach((date) => {
+            dates[date] = {
+                time: [
+                    {
+                        placeAddress: '',
+                        placeId: '',
+                        placeName: '',
+                        placeWebsite: '',
+                        time: '',
+                    },
+                ],
+            }; // 建立日期的空物件，並在其中加入時間的空陣列
+        });
         setDoc(tripRef, {
             tripname: tripname,
-            dateRange: formattedDateRange,
+            tripId: tripId,
+            dates: dates,
         })
             .then(() => {
                 console.log(`成功儲存旅行 ${tripname}`);

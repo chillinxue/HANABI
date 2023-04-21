@@ -97,14 +97,10 @@ const DateBox = styled.div`
     border: 1px solid black;
 `;
 const TripDetailContainer = styled.div`
-    display: flex;
     border: 1px solid black;
     height: 50px;
     display: flex;
     margin: 5px;
-`;
-const TripDetailBox = styled.div`
-    display: flex;
 `;
 const TripDetailTime = styled.div`
     border: 1px solid black;
@@ -452,10 +448,9 @@ export default function Trips() {
                                 ))}
                             </TripDateContainer>
                             <TripDetailContainer>
-                                <TripDetailBox>
-                                    <TripDetailTime>TripDetailTime</TripDetailTime>
-                                    <TripDetailAddress>TripDetailAdress</TripDetailAddress>
-                                </TripDetailBox>
+                                <TripDateContainer></TripDateContainer>
+                                <TripDetailTime>TripDetailTime</TripDetailTime>
+                                <TripDetailAddress>TripDetailAdress</TripDetailAddress>
                             </TripDetailContainer>
                         </TripInfoContainer>
                     </PlanRightContainer>
