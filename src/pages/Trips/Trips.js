@@ -96,26 +96,45 @@ const DateBox = styled.div`
     height: 20px;
     border: 1px solid black;
 `;
-const TripDetailContainer = styled.div`
+const AddTripDetailContainer = styled.div`
     border: 1px solid black;
     height: 50px;
     display: flex;
     margin: 5px;
 `;
-const TripDetailPlace = styled.div`
+const AddTripDetailPlace = styled.div`
     border: 1px solid black;
     margin: 5px;
 `;
-const TripDetailTime = styled.div`
+const AddTripDetailTime = styled.div`
     border: 1px solid black;
     margin: 5px;
 `;
-const TripDetailAddress = styled.div`
+const AddTripDetailAddress = styled.div`
     border: 1px solid black;
     width: 100%;
     margin: 5px;
 `;
 
+const SavedTripDetailContainer = styled.div`
+    border: 1px solid black;
+    height: 50px;
+    display: flex;
+    margin: 5px;
+`;
+const SavedTripDetailPlace = styled.div`
+    border: 1px solid black;
+    margin: 5px;
+`;
+const SavedTripDetailTime = styled.div`
+    border: 1px solid black;
+    margin: 5px;
+`;
+const SavedTripDetailAddress = styled.div`
+    border: 1px solid black;
+    width: 100%;
+    margin: 5px;
+`;
 export default function Trips() {
     const { userUID } = useContext(AuthContext);
     let cachedScripts = [];
@@ -204,7 +223,13 @@ export default function Trips() {
     const [trips, setTrips] = useState([]); //抓到旅行資料
     const initialSelectedDates = trips && trips.length > 0 ? trips[0].dateRange : [];
     const [selectedTrip, setSelectedTrip] = useState(initialSelectedDates);
+    const [selectedTripDate, setSelectedTripDate] = useState(undefined); // 預設為 undefined
+    const [selectedDateIndex, setSelectedDateIndex] = useState(0);
 
+    const handleDateClick = (date) => {
+        setSelectedTripDate(date);
+    };
+    console.log(selectedTrip.dates);
     // const handleTripClick = (trip, index) => {
     //     const tripDates = trips[index].dates;
     //     setSelectedDates(tripDates);
@@ -222,6 +247,11 @@ export default function Trips() {
         return () => unsubscribe();
     }, [userUID]);
     console.log('userUID: ', userUID);
+
+    const [time, setTime] = useState(''); //時間選擇器
+    const handleTimeChange = (event) => {
+        setTime(event.target.value);
+    };
 
     async function uploadItems(name, id, address, rating, url, website, type) {
         //存入user sub-collection Places
@@ -377,6 +407,8 @@ export default function Trips() {
     } else {
     }
 
+    console.log(selectedTrip.dates);
+
     return (
         <>
             <Outside>
@@ -452,16 +484,38 @@ export default function Trips() {
                         <TripInfoContainer>
                             <TripDateContainer>
                                 {selectedTrip.dates?.map((date, index) => (
-                                    <DateBox key={index}>
+                                    <DateBox key={index} onClick={() => setSelectedDateIndex(index)}>
                                         {date.date.split('/')[1]}/{date.date.split('/')[2]}
                                     </DateBox>
                                 ))}
                             </TripDateContainer>
-                            <TripDetailContainer>
-                                <TripDetailTime>TripDetailTime</TripDetailTime>
-                                <TripDetailPlace>TripDetailPlace</TripDetailPlace>
-                                <TripDetailAddress>TripDetailAdress</TripDetailAddress>
-                            </TripDetailContainer>
+                            <AddTripDetailContainer>
+                                <AddTripDetailTime>
+                                    <input type='time' value={time} onChange={handleTimeChange} />
+                                </AddTripDetailTime>
+                                <AddTripDetailPlace>TripDetailPlace</AddTripDetailPlace>
+                                <AddTripDetailAddress>TripDetailAdress</AddTripDetailAddress>
+                            </AddTripDetailContainer>
+                            <SavedTripDetailContainer>
+                                {/* {selectedTrip.dates[0]} */}
+                                {selectedTrip.dates &&
+                                    Object.keys(selectedTrip.dates[selectedDateIndex]) // { 9:00: {}, 10:00: {}, date: '' }
+                                        .filter((time) => time !== 'date')
+                                        .map((time) => (
+                                            <>
+                                                <SavedTripDetailTime>{time}</SavedTripDetailTime>
+                                                <SavedTripDetailPlace>
+                                                    {selectedTrip.dates[selectedDateIndex][time].placeName}
+                                                </SavedTripDetailPlace>
+                                                <SavedTripDetailAddress>
+                                                    {selectedTrip.dates[selectedDateIndex][time].placeAddress}
+                                                </SavedTripDetailAddress>
+                                            </>
+                                        ))}
+                                <SavedTripDetailAddress>
+                                    {/* {trips[0].dates[0]['9:00'].placeAddress}S */}
+                                </SavedTripDetailAddress>
+                            </SavedTripDetailContainer>
                         </TripInfoContainer>
                     </PlanRightContainer>
                 </PlanOutContainer>

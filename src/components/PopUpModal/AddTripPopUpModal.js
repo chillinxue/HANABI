@@ -179,7 +179,14 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
             </ModalContainer>
         </div>
     );
-}
+} // async function getDates() {
+//     const tripsRef = collection(db, `users/${userUID}/dates`);
+//     const querySnapshot = await getDoc(tripsRef);
+//     querySnapshot.data();
+//     console.log(querySnapshot.data());
+// }
+// getDates();
+
 // export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
 //     const [selectedStartedDate, setSelectedStartedDate] = useState(null);
 //     const [selectedEndedDate, setSelectedEndedDate] = useState(null);
