@@ -53,7 +53,7 @@ const FavoritesContainer = styled.div`
     border-box: box-sizing;
 `;
 const MapOutContainer = styled.div``;
-const MapContainer = styled.div``;
+
 const PlanOutContainer = styled.div`
     border: 1px solid black;
     display: flex;
@@ -100,6 +100,10 @@ const TripDetailContainer = styled.div`
     border: 1px solid black;
     height: 50px;
     display: flex;
+    margin: 5px;
+`;
+const TripDetailPlace = styled.div`
+    border: 1px solid black;
     margin: 5px;
 `;
 const TripDetailTime = styled.div`
@@ -199,12 +203,12 @@ export default function Trips() {
 
     const [trips, setTrips] = useState([]); //抓到旅行資料
     const initialSelectedDates = trips && trips.length > 0 ? trips[0].dateRange : [];
-    const [selectedDates, setSelectedDates] = useState(initialSelectedDates);
+    const [selectedTrip, setSelectedTrip] = useState(initialSelectedDates);
 
-    const handleTripClick = (index) => {
-        const tripDates = trips[index].dateRange;
-        setSelectedDates(tripDates);
-    };
+    // const handleTripClick = (trip, index) => {
+    //     const tripDates = trips[index].dates;
+    //     setSelectedDates(tripDates);
+    // };
     useEffect(() => {
         if (!userUID) {
             return;
@@ -218,7 +222,6 @@ export default function Trips() {
         return () => unsubscribe();
     }, [userUID]);
     console.log('userUID: ', userUID);
-    console.log(trips);
 
     async function uploadItems(name, id, address, rating, url, website, type) {
         //存入user sub-collection Places
@@ -335,7 +338,7 @@ export default function Trips() {
         return;
     }
 
-    console.log(places);
+    // console.log(places);
     //create a DirectionsService object to use the route method and get a result for our request
     const directionsService = new window.google.maps.DirectionsService(); //路線計算
 
@@ -432,24 +435,31 @@ export default function Trips() {
                     <PlanLeftContainer>
                         <button onClick={openModal}>Add new Trip</button>
                         {trips &&
-                            trips.map((data, index) => (
-                                <TripsBox key={index} onClick={() => handleTripClick(index)}>
-                                    {data.tripname}
+                            trips.map((trip, index) => (
+                                <TripsBox
+                                    key={index}
+                                    onClick={() => {
+                                        console.log(trip);
+                                        setSelectedTrip(trip);
+                                        console.log(trips);
+                                    }}
+                                >
+                                    {trip.tripname}
                                 </TripsBox>
                             ))}
                     </PlanLeftContainer>
                     <PlanRightContainer>
                         <TripInfoContainer>
                             <TripDateContainer>
-                                {selectedDates.map((date, index) => (
+                                {selectedTrip.dates?.map((date, index) => (
                                     <DateBox key={index}>
-                                        {date.split('/')[1]}/{date.split('/')[2]}
+                                        {date.date.split('/')[1]}/{date.date.split('/')[2]}
                                     </DateBox>
                                 ))}
                             </TripDateContainer>
                             <TripDetailContainer>
-                                <TripDateContainer></TripDateContainer>
                                 <TripDetailTime>TripDetailTime</TripDetailTime>
+                                <TripDetailPlace>TripDetailPlace</TripDetailPlace>
                                 <TripDetailAddress>TripDetailAdress</TripDetailAddress>
                             </TripDetailContainer>
                         </TripInfoContainer>
