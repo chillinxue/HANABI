@@ -115,6 +115,11 @@ const AddTripDetailAddress = styled.div`
     width: 100%;
     margin: 5px;
 `;
+const AddDescription = styled.div`
+    border: 1px solid black;
+    width: 100%;
+    margin: 5px;
+`;
 
 const SavedTripDetailContainer = styled.div`
     border: 1px solid black;
@@ -131,6 +136,11 @@ const SavedTripDetailTime = styled.div`
     margin: 5px;
 `;
 const SavedTripDetailAddress = styled.div`
+    border: 1px solid black;
+    width: 100%;
+    margin: 5px;
+`;
+const SavedDescription = styled.div`
     border: 1px solid black;
     width: 100%;
     margin: 5px;
@@ -222,9 +232,11 @@ export default function Trips() {
 
     const [trips, setTrips] = useState([]); //抓到旅行資料
     const initialSelectedDates = trips && trips.length > 0 ? trips[0].dateRange : [];
-    const [selectedTrip, setSelectedTrip] = useState(initialSelectedDates);
+    // const [selectedTrip, setSelectedTrip] = useState(initialSelectedDates);
+    const [selectedTrip, setSelectedTrip] = useState({});
     const [selectedTripDate, setSelectedTripDate] = useState(undefined); // 預設為 undefined
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
+    const [sortedData, setSortedData] = useState();
 
     const handleDateClick = (date) => {
         setSelectedTripDate(date);
@@ -364,11 +376,15 @@ export default function Trips() {
             console.log(latLngResults);
         }
     }, [loaded]);
+    useEffect(() => {
+        getNewSortedDate(); //.map之前consloe出來是個array，讓他
+    }, [selectedTrip]); //當點擊trip，產生時間順續的array
+
     if (!loaded) {
         return;
     }
 
-    // console.log(places);
+    console.log(places);
     //create a DirectionsService object to use the route method and get a result for our request
     const directionsService = new window.google.maps.DirectionsService(); //路線計算
 
@@ -402,12 +418,34 @@ export default function Trips() {
         });
     }
 
-    if (locationInfo !== null) {
-        // console.log('locationInfo:', locationInfo.geometry);
-    } else {
-    }
+    // if (locationInfo !== null) {
+    //     console.log('locationInfo:', locationInfo.geometry);
+    // } else {
+    // }
 
-    console.log(selectedTrip.dates);
+    // console.log(selectedTrip.dates);
+
+    function getSortedDate() {
+        if (Object.keys(selectedTrip).length > 0) {
+            const timeList = selectedTrip.dates.map((date) => date);
+            const sortedData = Object.fromEntries(
+                Object.entries(timeList)
+                    .filter(([key]) => !isNaN(Date.parse(key))) // filter out non-time keys
+                    .sort(([a], [b]) => new Date(`1970/01/01 ${a}`) - new Date(`1970/01/01 ${b}`))
+            );
+            return sortedData;
+        }
+    } //selectedtrip.date（有包含地址資料）按照時間順序排
+
+    function getNewSortedDate() {
+        if (getSortedDate()) {
+            const dates = Object.keys(getSortedDate()[selectedDateIndex]).filter((time) => time !== 'date'); // { 9:00: {}, 10:00: {}, date: '' }
+            dates.sort((a, b) => {
+                return new Date('1970/01/01 ' + a) - new Date('1970/01/01 ' + b);
+            });
+            return dates;
+        }
+    } //單純把時間拿出來排
 
     return (
         <>
@@ -482,6 +520,16 @@ export default function Trips() {
                     </PlanLeftContainer>
                     <PlanRightContainer>
                         <TripInfoContainer>
+                            <AddTripDetailContainer>
+                                <AddTripDetailTime>
+                                    <input type='time' value={time} onChange={handleTimeChange} />
+                                </AddTripDetailTime>
+                                <AddTripDetailPlace>TripDetailPlace</AddTripDetailPlace>
+                                <AddTripDetailAddress>TripDetailAdress</AddTripDetailAddress>
+                                <AddDescription>AddTripDescription</AddDescription>
+                                <button> 加入現有行程</button>
+                            </AddTripDetailContainer>
+                            {/* {selectedTrip.dates[0]} */}
                             <TripDateContainer>
                                 {selectedTrip.dates?.map((date, index) => (
                                     <DateBox key={index} onClick={() => setSelectedDateIndex(index)}>
@@ -489,33 +537,21 @@ export default function Trips() {
                                     </DateBox>
                                 ))}
                             </TripDateContainer>
-                            <AddTripDetailContainer>
-                                <AddTripDetailTime>
-                                    <input type='time' value={time} onChange={handleTimeChange} />
-                                </AddTripDetailTime>
-                                <AddTripDetailPlace>TripDetailPlace</AddTripDetailPlace>
-                                <AddTripDetailAddress>TripDetailAdress</AddTripDetailAddress>
-                            </AddTripDetailContainer>
-                            <SavedTripDetailContainer>
-                                {/* {selectedTrip.dates[0]} */}
-                                {selectedTrip.dates &&
-                                    Object.keys(selectedTrip.dates[selectedDateIndex]) // { 9:00: {}, 10:00: {}, date: '' }
-                                        .filter((time) => time !== 'date')
-                                        .map((time) => (
-                                            <>
-                                                <SavedTripDetailTime>{time}</SavedTripDetailTime>
-                                                <SavedTripDetailPlace>
-                                                    {selectedTrip.dates[selectedDateIndex][time].placeName}
-                                                </SavedTripDetailPlace>
-                                                <SavedTripDetailAddress>
-                                                    {selectedTrip.dates[selectedDateIndex][time].placeAddress}
-                                                </SavedTripDetailAddress>
-                                            </>
-                                        ))}
-                                <SavedTripDetailAddress>
-                                    {/* {trips[0].dates[0]['9:00'].placeAddress}S */}
-                                </SavedTripDetailAddress>
-                            </SavedTripDetailContainer>
+                            {getNewSortedDate() &&
+                                getNewSortedDate().map((time) => (
+                                    <>
+                                        <SavedTripDetailContainer>
+                                            <SavedTripDetailTime>{time}</SavedTripDetailTime>
+                                            <SavedTripDetailPlace>
+                                                {selectedTrip.dates[selectedDateIndex][time].placeName}
+                                            </SavedTripDetailPlace>
+                                            <SavedTripDetailAddress>
+                                                {selectedTrip.dates[selectedDateIndex][time].placeAddress}
+                                            </SavedTripDetailAddress>
+                                            <SavedDescription>SavedDescription</SavedDescription>
+                                        </SavedTripDetailContainer>
+                                    </>
+                                ))}
                         </TripInfoContainer>
                     </PlanRightContainer>
                 </PlanOutContainer>
