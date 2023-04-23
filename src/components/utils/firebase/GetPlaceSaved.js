@@ -4,6 +4,8 @@ import { db } from '../../../pages/Trips/Trips';
 import { doc, onSnapshot } from 'firebase/firestore';
 import styled from 'styled-components';
 import { AuthContext } from '../../../Context/AuthContext';
+import { TripsContext } from '../../../pages/Trips/tripsContext';
+
 const GetPlaceSavedContainer = styled.div`
     padding: 10px 10px;
     display: flex;
@@ -37,12 +39,14 @@ const SavedBoxAddress = styled.div``;
 const DeleteSaveBox = styled.button``;
 const AddToTrip = styled.button``;
 
-export default function GetPlaceSaved({ places, setPlaces }) {
+export default function GetPlaceSaved() {
     // const [places, setPlaces] = useState(null);
     const [placeType, setPlaceType] = useState(null);
     const [searchInput, setSearchInput] = useState('');
     const [showSearchInput, setShowSearchInput] = useState(true);
     const { userUID } = useContext(AuthContext);
+    const { places, setPlaces, addPlaces, setAddPlaces } = useContext(TripsContext);
+
     console.log(userUID);
 
     useEffect(() => {
@@ -72,8 +76,9 @@ export default function GetPlaceSaved({ places, setPlaces }) {
                 placeList.push({ id: doc.id, ...doc.data() });
             });
             setPlaces(placeList);
+            console.log(placeList);
         });
-
+        console.log(places);
         return () => {
             unsub();
         };
@@ -94,7 +99,6 @@ export default function GetPlaceSaved({ places, setPlaces }) {
             setShowSearchInput(true);
         }
     };
-
     return (
         <>
             <GetPlaceSavedContainer style={{ overflow: 'scroll', maxHeight: '410px' }}>
@@ -111,7 +115,7 @@ export default function GetPlaceSaved({ places, setPlaces }) {
                             <SavedBoxName>{data.name}</SavedBoxName>
                             <SavedBoxAddress>{data.formatted_address}</SavedBoxAddress>
                             <DeleteSaveBox onClick={() => handleDelete(data.id)}>Delete</DeleteSaveBox>
-                            <AddToTrip>Add to Current Trip</AddToTrip>
+                            <AddToTrip onClick={() => setAddPlaces(data)}>Add to Current Trip</AddToTrip>
                         </SavedBox>
                     ))}
             </GetPlaceSavedContainer>

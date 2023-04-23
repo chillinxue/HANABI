@@ -3,12 +3,14 @@ import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import MenuSearchBar from '../../components/SearchBar/MenuSearchBar';
 import PosterMenu from '../../components/PosterMenu/PosterMenu';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, onSnapshot } from 'firebase/firestore';
-import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import { arrayUnion, getFirestore, onSnapshot } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection, updateDoc } from 'firebase/firestore';
 import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
 import Modal from 'react-modal';
 import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
 import { AuthContext } from '../../Context/AuthContext';
+import { TripsContextProvider } from './tripsContext';
+import { TripsContext } from './tripsContext';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
@@ -79,7 +81,9 @@ const TripsBox = styled.div`
     border: 1px solid black;
     width: 100%;
     height: 50px;
+    background-color: ${(props) => (props.isSelected ? 'grey' : 'white')};
 `;
+
 const TripInfoContainer = styled.div`
     border: 1px solid black;
     width: 100%;
@@ -95,6 +99,7 @@ const DateBox = styled.div`
     width: fit-content;
     height: 20px;
     border: 1px solid black;
+    background-color: ${(props) => (props.isSelected ? 'grey' : 'white')};
 `;
 const AddTripDetailContainer = styled.div`
     border: 1px solid black;
@@ -115,7 +120,7 @@ const AddTripDetailAddress = styled.div`
     width: 100%;
     margin: 5px;
 `;
-const AddDescription = styled.div`
+const AddDescription = styled.input`
     border: 1px solid black;
     width: 100%;
     margin: 5px;
@@ -130,6 +135,7 @@ const SavedTripDetailContainer = styled.div`
 const SavedTripDetailPlace = styled.div`
     border: 1px solid black;
     margin: 5px;
+    width: 100%;
 `;
 const SavedTripDetailTime = styled.div`
     border: 1px solid black;
@@ -204,7 +210,8 @@ export default function Trips() {
     const toInputRef = useRef(null); // 新增終點 ref
     const [to, setTo] = useState(''); // 新增終點 state
     const [locationInfo, setLocationInfo] = useState(null);
-    const [places, setPlaces] = useState();
+    // const [places, setPlaces] = useState();
+    const { places, setPlaces, addPlaces, setAddPlaces } = useContext(TripsContext);
     // const inputRef = useRef(null);
 
     const [favorites, setFavorites] = useState([]);
@@ -225,7 +232,7 @@ export default function Trips() {
         }
         setModalOpen(true);
     };
-
+    console.log(addPlaces);
     const closeModal = () => {
         setModalOpen(false);
     };
@@ -237,10 +244,16 @@ export default function Trips() {
     const [selectedTripDate, setSelectedTripDate] = useState(undefined); // 預設為 undefined
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
     const [sortedData, setSortedData] = useState();
+    const [enterDescription, setEnterDescription] = useState('');
+    const [tripUpdated, setTripUpdated] = useState(false);
+    const [autoUpdateTrips, setAutoUpdateTrips] = useState({});
+    const [isClickTrip, setIsClickTrip] = useState(false);
+    const [isClickDate, setIsClickDate] = useState(false);
 
     const handleDateClick = (date) => {
         setSelectedTripDate(date);
     };
+
     console.log(selectedTrip.dates);
     // const handleTripClick = (trip, index) => {
     //     const tripDates = trips[index].dates;
@@ -254,15 +267,47 @@ export default function Trips() {
         const unsubscribe = onSnapshot(tripsRef, (snapshot) => {
             const newTrips = snapshot.docs.map((doc) => doc.data());
             setTrips(newTrips);
-            console.log(newTrips); // 在此處添加console.log
+
+            // Get the selected trip from the updated trips array
+            const updatedSelectedTrip = newTrips.find((trip) => trip.tripId === selectedTrip.tripId);
+
+            // If the selected trip's data has changed, update the autoUpdateTrips state
+            if (updatedSelectedTrip && JSON.stringify(updatedSelectedTrip) !== JSON.stringify(selectedTrip)) {
+                setSelectedTrip(updatedSelectedTrip);
+                setAutoUpdateTrips(updatedSelectedTrip.dates[selectedDateIndex]);
+            }
         });
-        return () => unsubscribe();
-    }, [userUID]);
-    console.log('userUID: ', userUID);
+
+        // const tripsRef = collection(db, `users/${userUID}/trips`);
+        // const unsubscribe = onSnapshot(tripsRef, (snapshot) => {
+        //     const newTrips = snapshot.docs.map((doc) => doc.data());
+        //     setTrips(newTrips);
+        //     console.log(newTrips); // 在此處添加console.log
+        // });
+        // if (!selectedDateIndex) {
+        //     return;
+        // }
+        // const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
+
+        // const addTripDoc = onSnapshot(addTripDetailTestRef, (docSnapshot) => {
+        //     console.log('Received doc snapshot: ', docSnapshot.data());
+        //     setAutoUpdateTrips(docSnapshot.data());
+        // });
+        // setTripUpdated(false);
+
+        return () => {
+            unsubscribe();
+            // addTripDoc();
+        };
+    }, [userUID, tripUpdated]);
 
     const [time, setTime] = useState(''); //時間選擇器
     const handleTimeChange = (event) => {
         setTime(event.target.value);
+    };
+
+    const handleDescriptionChange = (event) => {
+        setEnterDescription(event.target.value);
     };
 
     async function uploadItems(name, id, address, rating, url, website, type) {
@@ -380,10 +425,6 @@ export default function Trips() {
         getNewSortedDate(); //.map之前consloe出來是個array，讓他
     }, [selectedTrip]); //當點擊trip，產生時間順續的array
 
-    if (!loaded) {
-        return;
-    }
-
     console.log(places);
     //create a DirectionsService object to use the route method and get a result for our request
     const directionsService = new window.google.maps.DirectionsService(); //路線計算
@@ -418,6 +459,8 @@ export default function Trips() {
         });
     }
 
+    console.log(selectedTrip.dates);
+
     // if (locationInfo !== null) {
     //     console.log('locationInfo:', locationInfo.geometry);
     // } else {
@@ -447,6 +490,80 @@ export default function Trips() {
         }
     } //單純把時間拿出來排
 
+    console.log(selectedTrip.dates);
+    async function addTripDetailToFirebase() {
+        const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
+        const selectedDate = selectedTrip.dates[selectedDateIndex];
+
+        await updateDoc(addTripDetailTestRef, {
+            dates: selectedTrip.dates.map((date) => {
+                if (date.date === selectedDate.date) {
+                    return {
+                        ...date,
+                        [time]: {
+                            // date: selectedTripDate,
+                            placeName: addPlaces.name,
+                            placeAddress: addPlaces.formatted_address,
+                            placeId: addPlaces.placeId,
+                            placesWebsite: addPlaces.website,
+                            description: enterDescription,
+                        },
+                    };
+                }
+                return date;
+            }),
+        });
+        setTripUpdated(true);
+    }
+    // async function addTripDetailToFirebase() {
+    //     console.log(userUID);
+    //     const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
+
+    //     for (let i = 0; i < selectedTrip.dates.length; i++) {
+    //         if (i === selectedDateIndex) {
+    //             await updateDoc(addTripDetailTestRef, {
+    //                 dates: {
+    //                     date: selectedTrip.dates[selectedDateIndex],
+    //                     [time]: {
+    //                         date: selectedTripDate,
+    //                         placeName: addPlaces.name,
+    //                         placeAddress: addPlaces.formatted_address,
+    //                         placeId: addPlaces.placeId,
+    //                         placesWebsite: addPlaces.website,
+    //                         description: enterDescription,
+    //                     },
+    //                 },
+    //             });
+    //             break;
+    //         }
+    //     }
+    //     // await updateDoc(addTripDetailTestRef, {
+    //     //     dates: arrayUnion({
+    //     //         ...selectedTrip.dates[selectedDateIndex],
+
+    //     //         [time]: {
+    //     //             date: selectedTripDate,
+    //     //             placeName: addPlaces.name,
+    //     //             placeAddress: addPlaces.formatted_address,
+    //     //             placeId: addPlaces.placeId,
+    //     //             placesWebsite: addPlaces.website,
+    //     //             description: enterDescription,
+    //     //         },
+    //     //     }),
+    //     // });
+    // }
+
+    console.log(selectedTripDate);
+    console.log(addPlaces.formatted_address);
+    console.log(addPlaces.placeId);
+    console.log(addPlaces.website);
+    console.log(selectedDateIndex);
+    console.log('userUID: ', userUID);
+    console.log(autoUpdateTrips);
+
+    if (!loaded) {
+        return;
+    }
     return (
         <>
             <Outside>
@@ -524,15 +641,28 @@ export default function Trips() {
                                 <AddTripDetailTime>
                                     <input type='time' value={time} onChange={handleTimeChange} />
                                 </AddTripDetailTime>
-                                <AddTripDetailPlace>TripDetailPlace</AddTripDetailPlace>
-                                <AddTripDetailAddress>TripDetailAdress</AddTripDetailAddress>
-                                <AddDescription>AddTripDescription</AddDescription>
-                                <button> 加入現有行程</button>
+                                <AddTripDetailPlace>{addPlaces.name}</AddTripDetailPlace>
+                                <AddTripDetailAddress>{addPlaces.formatted_address}</AddTripDetailAddress>
+                                <AddDescription
+                                    value={enterDescription}
+                                    onChange={handleDescriptionChange}
+                                ></AddDescription>
+                                <button onClick={addTripDetailToFirebase}>Add</button>
                             </AddTripDetailContainer>
                             {/* {selectedTrip.dates[0]} */}
                             <TripDateContainer>
                                 {selectedTrip.dates?.map((date, index) => (
-                                    <DateBox key={index} onClick={() => setSelectedDateIndex(index)}>
+                                    <DateBox
+                                        key={index}
+                                        onClick={() => {
+                                            setSelectedDateIndex(index);
+                                            setSelectedTripDate(
+                                                `${date.date.split('/')[0]}/${date.date.split('/')[1]}/${
+                                                    date.date.split('/')[2]
+                                                }`
+                                            );
+                                        }}
+                                    >
                                         {date.date.split('/')[1]}/{date.date.split('/')[2]}
                                     </DateBox>
                                 ))}
@@ -548,7 +678,9 @@ export default function Trips() {
                                             <SavedTripDetailAddress>
                                                 {selectedTrip.dates[selectedDateIndex][time].placeAddress}
                                             </SavedTripDetailAddress>
-                                            <SavedDescription>SavedDescription</SavedDescription>
+                                            <SavedDescription>
+                                                {selectedTrip.dates[selectedDateIndex][time].description}
+                                            </SavedDescription>
                                         </SavedTripDetailContainer>
                                     </>
                                 ))}
