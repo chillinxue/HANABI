@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import MenuSearchBar from '../../components/SearchBar/MenuSearchBar';
-import PosterMenu from '../../components/PosterMenu/PosterMenu';
+// import PosterMenuOld from '../../components/PosterMenu/PosterMenuOld';
 import { initializeApp } from 'firebase/app';
 import { arrayUnion, getFirestore, onSnapshot } from 'firebase/firestore';
 import { doc, setDoc, addDoc, collection, updateDoc } from 'firebase/firestore';
@@ -10,7 +10,12 @@ import Modal from 'react-modal';
 import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
 import { AuthContext } from '../../Context/AuthContext';
 import { TripsContextProvider } from './tripsContext';
+import { Link } from 'react-router-dom';
 import { TripsContext } from './tripsContext';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import PosterMenuBlack from '../../components/PosterMenuBlack/PosterMenuBlack';
+import FujiMt from './FujiMt.jpg';
+import SearchIcon from './search.png';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
@@ -27,110 +32,466 @@ const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
 
-const Outside = styled.div``;
-const SearchContainer = styled.div`
-    border: 1px solid black;
-    width: 100%;
-    height: 100px;
+const Outside = styled.div`
+    background-color: #fafafa;
+`;
+const Inside = styled.div``;
+const Login = styled.div`
+    z-index: 2;
+`;
+const LoginContainer = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+    padding-top: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+`;
+const LoginInsideContainer = styled.div`
+    display: flex;
+    border: 1px solid #2d2d2d;
+    justify-content: center;
+    align-items: center;
+`;
+const LogInButton = styled.div`
+    color: #2d2d2d;
+    border-right: 1px solid #2d2d2d;
+    width: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    box-sizing: border-box;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 18px;
+    text-align: center;
 `;
-const RouteMapContainer = styled.div`
-    border: 1px solid black;
-    height: 500px;
+const LogOutButton = styled.div`
+    color: #2d2d2d;
+    width: 45px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+`;
+const HeadContainer = styled.div``;
+const LogoContainer = styled.div`
     display: flex;
-    margin-top: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `;
-const RouteContainer = styled.div`
-    border: 1px solid black;
-    width: 200px;
-    height: 500px;
-`;
-const FavoritesContainer = styled.div`
-    border: 1px black solid;
-    width: 500px;
-    padding: 10px;
-    border-box: box-sizing;
-`;
-const MapOutContainer = styled.div``;
-
-const PlanOutContainer = styled.div`
-    border: 1px solid black;
+const Logo = styled.div`
+    width: 319px;
+    height: 80px;
+    font-family: 'Prata';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 81px;
+    text-align: center;
+    color: #2d2d2d;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    line-height: 54px;
     display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+const MainPage = styled.div`
+    padding: 12px 65px;
+    box-sizing: border-box;
+`;
+const PosterContainer = styled.div`
+    width: 100%vw;
+`;
+const Poster = styled.div`
+    background-image: url(${FujiMt});
+    background-size: cover;
+    background-position: center;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 30px;
     width: 100%;
-    height: 500px;
-    padding: 20px;
-    border-box: box-sizing;
-    gap: 20px;
-    margin-top: 20px;
+    height: 450px;
+    padding-top: 40px;
 `;
-const PlanLeftContainer = styled.div`
-    border: 1px solid black;
-    width: 500px;
-    height: 100%;
+
+const RouteContainer = styled.div`
+    width: 340px;
+    height: 245px;
+    margin-left: 30px;
+`;
+const RouteSearchLogo = styled.div`
+    height: 60px;
+
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 58px;
+    text-align: center;
+    color: #2d2d2d;
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+const RouteSubContainer = styled.div`
+    margin-left: 50px;
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 `;
+const RouteFromContainer = styled.div`
+    width: 265px;
+    height: 55px;
+
+    background: rgba(255, 255, 255, 0.5);
+    /* mix-blend-mode: soft-light; */
+    border: 2px solid #ffffff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px 15px;
+    box-sizing: border-box;
+`;
+const RouteInput = styled.input`
+    width: 210 px;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    background: none;
+
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 29px;
+    color: #fafafa;
+    ::placeholder {
+        color: #fafafa;
+        opacity: 1;
+    }
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+const RouteToContainer = styled.div`
+    width: 265px;
+    height: 55px;
+
+    background: rgba(255, 255, 255, 0.5);
+    /* mix-blend-mode: soft-light; */
+    border: 2px solid #ffffff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px 10px;
+    box-sizing: border-box;
+`;
+const SearchIconContainer = styled.img`
+    width: 25px;
+    position: relative;
+    right: 20px;
+`;
+const MiddleContainer = styled.div`
+    height: 525px;
+    display: flex;
+    margin-top: 20px;
+    gap: 10px;
+`;
+const AddtoFavContainer = styled.div`
+    display: flex;
+    gap: 5px;
+`;
+const SelectedTypeContainer = styled.div``;
+const SelectedType = styled.select`
+    width: 150px;
+    height: 25px;
+    background-color: transparent;
+    padding: 1px;
+    border-radius: 5px;
+    opacity: 0.75;
+    border: 1px solid #2d2d2d;
+
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 17px;
+    text-align: flex-start;
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+const Option = styled.option`
+    background-color: rgba(255, 255, 255, 0.5);
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 29px;
+    color: #2d2d2d;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
+const AddtoFav = styled.div`
+    width: 105px;
+    background-color: transparent;
+    padding: 1px;
+    border-radius: 5px;
+    opacity: 0.75;
+    border: 1px solid #2d2d2d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 17px;
+    text-align: flex-start;
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+const FavoritesContainer = styled.div`
+    width: 399px;
+    height: 525px;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #2d2d2d;
+    opacity: 0.9;
+`;
+const FavoritesHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+const FavLogo = styled.div`
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 29px;
+    text-align: center;
+
+    color: #fafafa;
+
+    mix-blend-mode: normal;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+const FavShowOnMap = styled.div`
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 8px;
+    line-height: 14px;
+    text-align: center;
+    border: 1px solid #fafafa;
+    padding: 4px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 95px;
+    height: 20px;
+
+    color: #fafafa;
+`;
+const MapOutContainer = styled.div``;
+
+const PlanOutContainer = styled.div`
+    display: flex;
+    margin-top: 10px;
+    gap: 10px;
+    height: 525px;
+`;
+const PlanLeftContainer = styled.div`
+    width: 399px;
+    padding: 10px 28px;
+    box-sizing: border-box;
+    background: #2d2d2d;
+    background: rgba(45, 45, 45, 0.2);
+    opacity: 0.9;
+`;
+const TripsLogo = styled.div`
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 29px;
+    text-align: center;
+
+    color: #2d2d2d;
+
+    mix-blend-mode: normal;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+const PlanLeftHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+const TripsBoxSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+`;
+
+const TripsBox = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 15px;
+`;
 const PlanRightContainer = styled.div`
     width: 100%;
 `;
-const TripsBox = styled.div`
-    border: 1px solid black;
-    width: 100%;
-    height: 50px;
-    background-color: ${(props) => (props.isSelected ? 'grey' : 'white')};
-`;
-
-const TripInfoContainer = styled.div`
-    border: 1px solid black;
-    width: 100%;
-    height: 100%;
-    border-box: box-sizing;
-`;
-
 const TripDateContainer = styled.div`
     display: flex;
     gap: 10px;
-`;
-const DateBox = styled.div`
-    width: fit-content;
-    height: 20px;
-    border: 1px solid black;
-    background-color: ${(props) => (props.isSelected ? 'grey' : 'white')};
-`;
-const AddTripDetailContainer = styled.div`
-    border: 1px solid black;
+    width: 100%;
     height: 50px;
-    display: flex;
-    margin: 5px;
-`;
-const AddTripDetailPlace = styled.div`
     border: 1px solid black;
-    margin: 5px;
-`;
-const AddTripDetailTime = styled.div`
-    border: 1px solid black;
-    margin: 5px;
-`;
-const AddTripDetailAddress = styled.div`
-    border: 1px solid black;
-    width: 100%;
-    margin: 5px;
-`;
-const AddDescription = styled.input`
-    border: 1px solid black;
-    width: 100%;
-    margin: 5px;
+    align-items: end;
 `;
 
-const SavedTripDetailContainer = styled.div`
+const TripsContent = styled.div`
+    width: 300px;
+    background: #f3f3f3;
+    mix-blend-mode: normal;
+    border: 2px solid rgba(250, 250, 250, 0.75);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 0px 20px 10px 20px;
+`;
+const TripsBoxName = styled.div`
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 23px;
+    text-align: center;
+
+    color: #2d2d2d;
+    margin-top: 10px;
+`;
+const TripsDate = styled.div`
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+
+    color: #404143;
+`;
+const TripsBoxHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+`;
+const DeleteTripsBox = styled.div`
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 22px;
+    text-align: end;
+    margin-right: 10px;
+
+    color: #404143;
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+const DateBox = styled.div`
+    width: 60px;
+    height: 30px;
+
+    background: #fafafa;
+    opacity: 0.9;
+    border: 1px solid #2d2d2d;
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+
+    color: #2d2d2d;
+`;
+const TripInfoContainer = styled.div`
     border: 1px solid black;
+    width: 100%;
+    height: 475px;
+    box-sizing: border-box;
+    background-color: #2d2d2d;
+    opacity: 0.9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+`;
+const TripInfoSubContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
+const TripInfoTitleContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const TripInfoTitle = styled.div`
+    height: 65px;
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 29px;
+    border-bottom: 1px solid #fafafa;
+    width: 640px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fafafa;
+`;
+
+const SavedTripContainer = styled.div`
+    /* display: flex;
+    flex-direction: column; */
+    /* justify-content: center;
+    align-items: center; */
+`;
+const SavedTripDetailContainer = styled.div`
     height: 50px;
     display: flex;
+    flex-direction: column;
     margin: 5px;
+    width: 645px;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #fafafa;
+`;
+const SavedTripDetailSubContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #fafafa;
+    height: 65px;
+    width: 645px;
+`;
+const SavedBox = styled.div`
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
 `;
 const SavedTripDetailPlace = styled.div`
     border: 1px solid black;
@@ -151,8 +512,241 @@ const SavedDescription = styled.div`
     width: 100%;
     margin: 5px;
 `;
+const TodayTripContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    border: 1px solid white;
+    width: 100%;
+    height: 475px;
+    box-sizing: border-box;
+    background-color: #2d2d2d;
+    opacity: 0.9;
+`;
+const TodayTripHeader = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const TodayTripHeaderTitle = styled.div`
+    height: 65px;
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 29px;
+    border-bottom: 1px solid #fafafa;
+    width: 640px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fafafa;
+`;
+const TodayTripSubContainer = styled.div`
+    height: 400px;
+`;
+
+const TripDeatailContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+const TripDetailBox = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 640px;
+    height: 65px;
+    border-bottom: 1px solid #fafafa;
+`;
+const TripTime = styled.div`
+    width: 70px;
+    margin-right: 20px;
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    text-align: end;
+
+    color: #fafafa;
+`;
+const TripPlace = styled.div`
+    color: #fafafa;
+    width: 350px;
+    margin-right: 35px;
+`;
+const TripName = styled.div`
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+
+    color: #fafafa;
+`;
+
+const TripAddress = styled.div`
+    width: 350px;
+
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+
+    color: #fafafa;
+`;
+const TripDescription = styled.div`
+    width: 155px;
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+
+    color: #fafafa;
+`;
+const DeleteDetailBox = styled.div`
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 22px;
+    text-align: center;
+
+    color: #fafafa;
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
+const AddNewTripContainer = styled.div`
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 8px;
+    line-height: 14px;
+    text-align: center;
+    border: 1px solid #2d2d2d;
+    padding: 4px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 95px;
+    height: 20px;
+
+    color: #2d2d2d;
+`;
+const AddTripDetailContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid white;
+    height: 65px;
+    margin: 0px 10px 10px 10px;
+
+    background: rgba(217, 217, 217, 0.5);
+`;
+const AddTripDetailBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 640px;
+    height: 60px;
+`;
+const AddTripDetailTime = styled.input`
+    border: none;
+    background-color: transparent;
+    /* margin-right: 20px; */
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 23px;
+    text-align: end;
+
+    color: #2d2d2d;
+
+    position: relative;
+    padding-left: 25px;
+    ::-webkit-calendar-picker-indicator {
+        position: absolute;
+        top: 50%;
+        left: 5px;
+        transform: translateY(-50%);
+    }
+`;
+const AddTripDetailPlace = styled.div`
+    color: #fafafa;
+    width: 350px;
+    margin-right: 35px;
+    margin-left: 20px;
+`;
+const AddTripDetailName = styled.div`
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+
+    color: #2d2d2d;
+`;
+
+const AddTripDetailAddress = styled.div`
+    width: 350px;
+
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+
+    color: #2d2d2d;
+`;
+const AddDescription = styled.input`
+    width: 155px;
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+
+    color: #2d2d2d;
+
+    border: none;
+    background-color: transparent;
+    ::placeholder {
+        color: #2d2d2d;
+    }
+`;
+const AddToTrip = styled.div`
+    margin-left: 20px;
+    width: 40px;
+    height: 24px;
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 8px;
+    line-height: 14px;
+    text-align: center;
+    border: 1px solid #fafafa;
+    padding: 4px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+
+    color: #2d2d2d;
+
+    border: 1px solid #2d2d2d;
+`;
+
 export default function Trips() {
     const { userUID } = useContext(AuthContext);
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    const { signIn, logOut } = useContext(AuthContext);
     let cachedScripts = [];
     function useScript(src) {
         // Keeping track of script loaded and error state   //load SDK 初始資料 （收）
@@ -212,16 +806,16 @@ export default function Trips() {
     const [locationInfo, setLocationInfo] = useState(null);
     // const [places, setPlaces] = useState();
     const { places, setPlaces, addPlaces, setAddPlaces } = useContext(TripsContext);
-    // const inputRef = useRef(null);
 
     const [favorites, setFavorites] = useState([]);
     const [typeSaved, setTypeSaved] = useState(null);
-    const inputRef = useRef(null);
     const [address, setAddress] = useState('');
     const [latLngResults, setLatLngResults] = useState([]);
     const cachedPlaces = useMemo(() => places, [places]);
     const [markers, setMarkers] = useState([]);
     const [showMarkers, setShowMarkers] = useState(false);
+    // const searchInputRef = useRef(null);
+    const { searchInputRef } = useContext(TripsContext);
 
     const [modalOpen, setModalOpen] = useState(false);
     const openModal = () => {
@@ -278,23 +872,6 @@ export default function Trips() {
             }
         });
 
-        // const tripsRef = collection(db, `users/${userUID}/trips`);
-        // const unsubscribe = onSnapshot(tripsRef, (snapshot) => {
-        //     const newTrips = snapshot.docs.map((doc) => doc.data());
-        //     setTrips(newTrips);
-        //     console.log(newTrips); // 在此處添加console.log
-        // });
-        // if (!selectedDateIndex) {
-        //     return;
-        // }
-        // const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
-
-        // const addTripDoc = onSnapshot(addTripDetailTestRef, (docSnapshot) => {
-        //     console.log('Received doc snapshot: ', docSnapshot.data());
-        //     setAutoUpdateTrips(docSnapshot.data());
-        // });
-        // setTripUpdated(false);
-
         return () => {
             unsubscribe();
             // addTripDoc();
@@ -330,6 +907,7 @@ export default function Trips() {
             console.error('Error uploading item: ', e);
         }
     }
+
     async function fetchData() {
         const apiKey = 'AIzaSyCszxEdzSyD5fLI9-m_nRiUr6GEbeIfTG4';
         const addresses = cachedPlaces.map((place) => place.formatted_address);
@@ -352,7 +930,7 @@ export default function Trips() {
 
         console.log(filteredResults);
 
-        const allmarkers = filteredResults.map(({ lat, lng }, index) => {
+        const allMarkers = filteredResults.map(({ lat, lng }, index) => {
             const place = places.find(({ formatted_address }) => formatted_address === addresses[index]);
             const title = `${place.name} (${place.formatted_address})`;
             const marker = new window.google.maps.Marker({
@@ -372,8 +950,9 @@ export default function Trips() {
             return marker;
         });
 
-        setMarkers(allmarkers);
+        setMarkers(allMarkers);
     }
+
     function addToFavorites() {
         if (to) {
             // setFavorites((prevFavorites) => [...prevFavorites, to]);
@@ -407,6 +986,7 @@ export default function Trips() {
 
             const fromAutocomplete = new window.google.maps.places.Autocomplete(fromInputRef.current);
             const toAutocomplete = new window.google.maps.places.Autocomplete(toInputRef.current);
+            // const searchAutocomplete = new window.google.maps.places.Autocomplete(searchInputRef.current);
 
             fromAutocomplete.addListener('place_changed', () => {
                 setFrom(fromAutocomplete.getPlace().formatted_address);
@@ -417,10 +997,58 @@ export default function Trips() {
                 toInputRef.current.value = toAutocomplete.getPlace().formatted_address;
                 setLocationInfo(toAutocomplete.getPlace());
             });
+
+            // searchAutocomplete.addListener('place_changed', () => {
+            //     searchInputRef.current.value = searchAutocomplete.getPlace().formatted_address;
+            //     setLocationInfo(searchAutocomplete.getPlace());
+            // });
             setDataMap(map);
             console.log(latLngResults);
         }
     }, [loaded]);
+
+    // useEffect(() => {
+    //     if (loaded) {
+    //         const myLatLng = [{ lat: 35.682518, lng: 139.765804 }];
+    //         const map = new window.google.maps.Map(document.getElementById('map'), {
+    //             zoom: 10,
+    //             center: myLatLng[0],
+    //             mapTypeId: window.google.maps.MapTypeId.ROADMAP,
+    //         });
+
+    //         const searchBox = new window.google.maps.places.SearchBox(searchInputRef.current);
+
+    //         searchBox.addListener('places_changed', () => {
+    //             const places = searchBox.getPlaces();
+    //             if (places.length === 0) return;
+
+    //             const bounds = new window.google.maps.LatLngBounds();
+    //             places.forEach((place) => {
+    //                 if (!place.geometry || !place.geometry.location) {
+    //                     console.log('Returned place contains no geometry');
+    //                     return;
+    //                 }
+
+    //                 const marker = new window.google.maps.Marker({
+    //                     map,
+    //                     title: place.name,
+    //                     position: place.geometry.location,
+    //                 });
+
+    //                 setMarkers((markers) => [...markers, marker]);
+
+    //                 if (place.geometry.viewport) {
+    //                     bounds.union(place.geometry.viewport);
+    //                 } else {
+    //                     bounds.extend(place.geometry.location);
+    //                 }
+    //             });
+
+    //             map.fitBounds(bounds);
+    //         });
+    //     }
+    // }, [loaded, searchInputRef]);
+
     useEffect(() => {
         getNewSortedDate(); //.map之前consloe出來是個array，讓他
     }, [selectedTrip]); //當點擊trip，產生時間順續的array
@@ -515,43 +1143,6 @@ export default function Trips() {
         });
         setTripUpdated(true);
     }
-    // async function addTripDetailToFirebase() {
-    //     console.log(userUID);
-    //     const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
-
-    //     for (let i = 0; i < selectedTrip.dates.length; i++) {
-    //         if (i === selectedDateIndex) {
-    //             await updateDoc(addTripDetailTestRef, {
-    //                 dates: {
-    //                     date: selectedTrip.dates[selectedDateIndex],
-    //                     [time]: {
-    //                         date: selectedTripDate,
-    //                         placeName: addPlaces.name,
-    //                         placeAddress: addPlaces.formatted_address,
-    //                         placeId: addPlaces.placeId,
-    //                         placesWebsite: addPlaces.website,
-    //                         description: enterDescription,
-    //                     },
-    //                 },
-    //             });
-    //             break;
-    //         }
-    //     }
-    //     // await updateDoc(addTripDetailTestRef, {
-    //     //     dates: arrayUnion({
-    //     //         ...selectedTrip.dates[selectedDateIndex],
-
-    //     //         [time]: {
-    //     //             date: selectedTripDate,
-    //     //             placeName: addPlaces.name,
-    //     //             placeAddress: addPlaces.formatted_address,
-    //     //             placeId: addPlaces.placeId,
-    //     //             placesWebsite: addPlaces.website,
-    //     //             description: enterDescription,
-    //     //         },
-    //     //     }),
-    //     // });
-    // }
 
     console.log(selectedTripDate);
     console.log(addPlaces.formatted_address);
@@ -560,6 +1151,7 @@ export default function Trips() {
     console.log(selectedDateIndex);
     console.log('userUID: ', userUID);
     console.log(autoUpdateTrips);
+    // searchInputRef.current && console.log(searchInputRef.current.value);
 
     if (!loaded) {
         return;
@@ -567,126 +1159,280 @@ export default function Trips() {
     return (
         <>
             <Outside>
-                <PosterMenu></PosterMenu>
-                <SearchContainer>
-                    <MenuSearchBar></MenuSearchBar>
-                </SearchContainer>
-                <RouteMapContainer>
-                    <RouteContainer>
-                        <input
-                            type='text'
-                            ref={fromInputRef} // 使用 ref
-                            placeholder='你在哪裏?'
-                            className='form-control'
-                        />
-                        <input
-                            type='text'
-                            ref={toInputRef} // 使用 ref
-                            placeholder='你要去哪裡?'
-                            className='form-control'
-                        />
-                        <button onClick={() => calcRoute()}>搜尋路線</button>
-                    </RouteContainer>
-                    <FavoritesContainer>
-                        <select name='layerSaved' id='placeSaved' onChange={(e) => setTypeSaved(e.target.value)}>
-                            <option value=''>--選擇存取資料夾--</option>
-                            <option value='hotel'>飯店</option>
-                            <option value='attraction'>景點</option>
-                            <option value='restaurant'>餐廳</option>
-                            <option value='transportation'>交通</option>
-                        </select>
-                        <button onClick={() => addToFavorites()}>加入最愛</button> {/* 新增加入最愛按鈕 */}
-                        <input
-                            type='checkbox'
-                            onChange={(e) => {
-                                if (e.target.checked) {
-                                    fetchData();
-                                } else {
-                                    markers.forEach((marker) => marker.setMap(null));
-                                }
-                            }}
-                        />
-                        <label>顯示於地圖上</label>
-                        <GetPlaceSaved
-                            places={places}
-                            setPlaces={setPlaces}
-                            setShowMarkers={setShowMarkers}
-                        ></GetPlaceSaved>
-                    </FavoritesContainer>
-                    <MapOutContainer
-                        id='map'
-                        style={{ height: '100%', width: '100%', border: `1px solid #88C8EC` }}
-                    ></MapOutContainer>
-                </RouteMapContainer>
-                <PlanOutContainer>
-                    <PlanLeftContainer>
-                        <button onClick={openModal}>Add new Trip</button>
-                        {trips &&
-                            trips.map((trip, index) => (
-                                <TripsBox
-                                    key={index}
-                                    onClick={() => {
-                                        console.log(trip);
-                                        setSelectedTrip(trip);
-                                        console.log(trips);
-                                    }}
-                                >
-                                    {trip.tripname}
-                                </TripsBox>
-                            ))}
-                    </PlanLeftContainer>
-                    <PlanRightContainer>
-                        <TripInfoContainer>
-                            <AddTripDetailContainer>
-                                <AddTripDetailTime>
-                                    <input type='time' value={time} onChange={handleTimeChange} />
-                                </AddTripDetailTime>
-                                <AddTripDetailPlace>{addPlaces.name}</AddTripDetailPlace>
-                                <AddTripDetailAddress>{addPlaces.formatted_address}</AddTripDetailAddress>
-                                <AddDescription
-                                    value={enterDescription}
-                                    onChange={handleDescriptionChange}
-                                ></AddDescription>
-                                <button onClick={addTripDetailToFirebase}>Add</button>
-                            </AddTripDetailContainer>
-                            {/* {selectedTrip.dates[0]} */}
-                            <TripDateContainer>
-                                {selectedTrip.dates?.map((date, index) => (
-                                    <DateBox
-                                        key={index}
-                                        onClick={() => {
-                                            setSelectedDateIndex(index);
-                                            setSelectedTripDate(
-                                                `${date.date.split('/')[0]}/${date.date.split('/')[1]}/${
-                                                    date.date.split('/')[2]
-                                                }`
-                                            );
+                <Inside>
+                    {/* <PosterMenuOld></PosterMenuOld> */}
+                    <HeadContainer>
+                        <Login>
+                            <LoginContainer to='/GoogleLogin'>
+                                <LoginInsideContainer>
+                                    <LogInButton onClick={() => signIn(auth, provider)}>Login</LogInButton>
+                                    <LogOutButton onClick={() => logOut(auth)}>Logout</LogOutButton>
+                                </LoginInsideContainer>
+                                {/* <button onClick={() => signIn(auth, provider)}>Login</button>
+                <button onClick={() => logOut(auth)}>Logout</button> */}
+                            </LoginContainer>
+                        </Login>
+                        <Link to='/Home' style={{ textDecoration: 'none' }}>
+                            <LogoContainer>
+                                <Logo>HANABI</Logo>
+                            </LogoContainer>
+                        </Link>
+                    </HeadContainer>
+                    <PosterMenuBlack></PosterMenuBlack>
+                    <MainPage>
+                        <PosterContainer>
+                            <Poster>
+                                <RouteContainer>
+                                    <RouteSearchLogo>ROUTE SEARCH</RouteSearchLogo>
+                                    <RouteSubContainer>
+                                        <RouteFromContainer>
+                                            <RouteInput
+                                                type='text'
+                                                ref={fromInputRef} // 使用 ref
+                                                placeholder='START 出発点'
+                                            ></RouteInput>
+                                        </RouteFromContainer>
+                                        <RouteToContainer>
+                                            <RouteInput
+                                                type='text'
+                                                ref={toInputRef} // 使用 ref
+                                                placeholder='DESTINATION 终点'
+                                            ></RouteInput>
+                                            <SearchIconContainer
+                                                src={SearchIcon}
+                                                onClick={() => calcRoute()}
+                                            ></SearchIconContainer>
+                                        </RouteToContainer>
+                                        <AddtoFavContainer>
+                                            <SelectedTypeContainer>
+                                                <SelectedType
+                                                    name='layerSaved'
+                                                    id='placeSaved'
+                                                    onChange={(e) => setTypeSaved(e.target.value)}
+                                                >
+                                                    <Option value=''>Selected Type</Option>
+                                                    <Option value='hotel'>Hotel</Option>
+                                                    <Option value='attraction'>Attraction</Option>
+                                                    <Option value='restaurant'>Restaurant</Option>
+                                                    <Option value='transportation'>Transport</Option>
+                                                </SelectedType>
+                                            </SelectedTypeContainer>
+                                            <AddtoFav onClick={() => addToFavorites()}>Add to Favorites</AddtoFav>
+                                        </AddtoFavContainer>
+                                    </RouteSubContainer>
+
+                                    {/* <button onClick={() => calcRoute()}>搜尋路線</button> */}
+                                </RouteContainer>
+                            </Poster>
+                        </PosterContainer>
+                        <MiddleContainer>
+                            <FavoritesContainer>
+                                <FavoritesHeader>
+                                    <FavLogo>Favorites</FavLogo>
+                                    <FavShowOnMap
+                                        onClick={(e) => {
+                                            if (e.target.checked) {
+                                                fetchData();
+                                            } else {
+                                                markers.forEach((marker) => marker.setMap(null));
+                                            }
                                         }}
                                     >
-                                        {date.date.split('/')[1]}/{date.date.split('/')[2]}
-                                    </DateBox>
-                                ))}
-                            </TripDateContainer>
-                            {getNewSortedDate() &&
-                                getNewSortedDate().map((time) => (
-                                    <>
-                                        <SavedTripDetailContainer>
-                                            <SavedTripDetailTime>{time}</SavedTripDetailTime>
-                                            <SavedTripDetailPlace>
-                                                {selectedTrip.dates[selectedDateIndex][time].placeName}
-                                            </SavedTripDetailPlace>
-                                            <SavedTripDetailAddress>
-                                                {selectedTrip.dates[selectedDateIndex][time].placeAddress}
-                                            </SavedTripDetailAddress>
-                                            <SavedDescription>
-                                                {selectedTrip.dates[selectedDateIndex][time].description}
-                                            </SavedDescription>
-                                        </SavedTripDetailContainer>
-                                    </>
-                                ))}
-                        </TripInfoContainer>
-                    </PlanRightContainer>
-                </PlanOutContainer>
+                                        Show on Map
+                                    </FavShowOnMap>
+                                </FavoritesHeader>
+                                {/* <select name='layerSaved' id='placeSaved' onChange={(e) => setTypeSaved(e.target.value)}>
+                                <option value=''>--選擇存取資料夾--</option>
+                                <option value='hotel'>飯店</option>
+                                <option value='attraction'>景點</option>
+                                <option value='restaurant'>餐廳</option>
+                                <option value='transportation'>交通</option>
+                            </select> */}
+                                {/* <button onClick={() => addToFavorites()}>加入最愛</button>  */}
+                                {/* <input
+                                    type='checkbox'
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            fetchData();
+                                        } else {
+                                            markers.forEach((marker) => marker.setMap(null));
+                                        }
+                                    }}
+                                />
+                                <label>顯示於地圖上</label> */}
+                                <GetPlaceSaved
+                                    places={places}
+                                    setPlaces={setPlaces}
+                                    setShowMarkers={setShowMarkers}
+                                ></GetPlaceSaved>
+                            </FavoritesContainer>
+                            <MapOutContainer
+                                id='map'
+                                style={{ height: '100%', width: '100%', border: `1px solid #88C8EC` }}
+                            ></MapOutContainer>
+                        </MiddleContainer>
+                        <PlanOutContainer>
+                            <PlanLeftContainer>
+                                <PlanLeftHeader>
+                                    <TripsLogo>TRIPS</TripsLogo>
+                                    <AddNewTripContainer onClick={openModal}>Add new Trip</AddNewTripContainer>
+                                </PlanLeftHeader>
+                                {/* <button onClick={openModal}>Add new Trip</button> */}
+                                <TripsBoxSection>
+                                    {trips &&
+                                        trips.map((trip, index) => (
+                                            <TripsBox
+                                                key={index}
+                                                onClick={() => {
+                                                    console.log(trip);
+                                                    setSelectedTrip(trip);
+                                                    console.log(trips);
+                                                }}
+                                            >
+                                                <TripsContent>
+                                                    <TripsBoxHeader>
+                                                        <TripsBoxName>{trip.tripname}</TripsBoxName>
+                                                        <DeleteTripsBox>X</DeleteTripsBox>
+                                                    </TripsBoxHeader>
+                                                    <TripsDate>2023 / 6 / 9 - 2023 / 6 / 20</TripsDate>
+                                                </TripsContent>
+                                            </TripsBox>
+                                        ))}
+                                </TripsBoxSection>
+                            </PlanLeftContainer>
+                            <PlanRightContainer>
+                                <TripDateContainer>
+                                    {selectedTrip.dates?.map((date, index) => (
+                                        <DateBox
+                                            key={index}
+                                            onClick={() => {
+                                                setSelectedDateIndex(index);
+                                                setSelectedTripDate(
+                                                    `${date.date.split('/')[0]}/${date.date.split('/')[1]}/${
+                                                        date.date.split('/')[2]
+                                                    }`
+                                                );
+                                            }}
+                                        >
+                                            {date.date.split('/')[1]}/{date.date.split('/')[2]}
+                                        </DateBox>
+                                    ))}
+                                </TripDateContainer>
+                                <TodayTripContainer>
+                                    <TodayTripHeader>
+                                        <TodayTripHeaderTitle>今日の行程</TodayTripHeaderTitle>
+                                    </TodayTripHeader>
+                                    <TodayTripSubContainer style={{ overflow: 'scroll', maxHeight: '390px' }}>
+                                        <TripDeatailContainer>
+                                            {getNewSortedDate() &&
+                                                getNewSortedDate().map((time) => (
+                                                    <>
+                                                        <TripDetailBox>
+                                                            <TripTime>{time}</TripTime>
+                                                            <TripPlace>
+                                                                <TripName>
+                                                                    {
+                                                                        selectedTrip.dates[selectedDateIndex][time]
+                                                                            .placeName
+                                                                    }
+                                                                </TripName>
+
+                                                                <TripAddress>
+                                                                    {
+                                                                        selectedTrip.dates[selectedDateIndex][time]
+                                                                            .placeAddress
+                                                                    }
+                                                                </TripAddress>
+                                                            </TripPlace>
+                                                            <TripDescription>
+                                                                {
+                                                                    selectedTrip.dates[selectedDateIndex][time]
+                                                                        .description
+                                                                }
+                                                            </TripDescription>
+                                                            <DeleteDetailBox>x</DeleteDetailBox>
+                                                        </TripDetailBox>
+                                                    </>
+                                                ))}
+                                        </TripDeatailContainer>
+                                    </TodayTripSubContainer>
+                                    <AddTripDetailContainer>
+                                        <AddTripDetailBox>
+                                            <AddTripDetailTime type='time' value={time} onChange={handleTimeChange}>
+                                                {/* <input type='time' value={time} onChange={handleTimeChange} /> */}
+                                            </AddTripDetailTime>
+                                            <AddTripDetailPlace>
+                                                <AddTripDetailName>{addPlaces.name}</AddTripDetailName>
+                                                <AddTripDetailAddress>
+                                                    {addPlaces.formatted_address}
+                                                </AddTripDetailAddress>
+                                            </AddTripDetailPlace>
+                                            <AddDescription
+                                                value={enterDescription}
+                                                onChange={handleDescriptionChange}
+                                                placeholder='add some notes...'
+                                            ></AddDescription>
+                                            <AddToTrip onClick={addTripDetailToFirebase}>Add</AddToTrip>
+                                            {/* <button onClick={addTripDetailToFirebase}>Done</button> */}
+                                        </AddTripDetailBox>
+                                    </AddTripDetailContainer>
+                                </TodayTripContainer>
+                                {/* <TripInfoContainer> */}
+                                {/* <TripInfoTitleContainer>
+                                        <TripInfoTitle>今日の行程</TripInfoTitle>
+                                    </TripInfoTitleContainer>
+                                    <TripInfoSubContainer>
+                                        <SavedTripContainer>
+                                            <SavedTripDetailContainer>
+                                                <SavedTripDetailSubContainer> */}
+                                {/* {selectedTrip.dates[0]} */}
+                                {/* {getNewSortedDate() &&
+                                                        getNewSortedDate().map((time) => (
+                                                            <>
+                                                                <SavedBox>
+                                                                    <SavedTripDetailTime>{time}</SavedTripDetailTime>
+                                                                    <SavedTripDetailPlace>
+                                                                        {
+                                                                            selectedTrip.dates[selectedDateIndex][time]
+                                                                                .placeName
+                                                                        }
+                                                                    </SavedTripDetailPlace>
+                                                                    <SavedTripDetailAddress>
+                                                                        {
+                                                                            selectedTrip.dates[selectedDateIndex][time]
+                                                                                .placeAddress
+                                                                        }
+                                                                    </SavedTripDetailAddress>
+                                                                    <SavedDescription>
+                                                                        {
+                                                                            selectedTrip.dates[selectedDateIndex][time]
+                                                                                .description
+                                                                        }
+                                                                    </SavedDescription>
+                                                                </SavedBox>
+                                                            </>
+                                                        ))} */}
+                                {/* </SavedTripDetailSubContainer>
+                                            </SavedTripDetailContainer>
+                                        </SavedTripContainer>
+                                    </TripInfoSubContainer>
+                                    <AddTripDetailContainer>
+                                        <AddTripDetailTime>
+                                            <input type='time' value={time} onChange={handleTimeChange} />
+                                        </AddTripDetailTime>
+                                        <AddTripDetailPlace>{addPlaces.name}</AddTripDetailPlace>
+                                        <AddTripDetailAddress>{addPlaces.formatted_address}</AddTripDetailAddress>
+                                        <AddDescription
+                                            value={enterDescription}
+                                            onChange={handleDescriptionChange}
+                                        ></AddDescription>
+                                        <button onClick={addTripDetailToFirebase}>Add</button>
+                                    </AddTripDetailContainer>
+                                </TripInfoContainer> */}
+                            </PlanRightContainer>
+                        </PlanOutContainer>
+                    </MainPage>
+                </Inside>
             </Outside>
             {modalOpen ? (
                 // <div>

@@ -10,6 +10,7 @@
         "google-map-react": "^2.2.0",
         "google-maps-api-loader": "^1.1.1",
         "moment": "^2.29.4",
+        "normalize.css": "^8.0.1",
         "rc-time-picker": "^3.7.3",
         "react": "^18.2.0",
         "react-datepicker": "^4.11.0",

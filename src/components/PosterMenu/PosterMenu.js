@@ -1,66 +1,188 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Modal from 'react-modal';
-import MenuPopUpModal from '../PopUpModal/MenuPopUpModal';
+import React from 'react';
+import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
+import BookMark from './bookmark.png';
+import Planning from './planning.png';
+import ProfileUser from './profile-user.png';
+import BlogPhoto from './BlogPhoto.png';
 
-Modal.setAppElement('#root');
+const Icon = styled.img`
+    width: 30px;
+    height: 30px;
+`;
 
-const OutSide = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-`;
-const PosterContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 100px;
-    border: 1px solid black;
-`;
-const MenuContainer = styled.div`
-    display: flex;
-    justify-content: center;
+const AllContainer = styled.div`
+    /* display: flex; */
+    display: grid;
+    /* justify-content: center; */
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 30px 50px;
     gap: 50px;
 `;
-const HotelSearchContainer = styled.div``;
-const AttractionSearchContainer = styled.div``;
-const RestaurantSearchContainer = styled.div``;
-const BlogSearchContainer = styled.div``;
-const AirplaneSearchContainer = styled.div``;
-const RouteSearchContainer = styled.div``;
-export default function PosterMenu() {
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const openModal = () => {
-        setModalIsOpen(true);
-    };
+const BlogContainer = styled.div`
+    /* width: 300px; */
+    padding: 5px 20px;
+    border: 3px solid white;
+    box-sizing: border-box;
+    border-radius: 20px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const Blog = styled.div`
+    /* width: 100%; */
+    height: 36px;
 
-    const closeModal = () => {
-        setModalIsOpen(false);
-    };
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 35px;
+    text-align: center;
+
+    color: #fafafa;
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    /* border: 1px solid white; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+`;
+const PlanContainer = styled.div`
+    /* width: 300px; */
+    padding: 5px 20px;
+    border: 3px solid white;
+    box-sizing: border-box;
+    border-radius: 20px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const Plan = styled.div`
+    /* width: 300px; */
+    height: 36px;
+
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 35px;
+    text-align: center;
+
+    color: #fafafa;
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    /* border: 1px solid white; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+`;
+const FavContainer = styled.div`
+    /* width: 300px; */
+    padding: 5px 20px;
+    border: 3px solid white;
+    box-sizing: border-box;
+    border-radius: 20px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const Fav = styled.div`
+    /* width: 300px; */
+    height: 36px;
+
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 35px;
+    text-align: center;
+
+    color: #fafafa;
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    /* border: 1px solid white; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+`;
+const ProfileContainer = styled.div`
+    /* width: 300px; */
+    padding: 5px 20px;
+    border: 3px solid white;
+    box-sizing: border-box;
+    border-radius: 20px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const Profile = styled.div`
+    /* width: 300px; */
+    height: 36px;
+
+    font-family: 'Noto Sans JP';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 35px;
+    text-align: center;
+
+    color: #fafafa;
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    /* border: 1px solid white; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+`;
+
+export default function PosterMenu() {
     return (
         <>
-            <OutSide>
-                <PosterContainer>
-                    <MenuContainer>
-                        <HotelSearchContainer onClick={openModal}>飯店</HotelSearchContainer>
-                        <AttractionSearchContainer onClick={openModal}>景點</AttractionSearchContainer>
-                        <RestaurantSearchContainer onClick={openModal}>餐廳</RestaurantSearchContainer>
-                        <BlogSearchContainer>旅遊故事</BlogSearchContainer>
-                        <AirplaneSearchContainer>航班狀態</AirplaneSearchContainer>
-                        <Link to='/Trips'>
-                            <RouteSearchContainer>路線搜尋</RouteSearchContainer>
-                        </Link>
-                    </MenuContainer>
-                </PosterContainer>
-            </OutSide>
-            {modalIsOpen ? (
-                // <div>
-                //     <ModalOverlay onClick={closeModal} />
-                //     <ModalContainer onClick={(e) => e.stopPropagation()}></ModalContainer>
-                // </div>
-                <MenuPopUpModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen}></MenuPopUpModal>
-            ) : null}
+            <AllContainer>
+                <Link to='/Blog' style={{ textDecoration: 'none' }}>
+                    <BlogContainer>
+                        <Blog>
+                            BLOG ブログ
+                            <Icon src={BlogPhoto}></Icon>
+                        </Blog>
+                    </BlogContainer>
+                </Link>
+                <Link to='/Trips' style={{ textDecoration: 'none' }}>
+                    <PlanContainer>
+                        <Plan>
+                            PLAN 旅程を計画
+                            <Icon src={Planning}></Icon>
+                        </Plan>
+                    </PlanContainer>
+                </Link>
+                <Link to='/Favorites' style={{ textDecoration: 'none' }}>
+                    <FavContainer>
+                        <Fav>
+                            FAVORITES 好き
+                            <Icon src={BookMark}></Icon>
+                        </Fav>
+                    </FavContainer>
+                </Link>
+                <Link to='/Profile' style={{ textDecoration: 'none' }}>
+                    <ProfileContainer>
+                        <Profile>
+                            PROFILE 会员
+                            <Icon src={ProfileUser}></Icon>
+                        </Profile>
+                    </ProfileContainer>
+                </Link>
+            </AllContainer>
         </>
     );
 }

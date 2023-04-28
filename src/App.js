@@ -1,6 +1,7 @@
+import 'normalize.css';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import Header from './components/Header/Header';
+// import Header from './components/Header/Header';
 import { Outlet } from 'react-router-dom';
 // import { AuthContext } from './Context/AuthContext';
 import { AuthContextProvider } from './Context/AuthContext';
@@ -12,7 +13,7 @@ function App() {
     return (
         <AuthContextProvider>
             <OutSide>
-                <Header></Header>
+                {/* <Header></Header> */}
                 <Outlet />
             </OutSide>
         </AuthContextProvider>

@@ -24,7 +24,7 @@ root.render(
                         <Route path='Home' element={<Home />} />
                         <Route path='Trips' element={<Trips />} />
                         {/* <Route path='PocTest' element={<PocTest />} /> */}
-                        <Route path='Test' element={<Test />} />
+                        {/* <Route path='Test' element={<Test />} /> */}
                         <Route path='Blog' element={<Blog />} />
                         {/* <Route path='GoogleLogin' element={<GoogleLogin />} /> */}
                         <Route path='GetPlaceSaved' element={<GetPlaceSaved />} />
