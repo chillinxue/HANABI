@@ -16,6 +16,7 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import PosterMenuBlack from '../../components/PosterMenuBlack/PosterMenuBlack';
 import FujiMt from './FujiMt.jpg';
 import SearchIcon from './search.png';
+import Header from '../../components/Header/Header';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
@@ -33,6 +34,8 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 const Outside = styled.div`
+    width: 100%;
+    height: 100%;
     background-color: #fafafa;
 `;
 const Inside = styled.div``;
@@ -75,7 +78,9 @@ const LogOutButton = styled.div`
     line-height: 18px;
     text-align: center;
 `;
-const HeadContainer = styled.div``;
+const HeadContainer = styled.div`
+    padding-top: 60px;
+`;
 const LogoContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -125,7 +130,7 @@ const RouteContainer = styled.div`
 const RouteSearchLogo = styled.div`
     height: 60px;
 
-    font-family: 'Noto Sans JP';
+    font-family: '"Noto Sans JP", sans-serif;';
     font-style: normal;
     font-weight: 700;
     font-size: 30px;
@@ -805,7 +810,7 @@ export default function Trips() {
     const [to, setTo] = useState(''); // 新增終點 state
     const [locationInfo, setLocationInfo] = useState(null);
     // const [places, setPlaces] = useState();
-    const { places, setPlaces, addPlaces, setAddPlaces } = useContext(TripsContext);
+    const { places, setPlaces, addPlaces, setAddPlaces, trips, setTrips } = useContext(TripsContext);
 
     const [favorites, setFavorites] = useState([]);
     const [typeSaved, setTypeSaved] = useState(null);
@@ -831,7 +836,7 @@ export default function Trips() {
         setModalOpen(false);
     };
 
-    const [trips, setTrips] = useState([]); //抓到旅行資料
+    // const [trips, setTrips] = useState([]); //抓到旅行資料
     const initialSelectedDates = trips && trips.length > 0 ? trips[0].dateRange : [];
     // const [selectedTrip, setSelectedTrip] = useState(initialSelectedDates);
     const [selectedTrip, setSelectedTrip] = useState({});
@@ -1161,24 +1166,25 @@ export default function Trips() {
             <Outside>
                 <Inside>
                     {/* <PosterMenuOld></PosterMenuOld> */}
+                    <Header></Header>
                     <HeadContainer>
-                        <Login>
+                        {/* <Login>
                             <LoginContainer to='/GoogleLogin'>
                                 <LoginInsideContainer>
                                     <LogInButton onClick={() => signIn(auth, provider)}>Login</LogInButton>
                                     <LogOutButton onClick={() => logOut(auth)}>Logout</LogOutButton>
-                                </LoginInsideContainer>
-                                {/* <button onClick={() => signIn(auth, provider)}>Login</button>
+                                </LoginInsideContainer> */}
+                        {/* <button onClick={() => signIn(auth, provider)}>Login</button>
                 <button onClick={() => logOut(auth)}>Logout</button> */}
-                            </LoginContainer>
-                        </Login>
+                        {/* </LoginContainer>
+                        </Login> */}
                         <Link to='/Home' style={{ textDecoration: 'none' }}>
                             <LogoContainer>
                                 <Logo>HANABI</Logo>
                             </LogoContainer>
                         </Link>
                     </HeadContainer>
-                    <PosterMenuBlack></PosterMenuBlack>
+                    {/* <PosterMenuBlack></PosterMenuBlack> */}
                     <MainPage>
                         <PosterContainer>
                             <Poster>

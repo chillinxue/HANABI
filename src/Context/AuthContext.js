@@ -27,6 +27,7 @@ export const AuthContext = createContext({
         name: '',
         email: '',
         userUID: '',
+        userImage: '',
     },
     loading: false,
     userUID: '',
@@ -37,6 +38,7 @@ const initialUserData = {
     name: '',
     email: '',
     userUID: '',
+    userImage: '',
 };
 export const AuthContextProvider = ({ children }) => {
     const [isLogin, setIsLogin] = useState(false);
@@ -67,6 +69,7 @@ export const AuthContextProvider = ({ children }) => {
                         name: getUser.name || '',
                         email: getUser.email || '',
                         userUID: getUser.userUID || '',
+                        userImage: getUser.photoURL || '',
                     };
                     setUser(data);
                     setUserUID(user.uid);
@@ -77,6 +80,7 @@ export const AuthContextProvider = ({ children }) => {
                         name: user.displayName || '',
                         email: user.email || '',
                         userUID: user.uid || '',
+                        userImage: user.photoURL || '',
                     };
                     setUser(data);
                 }
@@ -107,6 +111,7 @@ export const AuthContextProvider = ({ children }) => {
             name: user.displayName || '',
             email: user.email || '',
             userUID: user.uid || '',
+            userImage: user.photoURL || '',
         };
         await setUserDoc(data);
         setUser(data);

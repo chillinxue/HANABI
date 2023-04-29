@@ -11,6 +11,7 @@ import GetPlaceSaved from './components/utils/firebase/GetPlaceSaved';
 import Home from './pages/Home/Home';
 import Trips from './pages/Trips/Trips';
 import Blog from './pages/Blog/Blog';
+import Profile from './pages/Profile/Profile';
 import { AuthContextProvider } from './Context/AuthContext';
 import { TripsContextProvider } from './pages/Trips/tripsContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -26,6 +27,7 @@ root.render(
                         {/* <Route path='PocTest' element={<PocTest />} /> */}
                         {/* <Route path='Test' element={<Test />} /> */}
                         <Route path='Blog' element={<Blog />} />
+                        <Route path='Profile' element={<Profile />} />
                         {/* <Route path='GoogleLogin' element={<GoogleLogin />} /> */}
                         <Route path='GetPlaceSaved' element={<GetPlaceSaved />} />
                         <Route path='*' element={<Navigate to='/' replace />} />

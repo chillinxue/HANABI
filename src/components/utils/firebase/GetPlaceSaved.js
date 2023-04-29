@@ -109,9 +109,8 @@ const SaveContent = styled.div`
     padding: 0px 10px 10px 10px;
 `;
 const SavedBoxName = styled.div`
-    font-family: 'Noto Sans JP';
+    font-family: 'Noto Sans JP', sans-serif;
     font-style: normal;
-    font-weight: 700;
     font-size: 16px;
     line-height: 23px;
     text-align: center;
