@@ -252,7 +252,9 @@ export default function Profile() {
                                             <DeleteTripsBox>X</DeleteTripsBox>
                                         </TripsBoxHeader>
                                         <TripsBoxName>{trip.tripname}</TripsBoxName>
-                                        <TripsBoxDate>2023 / 6 / 9 - 2023 / 6 / 20</TripsBoxDate>
+                                        <TripsBoxDate>
+                                            {trip.dates[0].date} - {trip.dates[trip.dates.length - 1].date}
+                                        </TripsBoxDate>
                                     </TripsBox>
                                 ))}
                         </TripsInfoContainer>

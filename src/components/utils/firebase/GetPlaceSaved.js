@@ -220,7 +220,7 @@ export default function GetPlaceSaved() {
         if (type !== placeType) {
             setPlaceType(type);
             setSearchInput('');
-            setShowSearchInput(false);
+            setShowSearchInput(true);
         } else {
             setPlaceType(null);
             setShowSearchInput(true);

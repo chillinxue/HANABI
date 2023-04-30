@@ -4,7 +4,7 @@ import MenuSearchBar from '../../components/SearchBar/MenuSearchBar';
 // import PosterMenuOld from '../../components/PosterMenu/PosterMenuOld';
 import { initializeApp } from 'firebase/app';
 import { arrayUnion, getFirestore, onSnapshot } from 'firebase/firestore';
-import { doc, setDoc, addDoc, collection, updateDoc } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc } from 'firebase/firestore';
 import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
 import Modal from 'react-modal';
 import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
@@ -163,7 +163,7 @@ const RouteFromContainer = styled.div`
     box-sizing: border-box;
 `;
 const RouteInput = styled.input`
-    width: 210 px;
+    width: 180 px;
     border: none;
     box-shadow: none;
     outline: none;
@@ -174,7 +174,7 @@ const RouteInput = styled.input`
     font-weight: 700;
     font-size: 20px;
     line-height: 29px;
-    color: #fafafa;
+    color: #2d2d2d;
     ::placeholder {
         color: #fafafa;
         opacity: 1;
@@ -1125,6 +1125,10 @@ export default function Trips() {
 
     console.log(selectedTrip.dates);
     async function addTripDetailToFirebase() {
+        setEnterDescription('');
+        setAddPlaces('');
+        setTime('');
+
         const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
         const selectedDate = selectedTrip.dates[selectedDateIndex];
 
@@ -1148,7 +1152,15 @@ export default function Trips() {
         });
         setTripUpdated(true);
     }
-
+    async function handleDeleteTrip(tripId) {
+        try {
+            const tripRef = doc(db, 'users', userUID, 'trips', tripId);
+            await deleteDoc(tripRef);
+            console.log('刪除成功');
+        } catch (error) {
+            console.error('刪除失敗');
+        }
+    }
     console.log(selectedTripDate);
     console.log(addPlaces.formatted_address);
     console.log(addPlaces.placeId);
@@ -1226,7 +1238,6 @@ export default function Trips() {
                                             <AddtoFav onClick={() => addToFavorites()}>Add to Favorites</AddtoFav>
                                         </AddtoFavContainer>
                                     </RouteSubContainer>
-
                                     {/* <button onClick={() => calcRoute()}>搜尋路線</button> */}
                                 </RouteContainer>
                             </Poster>
@@ -1236,8 +1247,9 @@ export default function Trips() {
                                 <FavoritesHeader>
                                     <FavLogo>Favorites</FavLogo>
                                     <FavShowOnMap
-                                        onClick={(e) => {
-                                            if (e.target.checked) {
+                                        onClick={() => {
+                                            setShowMarkers(!showMarkers);
+                                            if (!showMarkers) {
                                                 fetchData();
                                             } else {
                                                 markers.forEach((marker) => marker.setMap(null));
@@ -1298,9 +1310,18 @@ export default function Trips() {
                                                 <TripsContent>
                                                     <TripsBoxHeader>
                                                         <TripsBoxName>{trip.tripname}</TripsBoxName>
-                                                        <DeleteTripsBox>X</DeleteTripsBox>
+                                                        <DeleteTripsBox
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleDeleteTrip(trip.tripId);
+                                                            }}
+                                                        >
+                                                            X
+                                                        </DeleteTripsBox>
                                                     </TripsBoxHeader>
-                                                    <TripsDate>2023 / 6 / 9 - 2023 / 6 / 20</TripsDate>
+                                                    <TripsDate>
+                                                        {trip.dates[0].date} - {trip.dates[trip.dates.length - 1].date}
+                                                    </TripsDate>
                                                 </TripsContent>
                                             </TripsBox>
                                         ))}

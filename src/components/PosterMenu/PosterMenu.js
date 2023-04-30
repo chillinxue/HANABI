@@ -166,7 +166,7 @@ export default function PosterMenu() {
                         </Plan>
                     </PlanContainer>
                 </Link>
-                <Link to='/Favorites' style={{ textDecoration: 'none' }}>
+                <Link to='/Profile' style={{ textDecoration: 'none' }}>
                     <FavContainer>
                         <Fav>
                             FAVORITES 好き
