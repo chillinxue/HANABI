@@ -17,6 +17,7 @@ import PosterMenuBlack from '../../components/PosterMenuBlack/PosterMenuBlack';
 import FujiMt from './FujiMt.jpg';
 import SearchIcon from './search.png';
 import Header from '../../components/Header/Header';
+import './Trips.css';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
@@ -947,7 +948,7 @@ export default function Trips() {
             });
 
             const infowindow = new window.google.maps.InfoWindow({
-                content: `<div><strong>${place.name}</strong><br>${place.formatted_address}<br>Phone: ${place.formatted_phone_number}<br>Rating: ${place.rating}<br>Website: ${place.website}</div>`,
+                content: `<div><strong>${place.name}</strong><br><div class="address">${place.formatted_address}</div><br>Phone: ${place.formatted_phone_number}<br>Rating: ${place.rating}<br>Website: ${place.website}</div>`,
             });
             console.log(place);
             marker.addListener('click', () => {

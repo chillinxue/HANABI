@@ -4,17 +4,19 @@ import PlacesRecommend from '../../components/PlacesRecommend/PlacesRecommend';
 import MenuSearchBar from '../../components/SearchBar/MenuSearchBar';
 import PosterMenuOld from '../../components/PosterMenu/PosterMenuOld';
 import FujiSan from './fujiSan.jpg';
-import FujiGif from './9uEA.gif';
+// import FujiGif from './JapanBackground.gif';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import LoginButton from '../../components/Header/LoginButton';
 import PosterMenu from '../../components/PosterMenu/PosterMenu';
+// import PosterVideo from './JapanBackground.gif';
 import JapanMap from './JapanMap.png';
 import SecOneBlockTwo from './SecOneBlockTwo.jpg';
 import SecOneBlockThree from './SecOneBlockThree.jpg';
 import SecOneBlockFour from './SecOneBlockFour.jpg';
 import Header from '../../components/Header/Header';
+import JapanVideo from './JapanVideo.mp4';
 
 const OutSide = styled.div`
     padding-top: 45vh;
@@ -42,7 +44,8 @@ const Video = styled.video`
 const Poster = styled.div`
     position: relative;
     width: 100%;
-    background-image: url(${FujiSan});
+    /* background-image: url(); */
+    /* background: url() no-repeat center center fixed; */
     background-size: cover;
     height: 100vh;
     padding-top: 24px;
@@ -84,10 +87,13 @@ const Logo = styled.div`
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
+const PosterTextCon = styled.div``;
+const PosterText = styled.div``;
 const MainPageContainer = styled.div`
-    border: 1px solid black;
+    /* border: 1px solid black; */
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     position: relative; /* 設置為相對定位 */
     z-index: 1; /* 確保在下面的元素之上 */
@@ -107,7 +113,7 @@ const FirstSectionBlockOne = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 `;
 const FirstSectionBlockOneCon = styled.div`
     height: 405px;
@@ -150,12 +156,12 @@ const FirstSectionBlockTwo = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 `;
 const FirstSectionBlockTwoPicCon = styled.div`
     width: 55%;
     height: 550px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 
     background-image: url(${SecOneBlockTwo});
     background-size: cover;
@@ -165,7 +171,7 @@ const FirstSectionBlockTwoPicCon = styled.div`
 `;
 const FirstSectionBlockTwoTextCon = styled.div`
     width: 45%;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -180,7 +186,7 @@ const FirstSectionBlockThree = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 `;
 const FirstSectionBlockThreeTextCon = styled.div`
     width: 64%;
@@ -188,7 +194,7 @@ const FirstSectionBlockThreeTextCon = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 `;
 
 const FirstSectionBlockThreePicCon = styled.div`
@@ -243,11 +249,13 @@ export default function Home() {
                     <Login>
                         <LoginButton />
                     </Login>
+                    <PosterTextCon></PosterTextCon>
                     <VideoContainer>
                         <Video autoPlay muted loop>
-                            <source src='https://www.w3schools.com/html/movie.mp4' type='video/mp4' />
+                            <source src={JapanVideo} type='video/mp4' />
                         </Video>
                     </VideoContainer>
+
                     {/* <PosterMenu /> */}
                 </Poster>
                 <LogoContainer>
