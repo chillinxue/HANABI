@@ -25,6 +25,7 @@ const FilterContainer = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
+    padding-bottom: 10px;
 `;
 const Filter = styled.div`
     display: flex;

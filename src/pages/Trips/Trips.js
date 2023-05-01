@@ -130,7 +130,7 @@ const RouteContainer = styled.div`
 const RouteSearchLogo = styled.div`
     height: 60px;
 
-    font-family: '"Noto Sans JP", sans-serif;';
+    font-family: '"Noto Sans JP", sans-serif';
     font-style: normal;
     font-weight: 700;
     font-size: 30px;
@@ -263,16 +263,18 @@ const AddtoFav = styled.div`
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 const FavoritesContainer = styled.div`
-    width: 399px;
+    width: 400px;
     height: 525px;
-    padding: 10px;
+    border: 1px solid white;
     box-sizing: border-box;
     background: #2d2d2d;
     opacity: 0.9;
+    border-radius: 20px;
 `;
 const FavoritesHeader = styled.div`
     display: flex;
     justify-content: space-between;
+    padding: 10px 20px;
 `;
 const FavLogo = styled.div`
     font-family: 'Noto Sans JP';
@@ -314,12 +316,13 @@ const PlanOutContainer = styled.div`
     height: 525px;
 `;
 const PlanLeftContainer = styled.div`
-    width: 399px;
-    padding: 10px 28px;
+    width: 400px;
+    padding: 0px 5px;
     box-sizing: border-box;
     background: #2d2d2d;
     background: rgba(45, 45, 45, 0.2);
     opacity: 0.9;
+    border-radius: 20px;
 `;
 const TripsLogo = styled.div`
     font-family: 'Noto Sans JP';
@@ -338,6 +341,7 @@ const PlanLeftHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px;
 `;
 const TripsBoxSection = styled.div`
     display: flex;
@@ -346,6 +350,7 @@ const TripsBoxSection = styled.div`
     align-items: center;
     justify-content: center;
     margin-top: 20px;
+    width: 380px;
 `;
 
 const TripsBox = styled.div`
@@ -361,7 +366,6 @@ const TripDateContainer = styled.div`
     gap: 10px;
     width: 100%;
     height: 50px;
-    border: 1px solid black;
     align-items: end;
 `;
 
@@ -416,7 +420,7 @@ const DateBox = styled.div`
     width: 60px;
     height: 30px;
 
-    background: #fafafa;
+    background: ${(props) => (props.isSelected ? '#2d2d2d' : '#fafafa')};
     opacity: 0.9;
     border: 1px solid #2d2d2d;
     font-family: 'Noto Sans JP';
@@ -429,7 +433,7 @@ const DateBox = styled.div`
     align-items: center;
     margin-bottom: 10px;
 
-    color: #2d2d2d;
+    color: ${(props) => (props.isSelected ? '#fafafa' : '#2d2d2d')};
 `;
 const TripInfoContainer = styled.div`
     border: 1px solid black;
@@ -735,7 +739,6 @@ const AddToTrip = styled.div`
     font-size: 8px;
     line-height: 14px;
     text-align: center;
-    border: 1px solid #fafafa;
     padding: 4px 5px;
     display: flex;
     justify-content: center;
@@ -1259,34 +1262,20 @@ export default function Trips() {
                                         Show on Map
                                     </FavShowOnMap>
                                 </FavoritesHeader>
-                                {/* <select name='layerSaved' id='placeSaved' onChange={(e) => setTypeSaved(e.target.value)}>
-                                <option value=''>--選擇存取資料夾--</option>
-                                <option value='hotel'>飯店</option>
-                                <option value='attraction'>景點</option>
-                                <option value='restaurant'>餐廳</option>
-                                <option value='transportation'>交通</option>
-                            </select> */}
-                                {/* <button onClick={() => addToFavorites()}>加入最愛</button>  */}
-                                {/* <input
-                                    type='checkbox'
-                                    onChange={(e) => {
-                                        if (e.target.checked) {
-                                            fetchData();
-                                        } else {
-                                            markers.forEach((marker) => marker.setMap(null));
-                                        }
-                                    }}
-                                />
-                                <label>顯示於地圖上</label> */}
-                                <GetPlaceSaved
-                                    places={places}
-                                    setPlaces={setPlaces}
-                                    setShowMarkers={setShowMarkers}
-                                ></GetPlaceSaved>
+
+                                <div
+                                    style={{ width: '380px', height: '500px', overflowY: 'auto', paddingLeft: '10px' }}
+                                >
+                                    <GetPlaceSaved
+                                        places={places}
+                                        setPlaces={setPlaces}
+                                        setShowMarkers={setShowMarkers}
+                                    />
+                                </div>
                             </FavoritesContainer>
                             <MapOutContainer
                                 id='map'
-                                style={{ height: '100%', width: '100%', border: `1px solid #88C8EC` }}
+                                style={{ height: '100%', width: '100%', borderRadius: '20px' }}
                             ></MapOutContainer>
                         </MiddleContainer>
                         <PlanOutContainer>
@@ -1331,6 +1320,7 @@ export default function Trips() {
                                 <TripDateContainer>
                                     {selectedTrip.dates?.map((date, index) => (
                                         <DateBox
+                                            isSelected={selectedDateIndex === index}
                                             key={index}
                                             onClick={() => {
                                                 setSelectedDateIndex(index);
