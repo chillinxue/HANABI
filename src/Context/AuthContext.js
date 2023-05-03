@@ -66,10 +66,10 @@ export const AuthContextProvider = ({ children }) => {
                     console.log('有');
 
                     const data = {
-                        name: getUser.name || '',
-                        email: getUser.email || '',
-                        userUID: getUser.userUID || '',
-                        userImage: getUser.photoURL || '',
+                        name: getUser.name || user.displayName || '',
+                        email: getUser.email || user.email || '',
+                        userUID: getUser.userUID || user.userUID || '',
+                        userImage: getUser.photoURL || user.photoURL || '',
                     };
                     setUser(data);
                     setUserUID(user.uid);

@@ -58,12 +58,12 @@ const ProfileContainer = styled.div`
 
     margin: 50px 0px;
 `;
-const ProfilePic = styled.div`
+const ProfilePic = styled.img`
     width: 150px;
     height: 150px;
-    background-image: url(${ProfilePhoto});
+    /* background-image: url({user.photoURL});
     background-size: cover;
-    background-position: center;
+    background-position: center; */
     box-sizing: border-box;
     border-radius: 180px;
     margin-bottom: 20px;
@@ -219,7 +219,7 @@ export default function Profile() {
                 <MainContainer>
                     <BarContainer>
                         <ProfileContainer>
-                            <ProfilePic></ProfilePic>
+                            <ProfilePic src={user.userImage}></ProfilePic>
                             <ProfileName>{user.name}</ProfileName>
                             <ProfileMail>{user.email}</ProfileMail>
                         </ProfileContainer>
