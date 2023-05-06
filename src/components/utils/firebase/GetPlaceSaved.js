@@ -32,7 +32,7 @@ const Filter = styled.div`
     gap: 10px;
 `;
 const PlaceTypeButton = styled.div`
-    border: 1px solid #fafafa;
+    border: 1px solid #2d2d2d;
     padding: 3px 5px;
     box-sizing: border-box;
     text-align: center;
@@ -41,7 +41,16 @@ const PlaceTypeButton = styled.div`
     font-weight: 700;
     font-size: 12px;
     line-height: 17px;
-    color: #fafafa;
+    color: #2d2d2d;
+    cursor: pointer;
+    &:hover {
+        background-color: #2c3e50;
+        color: #fafafa;
+    }
+
+    &:active {
+        box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.1);
+    }
 `;
 // const AllLayerContainer = styled.div`
 //     border: 1px solid #fafafa;
@@ -165,7 +174,13 @@ const AddToTrip = styled.div`
     color: #fafafa;
 
     border: 1px solid #fafafa;
+    cursor: pointer;
 `;
+
+export const handleDelete = async (id, userUID) => {
+    const placeRef = doc(db, 'users', userUID, 'SavedPlaces', id);
+    await deleteDoc(placeRef);
+};
 
 export default function GetPlaceSaved() {
     // const [places, setPlaces] = useState(null);
@@ -199,6 +214,7 @@ export default function GetPlaceSaved() {
 
         // Listen to query snapshots
         const unsub = onSnapshot(q, (snapshot) => {
+            console.log('snapshot');
             const placeList = [];
             snapshot.docs.forEach((doc) => {
                 placeList.push({ id: doc.id, ...doc.data() });
@@ -212,10 +228,10 @@ export default function GetPlaceSaved() {
         };
     }, [placeType, searchInput, userUID]);
 
-    const handleDelete = async (id) => {
-        const placeRef = doc(db, 'users', userUID, 'SavedPlaces', id);
-        await deleteDoc(placeRef);
-    };
+    // const handleDelete = async (id) => {
+    //     const placeRef = doc(db, 'users', userUID, 'SavedPlaces', id);
+    //     await deleteDoc(placeRef);
+    // };
 
     const handleFilter = (type) => {
         if (type !== placeType) {
@@ -255,7 +271,7 @@ export default function GetPlaceSaved() {
                     </SavedBoxContainer>
                 </GetPlaceSavedContainer>
                 <FilterContainer>
-                    <Filter>
+                    <Filter handleFilter={handleFilter}>
                         <PlaceTypeButton onClick={() => handleFilter(null)}>ALL</PlaceTypeButton>
                         <PlaceTypeButton onClick={() => handleFilter('hotel')}>Hotel</PlaceTypeButton>
                         <PlaceTypeButton onClick={() => handleFilter('attraction')}>Attraction</PlaceTypeButton>

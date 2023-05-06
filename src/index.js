@@ -14,6 +14,7 @@ import Blog from './pages/Blog/Blog';
 import Profile from './pages/Profile/Profile';
 import { AuthContextProvider } from './Context/AuthContext';
 import { TripsContextProvider } from './pages/Trips/tripsContext';
+import BlogArticle from './pages/BlogArticle/BlogArticle';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -23,10 +24,11 @@ root.render(
                 <Routes>
                     <Route path='/' element={<App />}>
                         <Route path='Home' element={<Home />} />
-                        {/* <Route path='Trips' element={<Trips />} /> */}
+                        <Route path='Trips' element={<Trips />} />
                         {/* <Route path='PocTest' element={<PocTest />} /> */}
                         {/* <Route path='Test' element={<Test />} /> */}
                         <Route path='Blog' element={<Blog />} />
+                        <Route path='BlogArticle' element={<BlogArticle />} />
                         <Route path='Profile' element={<Profile />} />
                         {/* <Route path='GoogleLogin' element={<GoogleLogin />} /> */}
                         <Route path='GetPlaceSaved' element={<GetPlaceSaved />} />

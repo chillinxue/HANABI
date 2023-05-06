@@ -41,6 +41,7 @@ export default function LoginButton() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     const { signIn, logOut } = useContext(AuthContext);
+
     return (
         <>
             <LoginContainer to='/GoogleLogin'>

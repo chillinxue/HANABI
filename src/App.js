@@ -10,6 +10,7 @@ const OutSide = styled.div``;
 function App() {
     // const { userUID } = useContext(AuthContext);
     // console.log(userUID);
+
     return (
         <AuthContextProvider>
             <OutSide>

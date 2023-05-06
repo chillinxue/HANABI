@@ -5,10 +5,17 @@ import Header from '../../components/Header/Header';
 import LoginButton from '../../components/Header/LoginButton';
 import JapanVideo from '../Home/JapanVideo.mp4';
 import FujiLawson from './FujiLawson.jpg';
+import NaraTemple from './NaraTemple.jpg';
 import Tokyo from './tokyo.jpg';
 import FujiSan from './FujiSan.jpg';
+import TokyoTemple from './TokyoTemple.jpg';
+import { Link } from 'react-router-dom';
 import KobeTrain from './Kobetrain.mp4';
 import FujiBus from './fujibus.mp4';
+import AkihabaraA from './AkihabaraA.jpg';
+import SunSkyTower from './SunSkyTower.jpg';
+import NaraDeer from './NaraDeer.jpg';
+import NaraTower from './NaraTower.jpg';
 
 const OutSide = styled.div`
     padding-top: 70px;
@@ -287,42 +294,50 @@ export default function Blog() {
                                     </SectionSubTitle>
                                 </SectionTitleCon>
                                 <PicContainer>
-                                    <PicBox>
-                                        <Pic src={FujiLawson}></Pic>
-                                        <PicTitleContainer>
-                                            <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
-                                            <PicContent>
-                                                自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
-                                            </PicContent>
-                                        </PicTitleContainer>
-                                    </PicBox>
-                                    <PicBox>
-                                        <Pic src={Tokyo}></Pic>
-                                        <PicTitleContainer>
-                                            <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
-                                            <PicContent>
-                                                自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
-                                            </PicContent>
-                                        </PicTitleContainer>
-                                    </PicBox>
-                                    <PicBox>
-                                        <Pic src={FujiSan}></Pic>
-                                        <PicTitleContainer>
-                                            <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
-                                            <PicContent>
-                                                自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
-                                            </PicContent>
-                                        </PicTitleContainer>
-                                    </PicBox>
-                                    <PicBox>
-                                        <Pic src={FujiSan}></Pic>
-                                        <PicTitleContainer>
-                                            <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
-                                            <PicContent>
-                                                自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
-                                            </PicContent>
-                                        </PicTitleContainer>
-                                    </PicBox>
+                                    <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
+                                        <PicBox>
+                                            <Pic src={FujiLawson}></Pic>
+                                            <PicTitleContainer>
+                                                <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
+                                                <PicContent>
+                                                    自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
+                                                </PicContent>
+                                            </PicTitleContainer>
+                                        </PicBox>
+                                    </Link>
+                                    <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
+                                        <PicBox>
+                                            <Pic src={Tokyo}></Pic>
+                                            <PicTitleContainer>
+                                                <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
+                                                <PicContent>
+                                                    自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
+                                                </PicContent>
+                                            </PicTitleContainer>
+                                        </PicBox>
+                                    </Link>
+                                    <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
+                                        <PicBox>
+                                            <Pic src={NaraTemple}></Pic>
+                                            <PicTitleContainer>
+                                                <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
+                                                <PicContent>
+                                                    自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
+                                                </PicContent>
+                                            </PicTitleContainer>
+                                        </PicBox>
+                                    </Link>
+                                    <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
+                                        <PicBox>
+                                            <Pic src={TokyoTemple}></Pic>
+                                            <PicTitleContainer>
+                                                <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
+                                                <PicContent>
+                                                    自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
+                                                </PicContent>
+                                            </PicTitleContainer>
+                                        </PicBox>
+                                    </Link>
                                 </PicContainer>
                             </SectionCon>
                             <SectionCon>
@@ -334,7 +349,7 @@ export default function Blog() {
                                 </SectionTitleCon>
                                 <PicContainer>
                                     <PicBox>
-                                        <Pic src={FujiLawson}></Pic>
+                                        <Pic src={AkihabaraA}></Pic>
                                         <PicTitleContainer>
                                             <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
                                             <PicContent>
@@ -343,7 +358,7 @@ export default function Blog() {
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
-                                        <Pic src={Tokyo}></Pic>
+                                        <Pic src={SunSkyTower}></Pic>
                                         <PicTitleContainer>
                                             <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
                                             <PicContent>
@@ -352,7 +367,7 @@ export default function Blog() {
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
-                                        <Pic src={FujiSan}></Pic>
+                                        <Pic src={NaraDeer}></Pic>
                                         <PicTitleContainer>
                                             <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
                                             <PicContent>
@@ -361,7 +376,7 @@ export default function Blog() {
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
-                                        <Pic src={FujiSan}></Pic>
+                                        <Pic src={NaraTower}></Pic>
                                         <PicTitleContainer>
                                             <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
                                             <PicContent>
