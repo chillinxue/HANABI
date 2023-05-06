@@ -23,6 +23,7 @@ root.render(
             <TripsContextProvider>
                 <Routes>
                     <Route path='/' element={<App />}>
+                        <Route index element={<Home />} />
                         <Route path='Home' element={<Home />} />
                         <Route path='Trips' element={<Trips />} />
                         {/* <Route path='PocTest' element={<PocTest />} /> */}
@@ -31,8 +32,8 @@ root.render(
                         <Route path='BlogArticle' element={<BlogArticle />} />
                         <Route path='Profile' element={<Profile />} />
                         {/* <Route path='GoogleLogin' element={<GoogleLogin />} /> */}
-                        <Route path='GetPlaceSaved' element={<GetPlaceSaved />} />
-                        <Route path='*' element={<Navigate to='/' replace />} />
+                        {/* <Route path='GetPlaceSaved' element={<GetPlaceSaved />} /> */}
+                        <Route path='*' element={<Navigate to='/Home' replace />} />
                     </Route>
                 </Routes>
             </TripsContextProvider>

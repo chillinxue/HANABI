@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import './BlogArticle.css';
 import styled from 'styled-components/macro';
 import Header from '../../components/Header/Header';
+import { AuthContext } from '../../Context/AuthContext';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc } from 'firebase/firestore';
+import { db } from '../Trips/Trips';
 import Schedule from './schedule.png';
 import FujiSan from './FujiSan.jpg';
 import Tokyo from './tokyo.jpg';
 import TokyoTemple from './TokyoTemple.jpg';
 import TokyoTempleB from './TokyoTempleB.jpg';
 import TokyoTempleWedding from './TokyoTempleWedding.jpg';
+import ArticleLikesButton from '../../components/Button/ArticleLikesButton';
 import ShibuyaStA from './ShibuyaStA.jpg';
 import ShibuyaStB from './ShibuyaStB.jpg';
 import ShibuyaStC from './ShibuyaStC.jpg';
@@ -398,8 +404,42 @@ const PicPagePicTitleContainer = styled.div`
     justify-content: center;
     align-items: center;
 `;
+
 export default function BlogArticle() {
-    window.scrollTo(0, 0);
+    const { userUID } = useContext(AuthContext);
+    const recommendation = [
+        {
+            name: '明治神宮',
+            placeId: 'ChIJ5SZMmreMGGARcz8QSTiJyo8',
+            formatted_address: '1-1 Yoyogikamizonochō, Shibuya City, Tokyo 151-8557日本',
+            rating: '4.6',
+            url: 'https://maps.google.com/?cid=10361244767556222835',
+            website: 'https://www.meijijingu.or.jp/',
+            type: 'attraction',
+        },
+        { name: '竹下通', placeId: '', formattedAdress: '' },
+        { name: '鐵塔', placeId: '', formattedAdress: '' },
+    ];
+
+    async function uploadItems(data) {
+        //存入user sub-collection Places
+        try {
+            const itemsRef = doc(db, 'users', userUID);
+            await addDoc(collection(itemsRef, 'SavedPlaces'), data);
+            // {
+            //     name: name,
+            //     placeId: id,
+            //     formatted_address: address,
+            //     rating: rating,
+            //     url: url,
+            //     website: website,
+            //     type: type,
+            // }
+            // console.log('Item uploaded with ID: ', docRef.id);
+        } catch (e) {
+            console.error('Error uploading item: ', e);
+        }
+    }
 
     return (
         <>
@@ -417,15 +457,19 @@ export default function BlogArticle() {
                                 </TitleCon>
                                 <AttractionCon>
                                     <HashTagCon>
-                                        <HashTag>
-                                            # 明治神宮 <AddTagFav>♡</AddTagFav>
-                                        </HashTag>
-                                        <HashTag>
-                                            # 竹下通 <AddTagFav>♡</AddTagFav>
-                                        </HashTag>
-                                        <HashTag>
-                                            # 澀谷 <AddTagFav>♡</AddTagFav>
-                                        </HashTag>
+                                        {recommendation.map((place, index) => (
+                                            <HashTag key={index}>
+                                                #{place.name}
+                                                <AddTagFav
+                                                    type='button'
+                                                    onClick={() => {
+                                                        uploadItems(place);
+                                                    }}
+                                                >
+                                                    <ArticleLikesButton />
+                                                </AddTagFav>
+                                            </HashTag>
+                                        ))}
                                     </HashTagCon>
                                 </AttractionCon>
                             </SummarySubCon>

@@ -800,14 +800,6 @@ const AddTripDetailTime = styled.input`
         transform: translateY(-50%);
     }
     cursor: pointer;
-    &:hover {
-        background-color: #2c3e50;
-        color: #fafafa;
-    }
-
-    &:active {
-        box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.1);
-    }
 `;
 const AddTripDetailPlace = styled.div`
     color: #fafafa;
@@ -852,14 +844,6 @@ const AddDescription = styled.input`
         color: #2d2d2d;
     }
     cursor: pointer;
-    &:hover {
-        background-color: #2c3e50;
-        color: #fafafa;
-    }
-
-    &:active {
-        box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.1);
-    }
 `;
 const AddToTrip = styled.div`
     margin-left: 20px;
