@@ -85,7 +85,7 @@ const Logo = styled.div`
     font-size: 40px;
     line-height: 81px;
     text-align: center;
-    color: #2d2d2d;
+    color: #fafafa;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
@@ -233,7 +233,10 @@ const SectionTwo = styled.div`
 
 export default function Blog() {
     const [showHeader, setShowHeader] = useState(false);
-
+    useEffect(() => {
+        window.scrollTo(0, 0); // 在页面加载完成或页面切换时滚动到顶部
+      }, []);
+    
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => {
@@ -270,18 +273,18 @@ export default function Blog() {
                         <PosterTextCon></PosterTextCon>
                         <VideoContainer>
                             <Video autoPlay muted loop>
-                                <source src={JapanVideo} type='video/mp4' />
+                                <source src={FujiBus} type='video/mp4' />
                             </Video>
                         </VideoContainer>
 
                         {/* <PosterMenu /> */}
                     </Poster>
                     <LogoContainer>
-                        <Logo>HANABI</Logo>
+                        <Logo></Logo>
                     </LogoContainer>
 
                     <LinearGradient>
-                        <BlogTitle>Blog</BlogTitle>
+                        <BlogTitle>HANABI - BLOG</BlogTitle>
                     </LinearGradient>
 
                     <MainPageContainer>

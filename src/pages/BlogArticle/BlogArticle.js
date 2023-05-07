@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './BlogArticle.css';
 import styled from 'styled-components/macro';
 import Header from '../../components/Header/Header';
@@ -407,6 +407,10 @@ const PicPagePicTitleContainer = styled.div`
 
 export default function BlogArticle() {
     const { userUID } = useContext(AuthContext);
+    useEffect(() => {
+        window.scrollTo(0, 0); // 在页面加载完成或页面切换时滚动到顶部
+    }, []);
+
     const recommendation = [
         {
             name: '明治神宮',
@@ -415,17 +419,46 @@ export default function BlogArticle() {
             rating: '4.6',
             url: 'https://maps.google.com/?cid=10361244767556222835',
             website: 'https://www.meijijingu.or.jp/',
+            photo: 'https://www.kkday.com/zh-tw/blog/wp-content/uploads/batch_shutterstock_1510366601.jpg',
             type: 'attraction',
+            isLike: false,
         },
-        { name: '竹下通', placeId: '', formattedAdress: '' },
-        { name: '鐵塔', placeId: '', formattedAdress: '' },
+        {
+            name: '竹下通',
+            placeId:
+                'EkdUYWtlc2hpdGEgU3QsIDEtY2jFjW1lLTYgSmluZ8WrbWFlLCBTaGlidXlhIENpdHksIFRva3lvIDE1MC0wMDAxLCBKYXBhbiIuKiwKFAoSCZVZ3vG6jBhgEbV-TuqIzL7CEhQKEgnLZd6tpIwYYBGhihayiuWxHg',
+            formatted_address: 'Takeshita St, 1-chōme-6 Jingūmae, Shibuya City, Tokyo 150-0001日本',
+            rating: '',
+            url: 'https://maps.google.com/?q=Takeshita+St,+1-ch%C5%8Dme-6+Jing%C5%ABmae,+Shibuya+City,+Tokyo+150-0001%E6%97%A5%E6%9C%AC&ftid=0x60188cbaf1de5995:0xc2becc88ea4e7eb5',
+            website: 'https://www.gotokyo.org/tc/spot/48/index.html',
+            photo: 'https://static.gltjp.com/glt/prd/data/directory/13000/12452/20220607_120400_3004bce1_w1920.jpg',
+            type: 'attraction',
+            isLike: false,
+        },
+        {
+            name: '澀谷',
+            placeId: 'ChIJGfSRvl6LGGAR5GDIDOVf4Bc',
+            formatted_address: '日本〒150-0002 東京都澀谷區澀谷',
+            rating: '',
+            url: 'https://maps.google.com/?q=%E6%97%A5%E6%9C%AC%E3%80%92150-0002+%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%BE%80%E8%B0%B7%E5%8D%80%E6%BE%80%E8%B0%B7&ftid=0x60188b5ebe91f419:0x17e05fe50cc860e4',
+            website: 'https://www.city.shibuya.tokyo.jp.c.mu.hp.transer.com/',
+            photo: 'https://static.gltjp.com/glt/prd/data/directory/13000/12452/20220607_120400_3004bce1_w1920.jpg',
+            type: 'attraction',
+            isLike: false,
+        },
     ];
+
+    const [isLiked, setIsLiked] = useState(false);
+    console.log(isLiked);
+    const handleCheckboxChange = () => {
+        setIsLiked(!isLiked);
+    };
 
     async function uploadItems(data) {
         //存入user sub-collection Places
         try {
             const itemsRef = doc(db, 'users', userUID);
-            await addDoc(collection(itemsRef, 'SavedPlaces'), data);
+            await setDoc(doc(itemsRef, 'SavedPlaces', data.placeId), data);
             // {
             //     name: name,
             //     placeId: id,
@@ -440,6 +473,39 @@ export default function BlogArticle() {
             console.error('Error uploading item: ', e);
         }
     }
+    // async function deleteItems(data) {
+    //     //存入user sub-collection Places
+    //     try {
+    //         const itemsRef = doc(db, 'users', userUID);
+    //         await deleteDoc(collection(itemsRef, 'SavedPlaces',), data);
+    //         // {
+    //         //     name: name,
+    //         //     placeId: id,
+    //         //     formatted_address: address,
+    //         //     rating: rating,
+    //         //     url: url,
+    //         //     website: website,
+    //         //     type: type,
+    //         // }
+    //         // console.log('Item uploaded with ID: ', docRef.id);
+    //     } catch (e) {
+    //         console.error('Error uploading item: ', e);
+    //     }
+    // }
+    const handleDelete = async (id) => {
+        const placeRef = doc(db, 'users', userUID, 'SavedPlaces', id);
+        await deleteDoc(placeRef);
+    };
+
+    // useEffect(() => {
+    //     if (isLiked) {
+    //         uploadItems();
+    //     } else {
+    //         deleteItems();
+    //     }
+    // }, [isLiked]);
+
+    // console.log(recommendation);
 
     return (
         <>
@@ -451,9 +517,9 @@ export default function BlogArticle() {
                             <SummarySubCon>
                                 <TitleCon>
                                     <ArticleNum>No.02</ArticleNum>
-                                    <Title>歴史に触れて地域に還元する旅</Title>
-                                    <DetailText>Date:</DetailText>
-                                    <DetailText>Writer:</DetailText>
+                                    <Title>Three Days in Tokyo: The World’s Largest City</Title>
+                                    <DetailText>Date: Mar 22 2023</DetailText>
+                                    <DetailText>Writer: Darren Weir</DetailText>
                                 </TitleCon>
                                 <AttractionCon>
                                     <HashTagCon>
@@ -461,12 +527,22 @@ export default function BlogArticle() {
                                             <HashTag key={index}>
                                                 #{place.name}
                                                 <AddTagFav
-                                                    type='button'
-                                                    onClick={() => {
-                                                        uploadItems(place);
-                                                    }}
+                                                // type='button'
+                                                // onClick={() => {
+                                                //     uploadItems(place);
+                                                // }}
                                                 >
-                                                    <ArticleLikesButton />
+                                                    <ArticleLikesButton
+                                                        onChange={() => {
+                                                            if (!place.isLike) {
+                                                                uploadItems(place);
+                                                                place.isLike = true;
+                                                            } else {
+                                                                handleDelete(place.placeId);
+                                                                place.isLike = false;
+                                                            }
+                                                        }}
+                                                    />
                                                 </AddTagFav>
                                             </HashTag>
                                         ))}

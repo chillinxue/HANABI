@@ -683,7 +683,7 @@ const TripTime = styled.div`
     line-height: 23px;
     text-align: end;
 
-    color: #fafafa;
+    color: #2d2d2d;
 `;
 const TripPlace = styled.div`
     color: #2d2d2d;
@@ -883,6 +883,9 @@ export default function Trips() {
     let cachedScripts = [];
     function useScript(src) {
         // Keeping track of script loaded and error state   //load SDK 初始資料 （收）
+        useEffect(() => {
+            window.scrollTo(0, 0); // 在页面加载完成或页面切换时滚动到顶部
+        }, []);
 
         const [state, setState] = useState({
             loaded: false,
@@ -1025,7 +1028,7 @@ export default function Trips() {
         setEnterDescription(event.target.value);
     };
 
-    async function uploadItems(name, id, address, rating, url, website, type) {
+    async function uploadItems(name, id, address, phone, rating, url, website, type) {
         //存入user sub-collection Places
         try {
             const itemsRef = doc(db, 'users', userUID);
@@ -1035,9 +1038,11 @@ export default function Trips() {
                 name: name,
                 placeId: id,
                 formatted_address: address,
-                rating: rating,
-                url: url,
-                website: website,
+                formatted_phone_number: phone || '',
+                rating: rating || '',
+                url: url || '',
+                website: website || '',
+                //如果要加回去，要在上面（）填回去，下方也要加（這個導致很多地方沒辦法加入fav
                 type: type,
             });
             // console.log('Item uploaded with ID: ', docRef.id);
@@ -1077,7 +1082,52 @@ export default function Trips() {
             });
 
             const infowindow = new window.google.maps.InfoWindow({
-                content: `<div><strong>${place.name}</strong><br><div class="address">${place.formatted_address}</div><br>Phone: ${place.formatted_phone_number}<br>Rating: ${place.rating}<br>Website: ${place.website}</div>`,
+                content: `
+                    <article class='article-wrapper'>
+                        <div class='rounded-lg container-project'  
+                        style={{
+                        
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                    
+                          }}>
+                          <img class="place-photo" src="${place.photo}">
+                          </div>
+                        <div class='project-info'>
+                            <div class='flex-pr'>
+                                <div class='project-title text-nowrap'>${place.name}</div>
+                                <div class='project-hover'>
+                                <a href=${place.website}>
+                                <svg
+                                style={{ color: 'black' }}
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='2em'
+                                height='2em'
+       color='black'
+       strokeLinejoin='round'
+       strokeLinecap='round'
+       viewBox='0 0 24 24'
+       strokeWidth='2'
+       fill='none'
+       stroke='currentColor'
+       style={{ cursor: 'pointer' }}
+     >
+                                 <line y2='12' x2='19' y1='12' x1='5'></line>
+                                 <polyline points='12 5 19 12 12 19'></polyline>
+                             </svg>
+       </a>
+                                </div>
+                            </div>
+                            <div style={{ color: 'black', fontSize: '8px', margin: '8px 0px' }}>
+                                Address: ${place.formatted_address}
+                                <br />
+                                Phone: ${place.formatted_phone_number}
+                            </div>
+                            <div class='types'>
+                                <span class='project-type'>• ${place.type}</span>
+                            </div>
+                        </div>
+                    </article>`,
             });
             console.log(place);
             marker.addListener('click', () => {
@@ -1102,9 +1152,10 @@ export default function Trips() {
                 locationInfo.name,
                 locationInfo.place_id,
                 locationInfo.formatted_address,
-                locationInfo.rating,
-                locationInfo.url,
-                locationInfo.website,
+                locationInfo.formatted_phone_number || '',
+                locationInfo.rating || '',
+                locationInfo.url || '',
+                locationInfo.website || '',
                 typeSaved
             );
             console.log(locationInfo.place_id);
@@ -1277,8 +1328,9 @@ export default function Trips() {
                             // date: selectedTripDate,
                             placeName: addPlaces.name,
                             placeAddress: addPlaces.formatted_address,
+                            formatted_phone_number: addPlaces.formatted_phone_number || '',
                             placeId: addPlaces.placeId,
-                            placesWebsite: addPlaces.website,
+                            placesWebsite: addPlaces.website || '',
                             description: enterDescription,
                         },
                     };
