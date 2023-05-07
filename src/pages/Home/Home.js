@@ -268,9 +268,9 @@ export default function Home() {
                             <FirstSectionBlockOneCon>
                                 <FirstSectionBlockOneTextCon>
                                     <TextTitle style={{ fontSize: '36px', lineHeight: '60px' }}>
-                                        弟子屈で出会う、
+                                        日本への一人旅のため
                                         <br />
-                                        圧倒的なスケールの大自然
+                                        日本が大好き
                                     </TextTitle>
                                     <TextContent>
                                         深い森と美しい水に囲まれた、北海道弟子屈町。

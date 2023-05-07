@@ -235,8 +235,8 @@ export default function Blog() {
     const [showHeader, setShowHeader] = useState(false);
     useEffect(() => {
         window.scrollTo(0, 0); // 在页面加载完成或页面切换时滚动到顶部
-      }, []);
-    
+    }, []);
+
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => {
@@ -291,9 +291,9 @@ export default function Blog() {
                         <SectionOne>
                             <SectionCon>
                                 <SectionTitleCon>
-                                    <SectionTitle>自然と繋がり自然に浸る旅</SectionTitle>
+                                    <SectionTitle>日本の大都市と小都市を旅する、没入型の旅</SectionTitle>
                                     <SectionSubTitle>
-                                        季節ごとにがらりと姿を変える自然を楽しむことができる、年間通しておすすめのプラン
+                                        好きな場所を選んで、一人旅を楽しんで、日本全国、大小の都市を旅して。
                                     </SectionSubTitle>
                                 </SectionTitleCon>
                                 <PicContainer>
@@ -301,9 +301,9 @@ export default function Blog() {
                                         <PicBox>
                                             <Pic src={FujiLawson}></Pic>
                                             <PicTitleContainer>
-                                                <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
+                                                <PicTitle>大切な人と富士山を見る</PicTitle>
                                                 <PicContent>
-                                                    自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
+                                                    世界で最も美しいコンビニエンス ストアを見たことがありますか?
                                                 </PicContent>
                                             </PicTitleContainer>
                                         </PicBox>
@@ -312,9 +312,9 @@ export default function Blog() {
                                         <PicBox>
                                             <Pic src={Tokyo}></Pic>
                                             <PicTitleContainer>
-                                                <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
+                                                <PicTitle>世界最大の都市：東京</PicTitle>
                                                 <PicContent>
-                                                    自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
+                                                    カルチャー、ファッション、フードのすべてがここに
                                                 </PicContent>
                                             </PicTitleContainer>
                                         </PicBox>
@@ -323,10 +323,8 @@ export default function Blog() {
                                         <PicBox>
                                             <Pic src={NaraTemple}></Pic>
                                             <PicTitleContainer>
-                                                <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
-                                                <PicContent>
-                                                    自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
-                                                </PicContent>
+                                                <PicTitle>奈良は鹿だけじゃない！</PicTitle>
+                                                <PicContent>一生に一度は見ておきたい非日常の東大寺</PicContent>
                                             </PicTitleContainer>
                                         </PicBox>
                                     </Link>
@@ -334,10 +332,8 @@ export default function Blog() {
                                         <PicBox>
                                             <Pic src={TokyoTemple}></Pic>
                                             <PicTitleContainer>
-                                                <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
-                                                <PicContent>
-                                                    自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
-                                                </PicContent>
+                                                <PicTitle>東京の中心：歴史ある明治神宮</PicTitle>
+                                                <PicContent>明治神宮と人々の関係は切っても切れないものです</PicContent>
                                             </PicTitleContainer>
                                         </PicBox>
                                     </Link>
@@ -345,46 +341,38 @@ export default function Blog() {
                             </SectionCon>
                             <SectionCon>
                                 <SectionTitleCon>
-                                    <SectionTitle>自然と繋がり自然に浸る旅</SectionTitle>
-                                    <SectionSubTitle>
-                                        季節ごとにがらりと姿を変える自然を楽しむことができる、年間通しておすすめのプラン
-                                    </SectionSubTitle>
+                                    <SectionTitle>ニッチな旅行先に旅行したいですか？</SectionTitle>
+                                    <SectionSubTitle>休日は一人でいたい、混みたくない</SectionSubTitle>
                                 </SectionTitleCon>
                                 <PicContainer>
                                     <PicBox>
                                         <Pic src={AkihabaraA}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
-                                            <PicContent>
-                                                自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
-                                            </PicContent>
+                                            <PicTitle>秋葉原：オタクだけじゃない</PicTitle>
+                                            <PicContent>秋葉原で居酒屋と寿司から始まった食の旅</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
                                         <Pic src={SunSkyTower}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
-                                            <PicContent>
-                                                自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
-                                            </PicContent>
+                                            <PicTitle>浅草寺から見たスカイツリー</PicTitle>
+                                            <PicContent>見ているだけで気分が上がるスカイツリー</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
                                         <Pic src={NaraDeer}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
+                                            <PicTitle>奈良の鹿は怖い</PicTitle>
                                             <PicContent>
-                                                自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
+                                                奈良の鹿は気をつけないと噛まれてしまうほど怖いです。
                                             </PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
                                         <Pic src={NaraTower}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle>歴史に触れて地域に還元する旅</PicTitle>
-                                            <PicContent>
-                                                自然を守りながら楽しみたい人におすすめな、地域の環境保全に貢献できるプラン
-                                            </PicContent>
+                                            <PicTitle>奈良の鹿物語</PicTitle>
+                                            <PicContent>角のある鹿に挨拶してみましたか？</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                 </PicContainer>

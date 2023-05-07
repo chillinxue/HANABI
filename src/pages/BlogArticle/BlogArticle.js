@@ -517,9 +517,9 @@ export default function BlogArticle() {
                             <SummarySubCon>
                                 <TitleCon>
                                     <ArticleNum>No.02</ArticleNum>
-                                    <Title>Three Days in Tokyo: The World’s Largest City</Title>
+                                    <Title>世界最大の都市：東京</Title>
                                     <DetailText>Date: Mar 22 2023</DetailText>
-                                    <DetailText>Writer: Darren Weir</DetailText>
+                                    <DetailText>Writer: 安雨真</DetailText>
                                 </TitleCon>
                                 <AttractionCon>
                                     <HashTagCon>
@@ -571,18 +571,18 @@ export default function BlogArticle() {
                                     <PicBox>
                                         <Pic src={TokyoTemple}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 明治神宮婚禮 </PicTitle>
+                                            <PicTitle># 明治神宮金鳥居 </PicTitle>
                                             <PicContent>
-                                                第一次在日本看到傳統的婚禮，屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
+                                                高さが12メートル、幅が17．1メートル、柱の太さが直径1．2メートル、重さが13トンもあり、木造の明神鳥居としては日本一の大きさを誇っています{' '}
                                             </PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
                                         <Pic src={TokyoTempleB}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 明治神宮婚禮 </PicTitle>
+                                            <PicTitle># 明治神宮本堂 </PicTitle>
                                             <PicContent>
-                                                第一次在日本看到傳統的婚禮，屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
+                                                三間社流造の本殿。先の大戦で戦渦に遭い、昭和33年（1958）に復興しました。
                                             </PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
@@ -590,9 +590,7 @@ export default function BlogArticle() {
                                         <Pic src={TokyoTempleWedding}></Pic>
                                         <PicTitleContainer>
                                             <PicTitle># 明治神宮婚禮 </PicTitle>
-                                            <PicContent>
-                                                第一次在日本看到傳統的婚禮，屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
-                                            </PicContent>
+                                            <PicContent>明治神宮で日本の伝統的な結婚式を初めて見た </PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                 </MainPicContainer>
@@ -602,19 +600,25 @@ export default function BlogArticle() {
                             <MainArticleSubCon>
                                 <MainArticle style={{ overflow: 'scroll', maxHeight: '505px' }}>
                                     {/* <ScrollCon> */}
-                                    <MainArticleTitle>
-                                        川湯温泉街から散策へ（川湯ビジターセンター～つつじヶ原）
-                                    </MainArticleTitle>
+                                    <MainArticleTitle>明治神宮の杜は人工林</MainArticleTitle>
                                     <MainArticleContent>
-                                        旅のスタート地点は、「川湯ビジターセンター」。周辺の自然環境や歴史が豊富な資料で紹介されており、さまざまな角度から、摩周・屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
-                                        川湯ビジターセンターのあとは「つつじヶ原自然探勝路」を通って硫黄山へ向かいましょう。約2.6kmの散策路には、イソツツジやハイマツなどが群生。火山の影響で、低地でありながら高山植物を間近に観察することができます。6月中旬から7月下旬にかけては、東京ドーム約21個分に相当する100ヘクタールに広がる日本最大のイソツツジの群落が、一斉に白い花を咲かせます。
+                                        明治神宮は明治天皇と皇后の昭憲皇太后をおまつりする神社です。
+                                        およそ70万平方メートルの広大な鎮守の杜は、明治神宮創建にあたって全国から献木された約10万本を植栽し、「永遠の杜」を目指して造成された人工林です。
+                                        国民の願いで創建
+                                        明治45年（1912）に明治天皇が、大正3年（1914）に昭憲皇太后が崩御になりましたが、国民から御神霊をおまつりして御聖徳を永久に敬い、お慕いしたいとの熱い願いが沸き上がり、御祭神とゆかりの深い代々木の地に創建されました。
+                                        祈りの杜
+                                        以来、明治神宮では皇室の弥栄（いやさか）とわが国の隆盛、世界の平和をお祈りしています。
+                                        初詣は例年、日本一となるほどの参拝者数を集めますが、平常は豊かに大きく成長した杜と森厳な神気が静かに人々の祈りを包みこんでいます。
                                     </MainArticleContent>
                                     <MainArticleTitle>
-                                        川湯温泉街から散策へ（川湯ビジターセンター～つつじヶ原）
+                                        剛毅果断で、御仁徳高く、またユーモアを解せられたお方
                                     </MainArticleTitle>
                                     <MainArticleContent>
-                                        旅のスタート地点は、「川湯ビジターセンター」。周辺の自然環境や歴史が豊富な資料で紹介されており、さまざまな角度から、摩周・屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
-                                        川湯ビジターセンターのあとは「つつじヶ原自然探勝路」を通って硫黄山へ向かいましょう。約2.6kmの散策路には、イソツツジやハイマツなどが群生。火山の影響で、低地でありながら高山植物を間近に観察することができます。6月中旬から7月下旬にかけては、東京ドーム約21個分に相当する100ヘクタールに広がる日本最大のイソツツジの群落が、一斉に白い花を咲かせます。
+                                        明治天皇は立派な御体格で、剛毅果断であらせられた反面、御仁徳高く博愛の心に富ませられ、またユーモアを解せられたお方であったと伝えられています。
+                                        和歌をお好みになり、御一代にお詠みになった御製（ぎょせい＝和歌）の数は93,032首に及んでおり、常に国家国民の繁栄と世界の平和を祈念された尊い大御心（おおみごころ）を拝することができます。
+                                        おごそかにたもたざらめや神代よりうけつぎ来たるうらやすの国
+                                        国民のうへやすかれとおもふのみわが世にたえぬ思なりけり
+                                        これらの御製を拝することによっても、いかに明治天皇が、万世一系の天子としての御自覚をもって、多難な時局に対処し近代国家の建設に邁進あそばされたか、そして明けても暮れても国民の上に御心をおそそぎになったかを、うかがい知ることができます。
                                     </MainArticleContent>
                                     {/* </ScrollCon> */}
                                 </MainArticle>
@@ -628,19 +632,25 @@ export default function BlogArticle() {
                             <MainArticleSubCon>
                                 <MainArticle style={{ overflow: 'scroll', maxHeight: '505px' }}>
                                     {/* <ScrollCon> */}
-                                    <MainArticleTitle>
-                                        川湯温泉街から散策へ（川湯ビジターセンター～つつじヶ原）
-                                    </MainArticleTitle>
+                                    <MainArticleTitle>原宿に来たらまずはコレ！</MainArticleTitle>
                                     <MainArticleContent>
-                                        旅のスタート地点は、「川湯ビジターセンター」。周辺の自然環境や歴史が豊富な資料で紹介されており、さまざまな角度から、摩周・屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
-                                        川湯ビジターセンターのあとは「つつじヶ原自然探勝路」を通って硫黄山へ向かいましょう。約2.6kmの散策路には、イソツツジやハイマツなどが群生。火山の影響で、低地でありながら高山植物を間近に観察することができます。6月中旬から7月下旬にかけては、東京ドーム約21個分に相当する100ヘクタールに広がる日本最大のイソツツジの群落が、一斉に白い花を咲かせます。
+                                        修学旅行で初めて原宿に来たけれど、 どこに行っていいかわからない…。
+                                        そんな時、気軽に原宿を実感できる定番のコースをご紹介します！
+                                        3フロア、400坪の売り場に多くのブランド・コスメ商品を取り揃えている新体験フラッグシップショップの@cosme
+                                        TOKYO。各階では今注目されているアイテムを見たり、美容機器やテスターもお試しできたりと、美容好きにはたまらないお店です。その日の気分や用途に合わせて、コスメ選びを楽しむことができます。{' '}
+                                        IKEA（WITH HARAJUKU） ikea（with harajuku） 日本初となるイケアの都心型店舗「IKEA
+                                        原宿」。休日や平日のランチ、仕事の後にでも気軽に立ち寄れる都心型ショップです。店内は、都市部の暮らしに合わせたレイアウトで“眠る”“整える”“くつろぐ”“料理する”の4つをコンセプトに
+                                        しています。ルームセットは狭い部屋にも合うおしゃれなインテリアを提案しています。
                                     </MainArticleContent>
                                     <MainArticleTitle>
-                                        川湯温泉街から散策へ（川湯ビジターセンター～つつじヶ原）
+                                        SWEET BOXは、タレントショップやファーストフード店
                                     </MainArticleTitle>
                                     <MainArticleContent>
-                                        旅のスタート地点は、「川湯ビジターセンター」。周辺の自然環境や歴史が豊富な資料で紹介されており、さまざまな角度から、摩周・屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
-                                        川湯ビジターセンターのあとは「つつじヶ原自然探勝路」を通って硫黄山へ向かいましょう。約2.6kmの散策路には、イソツツジやハイマツなどが群生。火山の影響で、低地でありながら高山植物を間近に観察することができます。6月中旬から7月下旬にかけては、東京ドーム約21個分に相当する100ヘクタールに広がる日本最大のイソツツジの群落が、一斉に白い花を咲かせます。
+                                        SWEET
+                                        BOXは、タレントショップやファーストフード店が立ち並ぶ、東京の観光名所、原宿の竹下通りの入ってすぐににあります。
+                                        クレープのおいしさ故、行列ができる事もしばしばです。並んででも食べたくなるそのおいしさの秘密は、サクサクの薄皮生地と特製の濃厚クリームです。
+                                        日本初、“長さ”をテーマにしたフード&スイーツ専門店「LONG! LONGER!!
+                                        LONGEST!!!」。メニューはソフトクリームやポテトなど幅広い品揃えです。メディアにも多く取り上げられる原宿話題のスイーツとフードです。味だけでなく見た目も存分に楽しもう！
                                     </MainArticleContent>
                                     {/* </ScrollCon> */}
                                 </MainArticle>
@@ -649,7 +659,7 @@ export default function BlogArticle() {
                         <MainInfoCon>
                             <MainInfo>
                                 <MainInfoHeader>
-                                    <InfoTitle>#明治神宮</InfoTitle>
+                                    <InfoTitle>#竹下通</InfoTitle>
                                     <InfoDetail>
                                         <DetailText style={{ color: '#2d2d2d' }}>Open Time</DetailText>
                                         <DetailText style={{ color: '#2d2d2d' }}>Tickets</DetailText>
@@ -660,27 +670,23 @@ export default function BlogArticle() {
                                     <PicBox>
                                         <Pic src={TakeshitaC}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 明治神宮婚禮 </PicTitle>
-                                            <PicContent>
-                                                第一次在日本看到傳統的婚禮，屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
-                                            </PicContent>
+                                            <PicTitle># 竹下通り原宿駅 </PicTitle>
+                                            <PicContent>原宿駅が竹下通りの最寄り駅です</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
                                         <Pic src={TakeshitaB}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 明治神宮婚禮 </PicTitle>
-                                            <PicContent>
-                                                第一次在日本看到傳統的婚禮，屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
-                                            </PicContent>
+                                            <PicTitle># 原宿駅前のイチョウ並木 </PicTitle>
+                                            <PicContent>原宿駅前のイチョウの木がたまたま綺麗だった </PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
                                         <Pic src={TakeshitaA}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 明治神宮婚禮 </PicTitle>
+                                            <PicTitle># 竹下通りでショッピング </PicTitle>
                                             <PicContent>
-                                                第一次在日本看到傳統的婚禮，屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
+                                                竹下通りのショッピングはファッショントレンドの発信地
                                             </PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
@@ -694,17 +700,17 @@ export default function BlogArticle() {
                         <PicPageContainer>
                             <PicPageHeader>
                                 <DetailText style={{ color: '#fafafa', fontWeight: '200' }}>Date:</DetailText>
-                                <PicPageTitle>満天の星空を楽しむツアー/ 川湯温泉</PicPageTitle>
+                                <PicPageTitle>今日の国の出発点/ 渋谷駅</PicPageTitle>
                             </PicPageHeader>
                             <PicPagePicContainer>
                                 <PicPagePicBox>
                                     <PicPagePic src={ShibuyaStB}></PicPagePic>
                                     <PicPagePicTitleContainer>
                                         <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # 明治神宮婚禮
+                                            # 渋谷駅の外観
                                         </PicTitle>
                                         <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            第一次在日本看到傳統的婚禮，屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
+                                            私は今の国が好きなので、来なければなりません。
                                         </PicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
@@ -712,10 +718,10 @@ export default function BlogArticle() {
                                     <PicPagePic src={ShibuyaStA}></PicPagePic>
                                     <PicPagePicTitleContainer>
                                         <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # 明治神宮婚禮
+                                            # 渋谷で最も有名な交差点
                                         </PicTitle>
                                         <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            第一次在日本看到傳統的婚禮，屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
+                                            この交差点を自分の目で見るのは今でも信じられないほどです。{' '}
                                         </PicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
@@ -723,10 +729,10 @@ export default function BlogArticle() {
                                     <PicPagePic src={ShibuyaStC}></PicPagePic>
                                     <PicPagePicTitleContainer>
                                         <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # 明治神宮婚禮
+                                            # 今日の国主人公たちがチャットする場所
                                         </PicTitle>
                                         <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            第一次在日本看到傳統的婚禮，屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
+                                            いつゲームが始まるかわからない？
                                         </PicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
@@ -734,10 +740,10 @@ export default function BlogArticle() {
                                     <PicPagePic src={ShibuyaStD}></PicPagePic>
                                     <PicPagePicTitleContainer>
                                         <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # 明治神宮婚禮
+                                            # 渋谷スカイ
                                         </PicTitle>
                                         <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            第一次在日本看到傳統的婚禮，屈斜路の大地を知ることができます。また、自然へ出かけるために心得ておくべきことも紹介されているため、旅のはじめにぜひ足を運んでほしいスポットです。
+                                            渋谷スカイから見た東京タワー{' '}
                                         </PicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
