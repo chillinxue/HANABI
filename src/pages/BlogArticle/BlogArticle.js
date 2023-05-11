@@ -473,25 +473,6 @@ export default function BlogArticle() {
             console.error('Error uploading item: ', e);
         }
     }
-    // async function deleteItems(data) {
-    //     //存入user sub-collection Places
-    //     try {
-    //         const itemsRef = doc(db, 'users', userUID);
-    //         await deleteDoc(collection(itemsRef, 'SavedPlaces',), data);
-    //         // {
-    //         //     name: name,
-    //         //     placeId: id,
-    //         //     formatted_address: address,
-    //         //     rating: rating,
-    //         //     url: url,
-    //         //     website: website,
-    //         //     type: type,
-    //         // }
-    //         // console.log('Item uploaded with ID: ', docRef.id);
-    //     } catch (e) {
-    //         console.error('Error uploading item: ', e);
-    //     }
-    // }
     const handleDelete = async (id) => {
         const placeRef = doc(db, 'users', userUID, 'SavedPlaces', id);
         await deleteDoc(placeRef);

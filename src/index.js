@@ -10,6 +10,7 @@ import App from './App';
 import GetPlaceSaved from './components/utils/firebase/GetPlaceSaved';
 import Home from './pages/Home/Home';
 import Trips from './pages/Trips/Trips';
+import TripNew from './pages/Trips/TripNew';
 import Blog from './pages/Blog/Blog';
 import Profile from './pages/Profile/Profile';
 import { AuthContextProvider } from './Context/AuthContext';
@@ -26,6 +27,7 @@ root.render(
                         <Route index element={<Home />} />
                         <Route path='Home' element={<Home />} />
                         <Route path='Trips' element={<Trips />} />
+                        <Route path='TripNew' element={<TripNew />} />
                         {/* <Route path='PocTest' element={<PocTest />} /> */}
                         {/* <Route path='Test' element={<Test />} /> */}
                         <Route path='Blog' element={<Blog />} />

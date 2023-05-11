@@ -9,30 +9,31 @@ import { TripsContext } from '../../../pages/Trips/tripsContext';
 const OutSide = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-
-    gap: 5px;
-    height: 95%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 16px 0px 43px;
+    box-sizing: border-box;
 `;
+const Inside = styled.div``;
 const GetPlaceSavedContainer = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    height: 395px;
 `;
 const FilterContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding-bottom: 10px;
+    box-sizing: border-box;
+    margin-top: 10px;
 `;
 const Filter = styled.div`
     display: flex;
-    gap: 10px;
+    gap: 6px;
 `;
 const PlaceTypeButton = styled.div`
-    border: 1px solid #fafafa;
+    border: 1px solid #2d2d2d;
     padding: 3px 5px;
     box-sizing: border-box;
     text-align: center;
@@ -41,7 +42,7 @@ const PlaceTypeButton = styled.div`
     font-weight: 700;
     font-size: 12px;
     line-height: 17px;
-    color: #fafafa;
+    color: #2d2d2d;
 `;
 // const AllLayerContainer = styled.div`
 //     border: 1px solid #fafafa;
@@ -57,26 +58,31 @@ const PlaceTypeButton = styled.div`
 
 //     color: #fafafa;
 // `;
+const SearchLayerInputContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    padding: 12px 45px 20px 35px;
+    box-sizing: border-box;
+`;
 const SearchLayerInput = styled.input`
-    margin: 10px 0px;
-    width: 325px;
+    width: 230px;
     height: 25px;
-    border: 1px solid #fafafa;
-    border-radius: 10px;
+    border: 1px solid #2d2d2d;
+    border-radius: 5px;
     background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     padding-left: 10px; /* 左邊距離10px */
-    color: #fafafa;
+    color: #2d2d2d;
     font-size: 10px;
     font-family: 'Noto Sans JP';
     font-style: normal;
     font-weight: 700;
     font-size: 10px;
     line-height: 25px; /* 與input的高度一樣 */
-    color: #fafafa;
     opacity: 0.75;
+    outline: none;
 
     ::placeholder {
         font-family: 'Noto Sans JP';
@@ -84,7 +90,7 @@ const SearchLayerInput = styled.input`
         font-weight: 700;
         font-size: 10px;
         line-height: 25px; /* 與input的高度一樣 */
-        color: #fafafa;
+        color: #d7d7d7;
         opacity: 0.75;
         /* padding-left: 10px; 左邊距離10px */
         text-align: start; /* 水平置中 */
@@ -101,19 +107,22 @@ const SavedBox = styled.div`
     gap: 15px;
 `;
 const SaveContent = styled.div`
-    width: 300px;
-    background: #f3f3f3;
+    width: 210px;
+    height: 70px;
+    background: #fafafa;
     mix-blend-mode: normal;
     border: 2px solid rgba(250, 250, 250, 0.75);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
-    padding: 0px 10px 10px 10px;
+    padding: 0px 10px 5px 10px;
+    box-sizing: border-box;
 `;
 const SavedBoxName = styled.div`
     font-family: 'Noto Sans JP', sans-serif;
     font-style: normal;
-    font-size: 16px;
-    line-height: 23px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
     text-align: center;
 
     color: #2d2d2d;
@@ -123,7 +132,7 @@ const SavedBoxAddress = styled.div`
     font-family: 'Noto Sans JP';
     font-style: normal;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 8px;
     line-height: 14px;
 
     color: #404143;
@@ -137,7 +146,7 @@ const DeleteSaveBox = styled.div`
     font-family: 'Noto Sans JP';
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 8px;
     line-height: 22px;
     text-align: end;
     margin-right: 10px;
@@ -155,25 +164,27 @@ const AddToTrip = styled.div`
     font-size: 8px;
     line-height: 14px;
     text-align: center;
-    border: 1px solid #fafafa;
     padding: 4px 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
 
-    color: #fafafa;
-
-    border: 1px solid #fafafa;
+    color: #2d2d2d;
     cursor: pointer;
 `;
-
+const SubContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100vh - 353px);
+`;
 // export const handleDelete = async (id, userUID) => {
 //     const placeRef = doc(db, 'users', userUID, 'SavedPlaces', id);
 //     await deleteDoc(placeRef);
 // };
 
-export default function GetPlaceSaved() {
+export default function GetPlaceSaved({ showOnMap }) {
     // const [places, setPlaces] = useState(null);
     const [placeType, setPlaceType] = useState(null);
     const [searchInput, setSearchInput] = useState('');
@@ -236,7 +247,7 @@ export default function GetPlaceSaved() {
     };
     return (
         <>
-            <OutSide>
+            <SearchLayerInputContainer>
                 {showSearchInput && (
                     <SearchLayerInput
                         placeholder='Search Favorites Place'
@@ -244,33 +255,78 @@ export default function GetPlaceSaved() {
                         onChange={(e) => setSearchInput(e.target.value)}
                     />
                 )}
-                <GetPlaceSavedContainer style={{ overflow: 'scroll', maxHeight: '395px' }}>
-                    <SavedBoxContainer>
-                        {places &&
-                            places.map((data, index) => (
-                                <SavedBox key={index}>
-                                    <SaveContent>
-                                        <SavedBoxHeader>
-                                            <SavedBoxName>{data.name}</SavedBoxName>
-                                            <DeleteSaveBox onClick={() => handleDelete(data.id)}>X</DeleteSaveBox>
-                                        </SavedBoxHeader>
-                                        <SavedBoxAddress>{data.formatted_address}</SavedBoxAddress>
-                                    </SaveContent>
-                                    <AddToTrip onClick={() => setAddPlaces(data)}>Add</AddToTrip>
-                                </SavedBox>
-                            ))}
-                    </SavedBoxContainer>
-                </GetPlaceSavedContainer>
+            </SearchLayerInputContainer>
+            <SubContainer>
+                {/* <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}> */}
+                <OutSide style={{ overflow: 'scroll' }}>
+                    <Inside>
+                        <GetPlaceSavedContainer style={{ overflow: 'scroll' }}>
+                            <SavedBoxContainer>
+                                {places &&
+                                    places.map((data, index) => (
+                                        <SavedBox key={index}>
+                                            <SaveContent>
+                                                <SavedBoxHeader>
+                                                    <SavedBoxName>📍 {data.name}</SavedBoxName>
+                                                    <DeleteSaveBox onClick={() => handleDelete(data.id)}>
+                                                        x
+                                                    </DeleteSaveBox>
+                                                </SavedBoxHeader>
+                                                <SavedBoxAddress>{data.formatted_address}</SavedBoxAddress>
+                                            </SaveContent>
+                                            <AddToTrip onClick={() => setAddPlaces(data)}>+</AddToTrip>
+                                        </SavedBox>
+                                    ))}
+                            </SavedBoxContainer>
+                        </GetPlaceSavedContainer>
+                    </Inside>
+                </OutSide>
                 <FilterContainer>
                     <Filter handleFilter={handleFilter}>
-                        <PlaceTypeButton onClick={() => handleFilter(null)}>ALL</PlaceTypeButton>
-                        <PlaceTypeButton onClick={() => handleFilter('hotel')}>Hotel</PlaceTypeButton>
-                        <PlaceTypeButton onClick={() => handleFilter('attraction')}>Attraction</PlaceTypeButton>
-                        <PlaceTypeButton onClick={() => handleFilter('restaurant')}>Restaurant</PlaceTypeButton>
-                        <PlaceTypeButton onClick={() => handleFilter('transportation')}>Transportation</PlaceTypeButton>
+                        <PlaceTypeButton
+                            onClick={() => {
+                                handleFilter(null);
+                                showOnMap();
+                            }}
+                        >
+                            ALL
+                        </PlaceTypeButton>
+                        <PlaceTypeButton
+                            onClick={() => {
+                                handleFilter('hotel');
+                                showOnMap();
+                            }}
+                        >
+                            Hotel
+                        </PlaceTypeButton>
+                        <PlaceTypeButton
+                            onClick={() => {
+                                handleFilter('attraction');
+                                showOnMap();
+                            }}
+                        >
+                            Attraction
+                        </PlaceTypeButton>
+                        <PlaceTypeButton
+                            onClick={() => {
+                                handleFilter('restaurant');
+                                showOnMap();
+                            }}
+                        >
+                            Food
+                        </PlaceTypeButton>
+                        <PlaceTypeButton
+                            onClick={() => {
+                                handleFilter('transportation');
+                                showOnMap();
+                            }}
+                        >
+                            Transportation
+                        </PlaceTypeButton>
                     </Filter>
                 </FilterContainer>
-            </OutSide>
+                {/* </div> */}
+            </SubContainer>
         </>
     );
 }

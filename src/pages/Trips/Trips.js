@@ -1,15 +1,15 @@
 import styled from 'styled-components/macro';
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import MenuSearchBar from '../../components/SearchBar/MenuSearchBar';
+// import Slider from 'react-slick';
+// import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick-theme.css';
+// import MenuSearchBar from '../../components/SearchBar/MenuSearchBar';
 // import PosterMenuOld from '../../components/PosterMenu/PosterMenuOld';
 import { initializeApp } from 'firebase/app';
 import { arrayUnion, getFirestore, onSnapshot } from 'firebase/firestore';
 import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc } from 'firebase/firestore';
 import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
-import Modal from 'react-modal';
+// import Modal from 'react-modal';
 import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
 import { AuthContext } from '../../Context/AuthContext';
 import { TripsContextProvider } from './tripsContext';
@@ -1429,7 +1429,7 @@ export default function Trips() {
                                 {/* <button onClick={() => calcRoute()}>搜尋路線</button> */}
                             </RouteContainer>
                             <Poster>
-                                <Slider autoplay={true} autoplaySpeed={4000} slidesToShow={1}>
+                                {/* <Slider autoplay={true} autoplaySpeed={4000} slidesToShow={1}>
                                     <div>
                                         <img
                                             src={FujiMt}
@@ -1451,7 +1451,7 @@ export default function Trips() {
                                             style={{ width: '100%', height: '450px', objectFit: 'cover' }}
                                         />
                                     </div>
-                                </Slider>
+                                </Slider> */}
                             </Poster>
                         </PosterContainer>
                         <MiddleContainer>
