@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
-import { db } from '../../../pages/Trips/Trips';
+import { db } from '../../../pages/Trips/TripsOld';
 import { doc, onSnapshot } from 'firebase/firestore';
 import styled from 'styled-components/macro';
 import { AuthContext } from '../../../Context/AuthContext';
 import { TripsContext } from '../../../pages/Trips/tripsContext';
 
 const OutSide = styled.div`
+    width: 325px;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -13,6 +13,7 @@ const LoginInsideContainer = styled.div`
     border: 1px solid white;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `;
 const LogInButton = styled.div`
     color: #fafafa;

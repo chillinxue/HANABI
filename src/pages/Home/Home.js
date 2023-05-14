@@ -64,6 +64,7 @@ const Poster = styled.div`
 
 const Login = styled.div`
     z-index: 2;
+    padding: 30px 35px 0px 0px;
 `;
 
 const LogoContainer = styled.div`
@@ -235,104 +236,106 @@ export default function Home() {
     };
 
     return (
-        <OutSide>
-            <MainContainer>
-                {showHeader && (
-                    <Header
-                        style={{
-                            transform: showHeader ? 'translateY(0%) scale(1)' : 'translateY(-100%) scale(0.8)',
-                            transition: 'transform 1s ease-out',
-                        }}
-                    />
-                )}
-                <Poster>
-                    <Login>
-                        <LoginButton />
-                    </Login>
-                    <PosterTextCon></PosterTextCon>
-                    <VideoContainer>
-                        <Video autoPlay muted loop>
-                            <source src={JapanVideo} type='video/mp4' />
-                        </Video>
-                    </VideoContainer>
+        <>
+            <Login>
+                <LoginButton />
+            </Login>
+            <OutSide>
+                <MainContainer>
+                    {showHeader && (
+                        <Header
+                            style={{
+                                transform: showHeader ? 'translateY(0%) scale(1)' : 'translateY(-100%) scale(0.8)',
+                                transition: 'transform 1s ease-out',
+                            }}
+                        />
+                    )}
+                    <Poster>
+                        <PosterTextCon></PosterTextCon>
+                        <VideoContainer>
+                            <Video autoPlay muted loop>
+                                <source src={JapanVideo} type='video/mp4' />
+                            </Video>
+                        </VideoContainer>
 
-                    {/* <PosterMenu /> */}
-                </Poster>
-                <LogoContainer>
-                    <Logo>HANABI</Logo>
-                </LogoContainer>
-                <MainPageContainer>
-                    {/* <PlacesRecommend /> */}
-                    <FirstSection>
-                        <FirstSectionBlockOne>
-                            <FirstSectionBlockOneCon>
-                                <FirstSectionBlockOneTextCon>
-                                    <TextTitle style={{ fontSize: '36px', lineHeight: '60px' }}>
-                                        日本への一人旅のため
-                                        <br />
-                                        日本が大好き
-                                    </TextTitle>
-                                    <TextContent>
-                                        深い森と美しい水に囲まれた、北海道弟子屈町。
-                                        面積の65％が阿寒摩周国立公園に位置する自然豊かなエリアです。
-                                        ここには世界有数の透明度を誇る摩周湖や、100年以上の歴史を持つ温泉街、
-                                        日本一大きなカルデラ湖の屈斜路湖、今なお噴気を上げる硫黄山など、
-                                        森と湖と火山の織りなす、大自然が広がっています。
-                                        このまちで自然とともに暮らしてきた人々もまた、まちの魅力のひとつ。
-                                        弟子屈町へ旅してみませんか。
-                                    </TextContent>
-                                </FirstSectionBlockOneTextCon>
-                                <FirstSectionBlockOnePicCon></FirstSectionBlockOnePicCon>
-                            </FirstSectionBlockOneCon>
-                        </FirstSectionBlockOne>
-                        <FirstSectionBlockTwo>
-                            <FirstSectionBlockTwoPicCon></FirstSectionBlockTwoPicCon>
-                            <FirstSectionBlockTwoTextCon>
-                                <TextSubCon>
-                                    <TextTitle>
-                                        さまざまな水がつくりだす、
-                                        <br />
-                                        まちの物語
-                                    </TextTitle>
-                                    <TextContent style={{ marginTop: '40px' }}>
-                                        弟子屈町は美しい水が流れるまち。神秘的な深いブルーの広がる摩周湖、母のように懐広く人々の暮らしをそっと支える屈斜路湖、湖から流れ出す美しい釧路川。まちの至るところから湧き出る温泉や井戸水も、大切な存在です。
-                                    </TextContent>
-                                </TextSubCon>
-                            </FirstSectionBlockTwoTextCon>
-                        </FirstSectionBlockTwo>
-                        <FirstSectionBlockThree>
-                            <FirstSectionBlockThreeTextCon>
-                                <TextSubCon style={{ width: '450px' }}>
-                                    <TextTitle>
-                                        自然とともに暮らしてきた、
-                                        <br />
-                                        このまちの魅力
-                                    </TextTitle>
-                                    <TextContent style={{ fontSize: '10px', marginTop: '30px' }}>
-                                        自然に逆らわず、自然の恵みとともに暮らしを紡いできたアイヌの人々も、厳しい自然に負けじと力強くこの地に鍬を下ろし続けた開拓者の人々も、今のまちの礎を築いた大切な人たち。先人たちの暮らしの知恵と、訪れた人々を誰でも迎え入れるあたたかさ、伝え続けた歴史や文化は、このまちの魅力となり、しっかりと根づいています。
-                                    </TextContent>
-                                </TextSubCon>
-                            </FirstSectionBlockThreeTextCon>
-                            <FirstSectionBlockThreePicCon></FirstSectionBlockThreePicCon>
-                        </FirstSectionBlockThree>
-                        <FirstSectionBlockThree>
-                            <FirstSectionBlockFourPicCon></FirstSectionBlockFourPicCon>
-                            <FirstSectionBlockThreeTextCon>
-                                <TextSubCon style={{ width: '450px' }}>
-                                    <TextTitle>
-                                        厳しい自然が育む、
-                                        <br />
-                                        豊かな食文化
-                                    </TextTitle>
-                                    <TextContent style={{ fontSize: '10px', marginTop: '30px' }}>
-                                        冬と夏の気温差は60℃以上。寒暖の差は、農産物を豊かに育て、人々の食卓を彩ります。香り高い摩周そば、みずみずしい摩周メロン、温泉熱で育つイチゴやマンゴーに加え、摩周和牛や弟子屈ポーク、牛乳など、弟子屈ならではの食材から生まれる珠玉の一皿が、多くの人を魅了します。
-                                    </TextContent>
-                                </TextSubCon>
-                            </FirstSectionBlockThreeTextCon>
-                        </FirstSectionBlockThree>
-                    </FirstSection>
-                </MainPageContainer>
-            </MainContainer>
-        </OutSide>
+                        {/* <PosterMenu /> */}
+                    </Poster>
+                    <LogoContainer>
+                        <Logo>HANABI</Logo>
+                    </LogoContainer>
+                    <MainPageContainer>
+                        {/* <PlacesRecommend /> */}
+                        <FirstSection>
+                            <FirstSectionBlockOne>
+                                <FirstSectionBlockOneCon>
+                                    <FirstSectionBlockOneTextCon>
+                                        <TextTitle style={{ fontSize: '36px', lineHeight: '60px' }}>
+                                            日本への一人旅のため
+                                            <br />
+                                            日本が大好き
+                                        </TextTitle>
+                                        <TextContent>
+                                            深い森と美しい水に囲まれた、北海道弟子屈町。
+                                            面積の65％が阿寒摩周国立公園に位置する自然豊かなエリアです。
+                                            ここには世界有数の透明度を誇る摩周湖や、100年以上の歴史を持つ温泉街、
+                                            日本一大きなカルデラ湖の屈斜路湖、今なお噴気を上げる硫黄山など、
+                                            森と湖と火山の織りなす、大自然が広がっています。
+                                            このまちで自然とともに暮らしてきた人々もまた、まちの魅力のひとつ。
+                                            弟子屈町へ旅してみませんか。
+                                        </TextContent>
+                                    </FirstSectionBlockOneTextCon>
+                                    <FirstSectionBlockOnePicCon></FirstSectionBlockOnePicCon>
+                                </FirstSectionBlockOneCon>
+                            </FirstSectionBlockOne>
+                            <FirstSectionBlockTwo>
+                                <FirstSectionBlockTwoPicCon></FirstSectionBlockTwoPicCon>
+                                <FirstSectionBlockTwoTextCon>
+                                    <TextSubCon>
+                                        <TextTitle>
+                                            さまざまな水がつくりだす、
+                                            <br />
+                                            まちの物語
+                                        </TextTitle>
+                                        <TextContent style={{ marginTop: '40px' }}>
+                                            弟子屈町は美しい水が流れるまち。神秘的な深いブルーの広がる摩周湖、母のように懐広く人々の暮らしをそっと支える屈斜路湖、湖から流れ出す美しい釧路川。まちの至るところから湧き出る温泉や井戸水も、大切な存在です。
+                                        </TextContent>
+                                    </TextSubCon>
+                                </FirstSectionBlockTwoTextCon>
+                            </FirstSectionBlockTwo>
+                            <FirstSectionBlockThree>
+                                <FirstSectionBlockThreeTextCon>
+                                    <TextSubCon style={{ width: '450px' }}>
+                                        <TextTitle>
+                                            自然とともに暮らしてきた、
+                                            <br />
+                                            このまちの魅力
+                                        </TextTitle>
+                                        <TextContent style={{ fontSize: '10px', marginTop: '30px' }}>
+                                            自然に逆らわず、自然の恵みとともに暮らしを紡いできたアイヌの人々も、厳しい自然に負けじと力強くこの地に鍬を下ろし続けた開拓者の人々も、今のまちの礎を築いた大切な人たち。先人たちの暮らしの知恵と、訪れた人々を誰でも迎え入れるあたたかさ、伝え続けた歴史や文化は、このまちの魅力となり、しっかりと根づいています。
+                                        </TextContent>
+                                    </TextSubCon>
+                                </FirstSectionBlockThreeTextCon>
+                                <FirstSectionBlockThreePicCon></FirstSectionBlockThreePicCon>
+                            </FirstSectionBlockThree>
+                            <FirstSectionBlockThree>
+                                <FirstSectionBlockFourPicCon></FirstSectionBlockFourPicCon>
+                                <FirstSectionBlockThreeTextCon>
+                                    <TextSubCon style={{ width: '450px' }}>
+                                        <TextTitle>
+                                            厳しい自然が育む、
+                                            <br />
+                                            豊かな食文化
+                                        </TextTitle>
+                                        <TextContent style={{ fontSize: '10px', marginTop: '30px' }}>
+                                            冬と夏の気温差は60℃以上。寒暖の差は、農産物を豊かに育て、人々の食卓を彩ります。香り高い摩周そば、みずみずしい摩周メロン、温泉熱で育つイチゴやマンゴーに加え、摩周和牛や弟子屈ポーク、牛乳など、弟子屈ならではの食材から生まれる珠玉の一皿が、多くの人を魅了します。
+                                        </TextContent>
+                                    </TextSubCon>
+                                </FirstSectionBlockThreeTextCon>
+                            </FirstSectionBlockThree>
+                        </FirstSection>
+                    </MainPageContainer>
+                </MainContainer>
+            </OutSide>
+        </>
     );
 }

@@ -4,7 +4,7 @@ import { TripsContext } from './tripsContext';
 import { TripsContextProvider } from './tripsContext';
 import { arrayUnion, getFirestore, onSnapshot } from 'firebase/firestore';
 import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db } from './Trips';
+import { db } from './TripsOld';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { AuthContext } from '../../Context/AuthContext';
 import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
@@ -41,8 +41,8 @@ const TripsBox = styled.div`
     height: 46px;
 
     display: flex;
-    align-items: center;
-    padding: 5px 10px 10px 73px;
+    justify-content: space-between;
+    padding: 5px 10px 5px 73px;
 
     &:hover {
         color: #fafafa;
@@ -84,30 +84,29 @@ const DeleteTripsBox = styled.div`
     font-family: 'Noto Sans JP';
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
-    line-height: 22px;
-    text-align: end;
-    margin-right: 10px;
-
-    color: #404143;
+    font-size: 10px;
+    line-height: 14px;
+    text-align: center;
+    color: #2d2d2d;
 
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;
 `;
 const DateBoxContainer = styled.div`
-    height: 30px;
+    height: 35px;
     display: flex;
     overflow-x: auto;
     gap: 10px;
-    padding: 10px 20px 10px 0px;
+    /* padding: 10px 20px 10px 0px; */
     box-sizing: border-box;
-    margin: 10px 33px 0px 33px;
+    margin: 20px 43px 0px 43px;
     &::-webkit-scrollbar {
         display: none;
     }
 `;
 const DateBox = styled.div`
     width: 45 px;
+    height: 13px;
     flex-shrink: 0;
     font-style: normal;
     font-weight: 400;
@@ -121,6 +120,8 @@ const DateBox = styled.div`
     align-items: center;
 
     color: ${(props) => (props.isSelected ? '#fafafa' : '#2d2d2d')};
+    background-color: ${(props) => (props.isSelected ? '#818181' : 'none')};
+
     cursor: pointer;
     &:hover {
         background-color: #2c3e50;
@@ -176,7 +177,8 @@ const TripDetailBox = styled.div`
     display: flex;
     justify-content: flex-start;
     width: 352px;
-    height: 65px;
+    min-height: 65px;
+    height: fit-content;
     padding: 5px;
     box-sizing: border-box;
     border-bottom: 1px solid #2d2d2d;
@@ -237,6 +239,7 @@ const DeleteDetailBox = styled.div`
     color: #2d2d2d;
 
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
 `;
 const AddNewTripContainer = styled.div`
     display: flex;
@@ -383,6 +386,11 @@ const AddToTrip = styled.div`
     }
 `;
 const TripContainerTop = styled.div``;
+const TripsContentContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
 
 export default function TripsSchedule() {
     const { userUID } = useContext(AuthContext);
@@ -509,6 +517,7 @@ export default function TripsSchedule() {
         });
         setTripUpdated(true);
     }
+
     async function handleDeleteTrip(tripId) {
         try {
             const tripRef = doc(db, 'users', userUID, 'trips', tripId);
@@ -519,67 +528,79 @@ export default function TripsSchedule() {
         }
     }
 
-    function getSortedDate() {
-        if (Object.keys(selectedTrip).length > 0) {
-            const timeList = selectedTrip.dates.map((date) => date);
-            const sortedData = Object.fromEntries(
-                Object.entries(timeList)
-                    .filter(([key]) => !isNaN(Date.parse(key))) // filter out non-time keys
-                    .sort(([a], [b]) => new Date(`1970/01/01 ${a}`) - new Date(`1970/01/01 ${b}`))
-            );
-            return sortedData;
-        }
-    } //selectedtrip.date（有包含地址資料）按照時間順序排
-
-    function getNewSortedDate() {
-        if (getSortedDate()) {
-            const dates = Object.keys(getSortedDate()[selectedDateIndex]).filter((time) => time !== 'date'); // { 9:00: {}, 10:00: {}, date: '' }
-            dates.sort((a, b) => {
-                return new Date('1970/01/01 ' + a) - new Date('1970/01/01 ' + b);
-            });
-            return dates;
-        }
-    } //單純把時間拿出來排
-
-    console.log(selectedTrip.dates);
-    async function addTripDetailToFirebase() {
-        setEnterDescription('');
-        setAddPlaces('');
-        setTime('');
-
-        const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
+    async function deleteTripDetailToFirebase() {
         const selectedDate = selectedTrip.dates[selectedDateIndex];
+        const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
 
-        await updateDoc(addTripDetailTestRef, {
-            dates: selectedTrip.dates.map((date) => {
-                if (date.date === selectedDate.date) {
-                    return {
-                        ...date,
-                        [time]: {
-                            // date: selectedTripDate,
-                            placeName: addPlaces.name,
-                            placeAddress: addPlaces.formatted_address,
-                            formatted_phone_number: addPlaces.formatted_phone_number || '',
-                            placeId: addPlaces.placeId,
-                            placesWebsite: addPlaces.website || '',
-                            description: enterDescription,
-                        },
-                    };
-                }
-                return date;
-            }),
-        });
-        setTripUpdated(true);
-    }
-    async function handleDeleteTrip(tripId) {
         try {
-            const tripRef = doc(db, 'users', userUID, 'trips', tripId);
-            await deleteDoc(tripRef);
-            console.log('刪除成功');
+            await deleteDoc(addTripDetailTestRef[selectedDateIndex]);
+            setTripUpdated(true);
         } catch (error) {
-            console.error('刪除失敗');
+            console.error('Error deleting trip detail:', error);
         }
     }
+
+    // function getSortedDate() {
+    //     if (Object.keys(selectedTrip).length > 0) {
+    //         const timeList = selectedTrip.dates.map((date) => date);
+    //         const sortedData = Object.fromEntries(
+    //             Object.entries(timeList)
+    //                 .filter(([key]) => !isNaN(Date.parse(key))) // filter out non-time keys
+    //                 .sort(([a], [b]) => new Date(`1970/01/01 ${a}`) - new Date(`1970/01/01 ${b}`))
+    //         );
+    //         return sortedData;
+    //     }
+    // } //selectedtrip.date（有包含地址資料）按照時間順序排
+
+    // function getNewSortedDate() {
+    //     if (getSortedDate()) {
+    //         const dates = Object.keys(getSortedDate()[selectedDateIndex]).filter((time) => time !== 'date'); // { 9:00: {}, 10:00: {}, date: '' }
+    //         dates.sort((a, b) => {
+    //             return new Date('1970/01/01 ' + a) - new Date('1970/01/01 ' + b);
+    //         });
+    //         return dates;
+    //     }
+    // } //單純把時間拿出來排
+
+    // console.log(selectedTrip.dates);
+    // async function addTripDetailToFirebase() {
+    //     setEnterDescription('');
+    //     setAddPlaces('');
+    //     setTime('');
+
+    //     const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
+    //     const selectedDate = selectedTrip.dates[selectedDateIndex];
+
+    //     await updateDoc(addTripDetailTestRef, {
+    //         dates: selectedTrip.dates.map((date) => {
+    //             if (date.date === selectedDate.date) {
+    //                 return {
+    //                     ...date,
+    //                     [time]: {
+    //                         // date: selectedTripDate,
+    //                         placeName: addPlaces.name,
+    //                         placeAddress: addPlaces.formatted_address,
+    //                         formatted_phone_number: addPlaces.formatted_phone_number || '',
+    //                         placeId: addPlaces.placeId,
+    //                         placesWebsite: addPlaces.website || '',
+    //                         description: enterDescription,
+    //                     },
+    //                 };
+    //             }
+    //             return date;
+    //         }),
+    //     });
+    //     setTripUpdated(true);
+    // }
+    // async function handleDeleteTrip(tripId) {
+    //     try {
+    //         const tripRef = doc(db, 'users', userUID, 'trips', tripId);
+    //         await deleteDoc(tripRef);
+    //         console.log('刪除成功');
+    //     } catch (error) {
+    //         console.error('刪除失敗');
+    //     }
+    // }
     return (
         <>
             <TripsContainer>
@@ -599,21 +620,22 @@ export default function TripsSchedule() {
                                         console.log(trips);
                                     }}
                                 >
-                                    <TripsBoxLine></TripsBoxLine>
-                                    <TripsContent>
-                                        <TripsName>{trip.tripname}</TripsName>
-                                        <TripsDate>
-                                            {' '}
-                                            {trip.dates[0].date} - {trip.dates[trip.dates.length - 1].date}
-                                        </TripsDate>
-                                    </TripsContent>
+                                    <TripsContentContainer>
+                                        <TripsBoxLine></TripsBoxLine>
+                                        <TripsContent>
+                                            <TripsName>{trip.tripname}</TripsName>
+                                            <TripsDate>
+                                                {trip.dates[0].date} - {trip.dates[trip.dates.length - 1].date}
+                                            </TripsDate>
+                                        </TripsContent>
+                                    </TripsContentContainer>
                                     <DeleteTripsBox
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleDeleteTrip(trip.tripId);
                                         }}
                                     >
-                                        X
+                                        x
                                     </DeleteTripsBox>
                                 </TripsBox>
                             </>
@@ -632,7 +654,7 @@ export default function TripsSchedule() {
                             );
                         }}
                     >
-                        {date.date.split('/')[1]}/{date.date.split('/')[2]}
+                        [ {date.date.split('/')[1]}/{date.date.split('/')[2]} ]
                     </DateBox>
                 ))}
             </DateBoxContainer>
@@ -659,7 +681,7 @@ export default function TripsSchedule() {
                                             <TripDescription>
                                                 {selectedTrip.dates[selectedDateIndex][time].description}
                                             </TripDescription>
-                                            <DeleteDetailBox>x</DeleteDetailBox>
+                                            <DeleteDetailBox onClick={deleteTripDetailToFirebase}>x</DeleteDetailBox>
                                         </TripDetailBox>
                                     </>
                                 ))}
