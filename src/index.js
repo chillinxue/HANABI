@@ -4,7 +4,6 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 // import PocTest from './pages/PocTest';
 // import AutoComplete from './pages/AutoComplete';
 // import GoogleMap from './pages/GoogleMap';
-import Test from './pages/Test';
 // import GoogleLogin from './pages/GoogleLogin';
 import App from './App';
 import GetPlaceSaved from './components/utils/firebase/GetPlaceSaved';

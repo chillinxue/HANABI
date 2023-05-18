@@ -422,6 +422,7 @@ export default function TripsSchedule() {
     }, [selectedTrip]); //當點擊trip，產生時間順續的array
 
     useEffect(() => {
+        console.log('123');
         if (!userUID) {
             return;
         }
@@ -527,18 +528,34 @@ export default function TripsSchedule() {
             console.error('刪除失敗');
         }
     }
-
-    async function deleteTripDetailToFirebase() {
+    // const selectedDate = selectedTrip.dates[selectedDateIndex];
+    console.log();
+    async function deleteTripDetailToFirebase(timeToDelete) {
+        const deleteTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
         const selectedDate = selectedTrip.dates[selectedDateIndex];
-        const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
 
-        try {
-            await deleteDoc(addTripDetailTestRef[selectedDateIndex]);
-            setTripUpdated(true);
-        } catch (error) {
-            console.error('Error deleting trip detail:', error);
-        }
+        await updateDoc(deleteTripDetailTestRef, {
+            dates: selectedTrip.dates.map((date) => {
+                if (date.date === selectedDate.date) {
+                    const updatedDate = { ...date };
+                    delete updatedDate[timeToDelete];
+                    return updatedDate;
+                }
+                return date;
+            }),
+        });
+        setTripUpdated(true);
     }
+    // async function deleteTripDetailToFirebase() {
+    //     const addTripDetailTestRef = doc(db, 'users', userUID, 'trips', selectedTrip.tripId);
+
+    //     try {
+    //         await deleteDoc(addTripDetailTestRef[selectedDateIndex]);
+    //         setTripUpdated(true);
+    //     } catch (error) {
+    //         console.error('Error deleting trip detail:', error);
+    //     }
+    // }
 
     // function getSortedDate() {
     //     if (Object.keys(selectedTrip).length > 0) {
@@ -601,6 +618,7 @@ export default function TripsSchedule() {
     //         console.error('刪除失敗');
     //     }
     // }
+    console.log(selectedTrip);
     return (
         <>
             <TripsContainer>
@@ -681,7 +699,9 @@ export default function TripsSchedule() {
                                             <TripDescription>
                                                 {selectedTrip.dates[selectedDateIndex][time].description}
                                             </TripDescription>
-                                            <DeleteDetailBox onClick={deleteTripDetailToFirebase}>x</DeleteDetailBox>
+                                            <DeleteDetailBox onClick={() => deleteTripDetailToFirebase(time)}>
+                                                x
+                                            </DeleteDetailBox>
                                         </TripDetailBox>
                                     </>
                                 ))}

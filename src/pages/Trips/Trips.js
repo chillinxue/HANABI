@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
+import { db } from '../../components/utils/firebase/firbase';
 
 import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
 import Header from '../../components/Header/Header';
@@ -18,20 +19,20 @@ import { TripsContext } from './tripsContext';
 
 import SearchIcon from './search.png';
 
-const firebaseConfig = {
-    apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
-    authDomain: 'hanabi-f5ee3.firebaseapp.com',
-    projectId: 'hanabi-f5ee3',
-    storageBucket: 'hanabi-f5ee3.appspot.com',
-    messagingSenderId: '602379997527',
-    appId: '1:602379997527:web:108c1f46f5e8788fe6ae12',
-    measurementId: 'G-Q9NRVJV8NH',
-};
+// const firebaseConfig = {
+//     apiKey: `${process.env.REACT_APP_FIREBASE_API_KEY}`,
+//     authDomain: 'hanabi-f5ee3.firebaseapp.com',
+//     projectId: 'hanabi-f5ee3',
+//     storageBucket: 'hanabi-f5ee3.appspot.com',
+//     messagingSenderId: '602379997527',
+//     appId: '1:602379997527:web:108c1f46f5e8788fe6ae12',
+//     measurementId: 'G-Q9NRVJV8NH',
+// };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
 
-export const db = getFirestore(app);
+// export const db = getFirestore(app);
 
 const OutSide = styled.div`
     width: 100%;
@@ -179,6 +180,8 @@ const RightBarContainer = styled.div`
     /* align-items: flex-end; */
     /* border: 1px solid black; */
     background-color: #dadada;
+    transform: translateX(${(props) => (props.isOpen ? '0' : '100%')});
+    transition: transform 0.3s ease;
 `;
 const AddtoFavContainer = styled.div`
     display: flex;
@@ -229,7 +232,18 @@ const FavLogo = styled.div`
     line-height: 17px;
     color: #2d2d2d;
 `;
-
+const HandleRightBarContainer = styled.div`
+    width: 10px;
+    height: 100%;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+`;
+const HandleRightBar = styled.div`
+    width: 10px;
+    height: 30px;
+    border: 1px solid black;
+`;
 export default function TripNew() {
     const { userUID } = useContext(AuthContext);
     const auth = getAuth();
@@ -240,9 +254,9 @@ export default function TripNew() {
         disableDefaultUI: true, // 移除地圖的預設控制介面
         streetViewControl: false, // 移除街景控制功能
     };
-
+    console.log(process.env.REACT_APP_GOOGlE_MAPS_API_KEY);
     const [loaded, error] = useScript(
-        'https://maps.googleapis.com/maps/api/js?key=AIzaSyCszxEdzSyD5fLI9-m_nRiUr6GEbeIfTG4&libraries=places&callback=initMap'
+        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGlE_MAPS_API_KEY}&libraries=places&callback=initMap`
     ); //憑證
     function useScript(src) {
         // Keeping track of script loaded and error state   //load SDK 初始資料 （收）
@@ -312,6 +326,11 @@ export default function TripNew() {
     const [showMarkers, setShowMarkers] = useState(false);
     // const searchInputRef = useRef(null);
     const { searchInputRef } = useContext(TripsContext);
+    const [isRightBarOpen, setIsRightBarOpen] = useState(true);
+
+    const handleRightBarToggle = () => {
+        setIsRightBarOpen(!isRightBarOpen);
+    };
 
     useEffect(() => {
         if (loaded) {
@@ -596,7 +615,10 @@ export default function TripNew() {
                         style={{ height: '100%', width: '100%' }}
                         options={mapOptions}
                     ></MapOutContainer>
-                    <RightBarContainer>
+                    <HandleRightBarContainer onClick={handleRightBarToggle}>
+                        <HandleRightBar></HandleRightBar>
+                    </HandleRightBarContainer>
+                    <RightBarContainer isOpen={isRightBarOpen}>
                         <TripsSchedule></TripsSchedule>
                     </RightBarContainer>
                 </MainPageContainer>
