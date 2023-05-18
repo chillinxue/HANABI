@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import { db } from './TripsOld';
+import { db } from '../../components/utils/firebase/firbase';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { AuthContext } from '../../Context/AuthContext';
 

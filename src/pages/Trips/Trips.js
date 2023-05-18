@@ -232,18 +232,7 @@ const FavLogo = styled.div`
     line-height: 17px;
     color: #2d2d2d;
 `;
-const HandleRightBarContainer = styled.div`
-    width: 10px;
-    height: 100%;
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-`;
-const HandleRightBar = styled.div`
-    width: 10px;
-    height: 30px;
-    border: 1px solid black;
-`;
+
 export default function TripNew() {
     const { userUID } = useContext(AuthContext);
     const auth = getAuth();
@@ -327,10 +316,6 @@ export default function TripNew() {
     // const searchInputRef = useRef(null);
     const { searchInputRef } = useContext(TripsContext);
     const [isRightBarOpen, setIsRightBarOpen] = useState(true);
-
-    const handleRightBarToggle = () => {
-        setIsRightBarOpen(!isRightBarOpen);
-    };
 
     useEffect(() => {
         if (loaded) {
@@ -615,9 +600,6 @@ export default function TripNew() {
                         style={{ height: '100%', width: '100%' }}
                         options={mapOptions}
                     ></MapOutContainer>
-                    <HandleRightBarContainer onClick={handleRightBarToggle}>
-                        <HandleRightBar></HandleRightBar>
-                    </HandleRightBarContainer>
                     <RightBarContainer isOpen={isRightBarOpen}>
                         <TripsSchedule></TripsSchedule>
                     </RightBarContainer>

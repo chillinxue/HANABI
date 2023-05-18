@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Auth, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { collection, setDoc, doc, getDoc } from 'firebase/firestore';
-import { db } from '../pages/Trips/TripsOld';
+import { db } from '../components/utils/firebase/firbase';
 import { DocumentData } from 'firebase/firestore';
 import { useLocation } from 'react-router-dom';
 

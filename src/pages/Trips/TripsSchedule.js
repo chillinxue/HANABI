@@ -4,7 +4,7 @@ import { TripsContext } from './tripsContext';
 import { TripsContextProvider } from './tripsContext';
 import { arrayUnion, getFirestore, onSnapshot } from 'firebase/firestore';
 import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db } from './TripsOld';
+import { db } from '../../components/utils/firebase/firbase';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { AuthContext } from '../../Context/AuthContext';
 import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';

@@ -5,7 +5,7 @@ import Header from '../../components/Header/Header';
 import { AuthContext } from '../../Context/AuthContext';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db } from '../Trips/TripsOld';
+import { db } from '../../components/utils/firebase/firbase';
 import Schedule from './schedule.png';
 import FujiSan from './FujiSan.jpg';
 import Tokyo from './tokyo.jpg';
