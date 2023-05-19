@@ -51,6 +51,7 @@ const LoginContainer = styled.div`
     flex-direction: row-reverse;
     box-sizing: border-box;
     margin-left: 5px;
+    cursor: pointer;
 `;
 const LoginInsideContainer = styled.div`
     display: flex;

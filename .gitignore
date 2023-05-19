@@ -23,3 +23,9 @@ yarn-debug.log*
 yarn-error.log*
 
 **/.firebase
+
+src/components/PosterMenu   
+src/components/PosterMenuBlack
+src/components/SearchBar
+src/components/utils/hook
+

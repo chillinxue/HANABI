@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Auth, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { collection, setDoc, doc, getDoc } from 'firebase/firestore';
-import { db } from '../pages/Trips/Trips';
+import { db } from '../components/utils/firebase/firbase';
 import { DocumentData } from 'firebase/firestore';
 import { useLocation } from 'react-router-dom';
 
@@ -66,10 +66,10 @@ export const AuthContextProvider = ({ children }) => {
                     console.log('有');
 
                     const data = {
-                        name: getUser.name || '',
-                        email: getUser.email || '',
-                        userUID: getUser.userUID || '',
-                        userImage: getUser.photoURL || '',
+                        name: getUser.name || user.displayName || '',
+                        email: getUser.email || user.email || '',
+                        userUID: getUser.userUID || user.userUID || '',
+                        userImage: getUser.photoURL || user.photoURL || '',
                     };
                     setUser(data);
                     setUserUID(user.uid);
