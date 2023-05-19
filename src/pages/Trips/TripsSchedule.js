@@ -341,7 +341,6 @@ const AddDescription = styled.input`
     font-size: 10px;
     line-height: 14px;
     margin-right: 5px;
-    /* identical to box height */
 
     outline: none;
 
@@ -446,7 +445,9 @@ export default function TripsSchedule() {
             // addTripDoc();
         };
     }, [userUID, tripUpdated]);
-    const [modalOpen, setModalOpen] = useState(false);
+    // const [modalOpen, setModalOpen] = useState(false);
+    const { modalOpen, setModalOpen } = useContext(TripsContext);
+
     const openModal = () => {
         if (!userUID) {
             // 如果用戶未登入，則顯示警告框
@@ -652,13 +653,13 @@ export default function TripsSchedule() {
                     </AddTripDetailBox>
                 </AddTripDetailContainer>
             </TodayTripContainer>
-            {modalOpen ? (
+            {/* {modalOpen ? (
                 // <div>
                 //     <ModalOverlay onClick={closeModal} />
                 //     <ModalContainer onClick={(e) => e.stopPropagation()}></ModalContainer>
                 // </div>
                 <AddTripPopUpModal modalOpen={modalOpen} setModalOpen={setModalOpen}></AddTripPopUpModal>
-            ) : null}
+            ) : null} */}
         </>
     );
 }
