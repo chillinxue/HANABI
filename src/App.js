@@ -21,14 +21,10 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-    // const { userUID } = useContext(AuthContext);
-    // console.log(userUID);
-
     return (
         <AuthContextProvider>
             <GlobalStyle />
             <OutSide>
-                {/* <Header></Header> */}
                 <Outlet />
             </OutSide>
         </AuthContextProvider>

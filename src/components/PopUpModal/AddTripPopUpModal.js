@@ -9,25 +9,26 @@ import { getFirestore } from 'firebase/firestore';
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 import { AuthContext } from '../../Context/AuthContext';
 import { v4 as uuidv4 } from 'uuid';
+import { db } from '../utils/firebase/firbase';
 import FujiLawson from './FujiLawson.jpg';
 
 // import { StrictMode } from 'react';
 // import { createRoot } from 'react-dom/client';
 
-const firebaseConfig = {
-    apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
-    authDomain: 'hanabi-f5ee3.firebaseapp.com',
-    projectId: 'hanabi-f5ee3',
-    storageBucket: 'hanabi-f5ee3.appspot.com',
-    messagingSenderId: '602379997527',
-    appId: '1:602379997527:web:108c1f46f5e8788fe6ae12',
-    measurementId: 'G-Q9NRVJV8NH',
-};
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
+//     authDomain: 'hanabi-f5ee3.firebaseapp.com',
+//     projectId: 'hanabi-f5ee3',
+//     storageBucket: 'hanabi-f5ee3.appspot.com',
+//     messagingSenderId: '602379997527',
+//     appId: '1:602379997527:web:108c1f46f5e8788fe6ae12',
+//     measurementId: 'G-Q9NRVJV8NH',
+// };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
 
-export const db = getFirestore(app);
+// export const db = getFirestore(app);
 
 const ModalContainer = styled.div`
     position: fixed;

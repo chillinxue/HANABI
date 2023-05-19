@@ -1,8 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import PlacesRecommend from '../../components/PlacesRecommend/PlacesRecommend';
-import MenuSearchBar from '../../components/SearchBar/MenuSearchBar';
-import PosterMenuOld from '../../components/PosterMenu/PosterMenuOld';
 import FujiSan from './fujiSan.jpg';
 // import FujiGif from './JapanBackground.gif';
 import { Link } from 'react-router-dom';
