@@ -315,6 +315,9 @@ export default function Trips() {
                 zoom: 10, //zoom in
                 center: myLatLng[0], //初始經緯度 （替換）
                 mapTypeId: window.google.maps.MapTypeId.ROADMAP, //一般地圖
+                mapTypeControl: false,
+                streetViewControl: false,
+                rotateControl: false,
             });
 
             const fromAutocomplete = new window.google.maps.places.Autocomplete(fromInputRef.current);
