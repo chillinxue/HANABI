@@ -4,24 +4,9 @@ import styled from 'styled-components/macro';
 import Header from '../../components/Header/Header';
 import { AuthContext } from '../../Context/AuthContext';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../../components/utils/firebase/firbase';
-import Schedule from './schedule.png';
-import FujiSan from './FujiSan.jpg';
-import Tokyo from './tokyo.jpg';
-import TokyoTemple from './TokyoTemple.jpg';
-import TokyoTempleB from './TokyoTempleB.jpg';
-import TokyoTempleWedding from './TokyoTempleWedding.jpg';
 import ArticleLikesButton from '../../components/Button/ArticleLikesButton';
-import ShibuyaStA from './ShibuyaStA.jpg';
-import ShibuyaStB from './ShibuyaStB.jpg';
-import ShibuyaStC from './ShibuyaStC.jpg';
-import ShibuyaStD from './ShibuyaStD.jpg';
-import ShibuyaStE from './ShibuyaStE.jpg';
-import ShibuyaStF from './ShibuyaStF.jpg';
-import TakeshitaA from './TakeshitaA.jpg';
-import TakeshitaB from './TakeshitaB.jpg';
-import TakeshitaC from './TakeshitaC.jpg';
 
 const OutSide = styled.div`
     width: 100%;
@@ -487,7 +472,35 @@ export default function BlogArticle() {
     // }, [isLiked]);
 
     // console.log(recommendation);
+    const [article, setArticle] = useState();
+    useEffect(() => {
+        const getDocumentData = async () => {
+            const docRef = doc(db, 'article', 'uqFBj9367agJPnk7UPtj');
+            const docSnap = await getDoc(docRef);
+            const readableSnap = docSnap.data();
+            console.log(readableSnap);
+            setArticle(readableSnap);
+        };
 
+        // 调用函数以获取文档数据
+        getDocumentData();
+    }, []);
+
+    useEffect(() => {
+        const getDocumentData = async () => {
+            const docRef = collection(db, 'article');
+            const docSnap = await getDocs(docRef);
+            const articles = [];
+            docSnap.forEach((doc) => articles.push(doc.data()));
+            console.log(articles);
+        };
+        // 调用函数以获取文档数据
+        getDocumentData();
+    }, []);
+
+    if (!article) {
+        return;
+    }
     return (
         <>
             <OutSide>
@@ -498,15 +511,15 @@ export default function BlogArticle() {
                             <SummarySubCon>
                                 <TitleCon>
                                     <ArticleNum>No.02</ArticleNum>
-                                    <Title>世界最大の都市：東京</Title>
-                                    <DetailText>Date: Mar 22 2023</DetailText>
-                                    <DetailText>Writer: 安雨真</DetailText>
+                                    <Title>{article.title}</Title>
+                                    <DetailText>Date: {article.date}</DetailText>
+                                    <DetailText>Writer: {article.Writer[0]}</DetailText>
                                 </TitleCon>
                                 <AttractionCon>
                                     <HashTagCon>
                                         {recommendation.map((place, index) => (
                                             <HashTag key={index}>
-                                                #{place.name}
+                                                # {place.name}
                                                 <AddTagFav
                                                 // type='button'
                                                 // onClick={() => {
@@ -532,7 +545,7 @@ export default function BlogArticle() {
                             </SummarySubCon>
                         </SummaryCon>
                         <PicContainer>
-                            <PicSubCon src={Tokyo}></PicSubCon>
+                            <PicSubCon src={article.mainImage}></PicSubCon>
                         </PicContainer>
                     </SummarySection>
                 </InsideOutline>
@@ -541,7 +554,7 @@ export default function BlogArticle() {
                         <MainInfoCon>
                             <MainInfo>
                                 <MainInfoHeader>
-                                    <InfoTitle>#明治神宮</InfoTitle>
+                                    <InfoTitle># {article.blockA.placeName}</InfoTitle>
                                     <InfoDetail>
                                         <DetailText style={{ color: '#2d2d2d' }}>Open Time</DetailText>
                                         <DetailText style={{ color: '#2d2d2d' }}>Tickets</DetailText>
@@ -550,28 +563,24 @@ export default function BlogArticle() {
                                 </MainInfoHeader>
                                 <MainPicContainer>
                                     <PicBox>
-                                        <Pic src={TokyoTemple}></Pic>
+                                        <Pic src={article.blockA.photo.photoA.photoURL}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 明治神宮金鳥居 </PicTitle>
-                                            <PicContent>
-                                                高さが12メートル、幅が17．1メートル、柱の太さが直径1．2メートル、重さが13トンもあり、木造の明神鳥居としては日本一の大きさを誇っています{' '}
-                                            </PicContent>
+                                            <PicTitle># {article.blockA.photo.photoA.photoTitle}</PicTitle>
+                                            <PicContent>{article.blockA.photo.photoA.photoInfo}</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
-                                        <Pic src={TokyoTempleB}></Pic>
+                                        <Pic src={article.blockA.photo.photoB.photoURL}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 明治神宮本堂 </PicTitle>
-                                            <PicContent>
-                                                三間社流造の本殿。先の大戦で戦渦に遭い、昭和33年（1958）に復興しました。
-                                            </PicContent>
+                                            <PicTitle># {article.blockA.photo.photoB.photoTitle} </PicTitle>
+                                            <PicContent>{article.blockA.photo.photoB.photoInfo}</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
-                                        <Pic src={TokyoTempleWedding}></Pic>
+                                        <Pic src={article.blockA.photo.photoC.photoURL}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 明治神宮婚禮 </PicTitle>
-                                            <PicContent>明治神宮で日本の伝統的な結婚式を初めて見た </PicContent>
+                                            <PicTitle># {article.blockA.photo.photoC.photoTitle} </PicTitle>
+                                            <PicContent>{article.blockA.photo.photoC.photoInfo} </PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                 </MainPicContainer>
@@ -581,26 +590,10 @@ export default function BlogArticle() {
                             <MainArticleSubCon>
                                 <MainArticle style={{ overflow: 'scroll', maxHeight: '505px' }}>
                                     {/* <ScrollCon> */}
-                                    <MainArticleTitle>明治神宮の杜は人工林</MainArticleTitle>
-                                    <MainArticleContent>
-                                        明治神宮は明治天皇と皇后の昭憲皇太后をおまつりする神社です。
-                                        およそ70万平方メートルの広大な鎮守の杜は、明治神宮創建にあたって全国から献木された約10万本を植栽し、「永遠の杜」を目指して造成された人工林です。
-                                        国民の願いで創建
-                                        明治45年（1912）に明治天皇が、大正3年（1914）に昭憲皇太后が崩御になりましたが、国民から御神霊をおまつりして御聖徳を永久に敬い、お慕いしたいとの熱い願いが沸き上がり、御祭神とゆかりの深い代々木の地に創建されました。
-                                        祈りの杜
-                                        以来、明治神宮では皇室の弥栄（いやさか）とわが国の隆盛、世界の平和をお祈りしています。
-                                        初詣は例年、日本一となるほどの参拝者数を集めますが、平常は豊かに大きく成長した杜と森厳な神気が静かに人々の祈りを包みこんでいます。
-                                    </MainArticleContent>
-                                    <MainArticleTitle>
-                                        剛毅果断で、御仁徳高く、またユーモアを解せられたお方
-                                    </MainArticleTitle>
-                                    <MainArticleContent>
-                                        明治天皇は立派な御体格で、剛毅果断であらせられた反面、御仁徳高く博愛の心に富ませられ、またユーモアを解せられたお方であったと伝えられています。
-                                        和歌をお好みになり、御一代にお詠みになった御製（ぎょせい＝和歌）の数は93,032首に及んでおり、常に国家国民の繁栄と世界の平和を祈念された尊い大御心（おおみごころ）を拝することができます。
-                                        おごそかにたもたざらめや神代よりうけつぎ来たるうらやすの国
-                                        国民のうへやすかれとおもふのみわが世にたえぬ思なりけり
-                                        これらの御製を拝することによっても、いかに明治天皇が、万世一系の天子としての御自覚をもって、多難な時局に対処し近代国家の建設に邁進あそばされたか、そして明けても暮れても国民の上に御心をおそそぎになったかを、うかがい知ることができます。
-                                    </MainArticleContent>
+                                    <MainArticleTitle>{article.blockA.article[0]}</MainArticleTitle>
+                                    <MainArticleContent>{article.blockA.article[1]}</MainArticleContent>
+                                    <MainArticleTitle>{article.blockA.article[2]}</MainArticleTitle>
+                                    <MainArticleContent>{article.blockA.article[3]}</MainArticleContent>
                                     {/* </ScrollCon> */}
                                 </MainArticle>
                             </MainArticleSubCon>
@@ -613,26 +606,10 @@ export default function BlogArticle() {
                             <MainArticleSubCon>
                                 <MainArticle style={{ overflow: 'scroll', maxHeight: '505px' }}>
                                     {/* <ScrollCon> */}
-                                    <MainArticleTitle>原宿に来たらまずはコレ！</MainArticleTitle>
-                                    <MainArticleContent>
-                                        修学旅行で初めて原宿に来たけれど、 どこに行っていいかわからない…。
-                                        そんな時、気軽に原宿を実感できる定番のコースをご紹介します！
-                                        3フロア、400坪の売り場に多くのブランド・コスメ商品を取り揃えている新体験フラッグシップショップの@cosme
-                                        TOKYO。各階では今注目されているアイテムを見たり、美容機器やテスターもお試しできたりと、美容好きにはたまらないお店です。その日の気分や用途に合わせて、コスメ選びを楽しむことができます。{' '}
-                                        IKEA（WITH HARAJUKU） ikea（with harajuku） 日本初となるイケアの都心型店舗「IKEA
-                                        原宿」。休日や平日のランチ、仕事の後にでも気軽に立ち寄れる都心型ショップです。店内は、都市部の暮らしに合わせたレイアウトで“眠る”“整える”“くつろぐ”“料理する”の4つをコンセプトに
-                                        しています。ルームセットは狭い部屋にも合うおしゃれなインテリアを提案しています。
-                                    </MainArticleContent>
-                                    <MainArticleTitle>
-                                        SWEET BOXは、タレントショップやファーストフード店
-                                    </MainArticleTitle>
-                                    <MainArticleContent>
-                                        SWEET
-                                        BOXは、タレントショップやファーストフード店が立ち並ぶ、東京の観光名所、原宿の竹下通りの入ってすぐににあります。
-                                        クレープのおいしさ故、行列ができる事もしばしばです。並んででも食べたくなるそのおいしさの秘密は、サクサクの薄皮生地と特製の濃厚クリームです。
-                                        日本初、“長さ”をテーマにしたフード&スイーツ専門店「LONG! LONGER!!
-                                        LONGEST!!!」。メニューはソフトクリームやポテトなど幅広い品揃えです。メディアにも多く取り上げられる原宿話題のスイーツとフードです。味だけでなく見た目も存分に楽しもう！
-                                    </MainArticleContent>
+                                    <MainArticleTitle>{article.blockB.article[0]}</MainArticleTitle>
+                                    <MainArticleContent>{article.blockB.article[1]}</MainArticleContent>
+                                    <MainArticleTitle>{article.blockB.article[2]}</MainArticleTitle>
+                                    <MainArticleContent>{article.blockB.article[3]}</MainArticleContent>
                                     {/* </ScrollCon> */}
                                 </MainArticle>
                             </MainArticleSubCon>
@@ -640,7 +617,7 @@ export default function BlogArticle() {
                         <MainInfoCon>
                             <MainInfo>
                                 <MainInfoHeader>
-                                    <InfoTitle>#竹下通</InfoTitle>
+                                    <InfoTitle># {article.blockB.placeName}</InfoTitle>
                                     <InfoDetail>
                                         <DetailText style={{ color: '#2d2d2d' }}>Open Time</DetailText>
                                         <DetailText style={{ color: '#2d2d2d' }}>Tickets</DetailText>
@@ -649,26 +626,24 @@ export default function BlogArticle() {
                                 </MainInfoHeader>
                                 <MainPicContainer>
                                     <PicBox>
-                                        <Pic src={TakeshitaC}></Pic>
+                                        <Pic src={article.blockB.photo.photoA.photoURL}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 竹下通り原宿駅 </PicTitle>
-                                            <PicContent>原宿駅が竹下通りの最寄り駅です</PicContent>
+                                            <PicTitle># {article.blockB.photo.photoA.photoTitle} </PicTitle>
+                                            <PicContent>{article.blockB.photo.photoA.photoInfo}</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
-                                        <Pic src={TakeshitaB}></Pic>
+                                        <Pic src={article.blockB.photo.photoB.photoURL}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 原宿駅前のイチョウ並木 </PicTitle>
-                                            <PicContent>原宿駅前のイチョウの木がたまたま綺麗だった </PicContent>
+                                            <PicTitle># {article.blockB.photo.photoB.photoTitle}</PicTitle>
+                                            <PicContent>{article.blockB.photo.photoB.photoInfo}</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
-                                        <Pic src={TakeshitaA}></Pic>
+                                        <Pic src={article.blockB.photo.photoC.photoURL}></Pic>
                                         <PicTitleContainer>
-                                            <PicTitle># 竹下通りでショッピング </PicTitle>
-                                            <PicContent>
-                                                竹下通りのショッピングはファッショントレンドの発信地
-                                            </PicContent>
+                                            <PicTitle># {article.blockB.photo.photoC.photoTitle}</PicTitle>
+                                            <PicContent>{article.blockB.photo.photoC.photoInfo}</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                 </MainPicContainer>
@@ -680,51 +655,53 @@ export default function BlogArticle() {
                     <SummarySection>
                         <PicPageContainer>
                             <PicPageHeader>
-                                <DetailText style={{ color: '#fafafa', fontWeight: '200' }}>Date:</DetailText>
-                                <PicPageTitle>今日の国の出発点/ 渋谷駅</PicPageTitle>
+                                <DetailText style={{ color: '#fafafa', fontWeight: '200' }}>
+                                    Date: {article.greyBlockA.date}
+                                </DetailText>
+                                <PicPageTitle>{article.greyBlockA.mainTitle}</PicPageTitle>
                             </PicPageHeader>
                             <PicPagePicContainer>
                                 <PicPagePicBox>
-                                    <PicPagePic src={ShibuyaStB}></PicPagePic>
+                                    <PicPagePic src={article.greyBlockA.photo.photoA.photoURL}></PicPagePic>
                                     <PicPagePicTitleContainer>
                                         <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # 渋谷駅の外観
+                                            # {article.greyBlockA.photo.photoA.photoTitle}
                                         </PicTitle>
                                         <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            私は今の国が好きなので、来なければなりません。
+                                            {article.greyBlockA.photo.photoA.photoInfo}
                                         </PicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
                                 <PicPagePicBox>
-                                    <PicPagePic src={ShibuyaStA}></PicPagePic>
+                                    <PicPagePic src={article.greyBlockA.photo.photoB.photoURL}></PicPagePic>
                                     <PicPagePicTitleContainer>
                                         <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # 渋谷で最も有名な交差点
+                                            # {article.greyBlockA.photo.photoB.photoTitle}
                                         </PicTitle>
                                         <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            この交差点を自分の目で見るのは今でも信じられないほどです。{' '}
+                                            {article.greyBlockA.photo.photoB.photoInfo}
                                         </PicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
                                 <PicPagePicBox>
-                                    <PicPagePic src={ShibuyaStC}></PicPagePic>
+                                    <PicPagePic src={article.greyBlockA.photo.photoC.photoURL}></PicPagePic>
                                     <PicPagePicTitleContainer>
                                         <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # 今日の国主人公たちがチャットする場所
+                                            # {article.greyBlockA.photo.photoC.photoTitle}
                                         </PicTitle>
                                         <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            いつゲームが始まるかわからない？
+                                            {article.greyBlockA.photo.photoC.photoInfo}
                                         </PicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
                                 <PicPagePicBox>
-                                    <PicPagePic src={ShibuyaStD}></PicPagePic>
+                                    <PicPagePic src={article.greyBlockA.photo.photoD.photoURL}></PicPagePic>
                                     <PicPagePicTitleContainer>
                                         <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # 渋谷スカイ
+                                            # {article.greyBlockA.photo.photoD.photoTitle}
                                         </PicTitle>
                                         <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            渋谷スカイから見た東京タワー{' '}
+                                            {article.greyBlockA.photo.photoD.photoInfo}
                                         </PicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>

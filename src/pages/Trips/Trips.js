@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 import { db } from '../../components/utils/firebase/firbase';
+import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
 
 import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
 import Header from '../../components/Header/Header';
@@ -218,11 +219,13 @@ const FavLogo = styled.div`
     color: #2d2d2d;
 `;
 
-export default function TripNew() {
+export default function Trips() {
     const { userUID } = useContext(AuthContext);
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     const { signIn, logOut } = useContext(AuthContext);
+    const { modalOpen, setModalOpen } = useContext(TripsContext);
+
     let cachedScripts = [];
     const mapOptions = {
         disableDefaultUI: true, // 移除地圖的預設控制介面
@@ -231,7 +234,8 @@ export default function TripNew() {
     console.log(process.env.REACT_APP_GOOGlE_MAPS_API_KEY);
     const [loaded, error] = useScript(
         `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGlE_MAPS_API_KEY}&libraries=places&callback=initMap`
-    ); //憑證
+    );
+    //憑證
     function useScript(src) {
         // Keeping track of script loaded and error state   //load SDK 初始資料 （收）
         useEffect(() => {
@@ -311,6 +315,9 @@ export default function TripNew() {
                 zoom: 10, //zoom in
                 center: myLatLng[0], //初始經緯度 （替換）
                 mapTypeId: window.google.maps.MapTypeId.ROADMAP, //一般地圖
+                mapTypeControl: false,
+                streetViewControl: false,
+                rotateControl: false,
             });
 
             const fromAutocomplete = new window.google.maps.places.Autocomplete(fromInputRef.current);
@@ -519,7 +526,18 @@ export default function TripNew() {
             markers.forEach((marker) => marker.setMap(null));
         }
     }
-
+    // const [modalOpen, setModalOpen] = useState(false);
+    const openModal = () => {
+        if (!userUID) {
+            // 如果用戶未登入，則顯示警告框
+            alert('請先登入');
+            return;
+        }
+        setModalOpen(true);
+    };
+    const closeModal = () => {
+        setModalOpen(false);
+    };
     return (
         <>
             <OutSide>
@@ -586,10 +604,21 @@ export default function TripNew() {
                         options={mapOptions}
                     ></MapOutContainer>
                     <RightBarContainer isOpen={isRightBarOpen}>
-                        <TripsSchedule></TripsSchedule>
+                        <TripsSchedule modalOpen={modalOpen}></TripsSchedule>
                     </RightBarContainer>
                 </MainPageContainer>
             </OutSide>
+            {modalOpen ? (
+                // <div>
+                //     <ModalOverlay onClick={closeModal} />
+                //     <ModalContainer onClick={(e) => e.stopPropagation()}></ModalContainer>
+                // </div>
+                <AddTripPopUpModal
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                    openModal={openModal}
+                ></AddTripPopUpModal>
+            ) : null}
         </>
     );
 }

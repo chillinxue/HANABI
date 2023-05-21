@@ -15,21 +15,9 @@ import FujiLawson from './FujiLawson.jpg';
 // import { StrictMode } from 'react';
 // import { createRoot } from 'react-dom/client';
 
-// const firebaseConfig = {
-//     apiKey: 'AIzaSyBx7Q_DL9eZ9zy9U-naVJ4iQPFdpfLL5Qc',
-//     authDomain: 'hanabi-f5ee3.firebaseapp.com',
-//     projectId: 'hanabi-f5ee3',
-//     storageBucket: 'hanabi-f5ee3.appspot.com',
-//     messagingSenderId: '602379997527',
-//     appId: '1:602379997527:web:108c1f46f5e8788fe6ae12',
-//     measurementId: 'G-Q9NRVJV8NH',
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-
-// export const db = getFirestore(app);
-
+const ModalOutSide = styled.div`
+    position: absolute;
+`;
 const ModalContainer = styled.div`
     position: fixed;
     top: 50%;
@@ -256,8 +244,7 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
         setModalOpen(false);
     };
     return (
-        <div>
-            <></>
+        <ModalOutSide>
             <ModalOverlay onClick={closeModal} />
             <ModalContainer onClick={(e) => e.stopPropagation()}>
                 <OutSide>
@@ -346,7 +333,7 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
                     </AddTripContainer>
                 </OutSide>
             </ModalContainer>
-        </div>
+        </ModalOutSide>
     );
 }
 // async function getDates() {
