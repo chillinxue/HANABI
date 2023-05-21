@@ -301,7 +301,7 @@ const MainArticle = styled.div`
 `;
 const MainArticleTitle = styled.div`
     width: 387px;
-    height: 65px;
+    /* height: 65px; */
     margin-top: 20px;
     margin-bottom: 43px;
 
