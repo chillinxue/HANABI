@@ -3,19 +3,7 @@ import StorySearchBar from '../../components/SearchBar/StorySearchBar';
 import styled from 'styled-components/macro';
 import Header from '../../components/Header/Header';
 import LoginButton from '../../components/Header/LoginButton';
-import JapanVideo from '../Home/JapanVideo.mp4';
-import FujiLawson from './FujiLawson.jpg';
-import NaraTemple from './NaraTemple.jpg';
-import Tokyo from './tokyo.jpg';
-import FujiSan from './FujiSan.jpg';
-import TokyoTemple from './TokyoTemple.jpg';
 import { Link } from 'react-router-dom';
-import KobeTrain from './Kobetrain.mp4';
-import FujiBus from './fujibus.mp4';
-import AkihabaraA from './AkihabaraA.jpg';
-import SunSkyTower from './SunSkyTower.jpg';
-import NaraDeer from './NaraDeer.jpg';
-import NaraTower from './NaraTower.jpg';
 
 const OutSide = styled.div`
     padding-top: 70px;
@@ -273,7 +261,12 @@ export default function Blog() {
                         <PosterTextCon></PosterTextCon>
                         <VideoContainer>
                             <Video autoPlay muted loop>
-                                <source src={FujiBus} type='video/mp4' />
+                                <source
+                                    src={
+                                        'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/Blog%2FBlogBackgroundVideo.mp4?alt=media&token=d4c7f504-f50e-4c33-a44d-2c53a9adc508'
+                                    }
+                                    type='video/mp4'
+                                />
                             </Video>
                         </VideoContainer>
 
@@ -299,7 +292,11 @@ export default function Blog() {
                                 <PicContainer>
                                     <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
                                         <PicBox>
-                                            <Pic src={FujiLawson}></Pic>
+                                            <Pic
+                                                src={
+                                                    'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/materials%2FBlogA1.jpg?alt=media&token=32ba05fd-fe12-4aa7-9e58-b4c6d537bd52'
+                                                }
+                                            ></Pic>
                                             <PicTitleContainer>
                                                 <PicTitle>大切な人と富士山を見る</PicTitle>
                                                 <PicContent>
@@ -310,7 +307,11 @@ export default function Blog() {
                                     </Link>
                                     <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
                                         <PicBox>
-                                            <Pic src={Tokyo}></Pic>
+                                            <Pic
+                                                src={
+                                                    'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/materials%2FBlogA2.jpg?alt=media&token=e101bc36-be9a-436a-9272-a4397a6d133f'
+                                                }
+                                            ></Pic>
                                             <PicTitleContainer>
                                                 <PicTitle>世界最大の都市：東京</PicTitle>
                                                 <PicContent>
@@ -321,7 +322,11 @@ export default function Blog() {
                                     </Link>
                                     <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
                                         <PicBox>
-                                            <Pic src={NaraTemple}></Pic>
+                                            <Pic
+                                                src={
+                                                    'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/materials%2FBlogA3.jpg?alt=media&token=44f81ec4-310f-44f6-bd52-601001e8abb1'
+                                                }
+                                            ></Pic>
                                             <PicTitleContainer>
                                                 <PicTitle>奈良は鹿だけじゃない！</PicTitle>
                                                 <PicContent>一生に一度は見ておきたい非日常の東大寺</PicContent>
@@ -330,7 +335,11 @@ export default function Blog() {
                                     </Link>
                                     <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
                                         <PicBox>
-                                            <Pic src={TokyoTemple}></Pic>
+                                            <Pic
+                                                src={
+                                                    'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/materials%2FBlogA4.jpg?alt=media&token=290661d7-0169-4a2f-9e90-03a611338e2d'
+                                                }
+                                            ></Pic>
                                             <PicTitleContainer>
                                                 <PicTitle>東京の中心：歴史ある明治神宮</PicTitle>
                                                 <PicContent>明治神宮と人々の関係は切っても切れないものです</PicContent>
@@ -346,21 +355,33 @@ export default function Blog() {
                                 </SectionTitleCon>
                                 <PicContainer>
                                     <PicBox>
-                                        <Pic src={AkihabaraA}></Pic>
+                                        <Pic
+                                            src={
+                                                'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/materials%2FBlogB1.jpg?alt=media&token=efd96f19-e70d-48e5-97be-e77698af284e'
+                                            }
+                                        ></Pic>
                                         <PicTitleContainer>
                                             <PicTitle>秋葉原：オタクだけじゃない</PicTitle>
                                             <PicContent>秋葉原で居酒屋と寿司から始まった食の旅</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
-                                        <Pic src={SunSkyTower}></Pic>
+                                        <Pic
+                                            src={
+                                                'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/materials%2FBlogB2.jpg?alt=media&token=20ba9db5-70ae-4d78-9abb-19d1820f766c'
+                                            }
+                                        ></Pic>
                                         <PicTitleContainer>
                                             <PicTitle>浅草寺から見たスカイツリー</PicTitle>
                                             <PicContent>見ているだけで気分が上がるスカイツリー</PicContent>
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
-                                        <Pic src={NaraDeer}></Pic>
+                                        <Pic
+                                            src={
+                                                'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/materials%2FBlogB3.jpg?alt=media&token=1aafe777-49cd-4fc8-b4e3-5bb24b0a28a2'
+                                            }
+                                        ></Pic>
                                         <PicTitleContainer>
                                             <PicTitle>奈良の鹿は怖い</PicTitle>
                                             <PicContent>
@@ -369,7 +390,11 @@ export default function Blog() {
                                         </PicTitleContainer>
                                     </PicBox>
                                     <PicBox>
-                                        <Pic src={NaraTower}></Pic>
+                                        <Pic
+                                            src={
+                                                'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/materials%2FBlogB4.jpg?alt=media&token=79765338-7389-439f-85b9-fdb26082d168'
+                                            }
+                                        ></Pic>
                                         <PicTitleContainer>
                                             <PicTitle>奈良の鹿物語</PicTitle>
                                             <PicContent>角のある鹿に挨拶してみましたか？</PicContent>

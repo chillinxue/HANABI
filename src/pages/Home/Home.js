@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import FujiSan from './fujiSan.jpg';
 // import FujiGif from './JapanBackground.gif';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
@@ -8,12 +7,7 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import LoginButton from '../../components/Header/LoginButton';
 import PosterMenu from '../../components/PosterMenu/PosterMenu';
 // import PosterVideo from './JapanBackground.gif';
-import JapanMap from './JapanMap.png';
-import SecOneBlockTwo from './SecOneBlockTwo.jpg';
-import SecOneBlockThree from './SecOneBlockThree.jpg';
-import SecOneBlockFour from './SecOneBlockFour.jpg';
 import Header from '../../components/Header/Header';
-import JapanVideo from './JapanVideo.mp4';
 
 const OutSide = styled.div`
     padding-top: 45vh;
@@ -122,7 +116,7 @@ const FirstSectionBlockOneTextCon = styled.div`
 `;
 const FirstSectionBlockOnePicCon = styled.div`
     width: 750px;
-    background-image: url(${JapanMap});
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/Home%2FHomeA1JapanMap.png?alt=media&token=7e89d48f-fb54-45d4-8135-a7843a44e97c');
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -161,7 +155,7 @@ const FirstSectionBlockTwoPicCon = styled.div`
     height: 550px;
     /* border: 1px solid black; */
 
-    background-image: url(${SecOneBlockTwo});
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/Home%2FHomeA2FujiSan.jpg?alt=media&token=13388884-0c1a-4fdc-bc3e-cc95bfb8ab3b');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -198,7 +192,7 @@ const FirstSectionBlockThreeTextCon = styled.div`
 const FirstSectionBlockThreePicCon = styled.div`
     width: 36%;
     height: 470px;
-    background-image: url(${SecOneBlockThree});
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/Home%2FHomeA3FujiStation.jpg?alt=media&token=aeb0ad7b-4e0e-4b7c-bfee-0198d9e0a68c');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -207,7 +201,7 @@ const FirstSectionBlockThreePicCon = styled.div`
 const FirstSectionBlockFourPicCon = styled.div`
     width: 36%;
     height: 470px;
-    background-image: url(${SecOneBlockFour});
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/Home%2FHomeA4Fujimt.jpg?alt=media&token=415304aa-3134-404f-b9a2-6975ae2aaf4a');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -251,7 +245,12 @@ export default function Home() {
                         <PosterTextCon></PosterTextCon>
                         <VideoContainer>
                             <Video autoPlay muted loop>
-                                <source src={JapanVideo} type='video/mp4' />
+                                <source
+                                    src={
+                                        'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/Home%2FHomeBackgroundVideo.mp4?alt=media&token=e53d4e20-3072-4ae4-9034-607c2fae8766'
+                                    }
+                                    type='video/mp4'
+                                />
                             </Video>
                         </VideoContainer>
 
