@@ -396,11 +396,11 @@ export default function TripsSchedule() {
     const [selectedTrip, setSelectedTrip] = useState({});
     const [selectedTripDate, setSelectedTripDate] = useState(undefined);
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
-    const [time, setTime] = useState(''); //時間選擇器
+    const [time, setTime] = useState('');
     const [enterDescription, setEnterDescription] = useState('');
     const [tripUpdated, setTripUpdated] = useState(false);
 
-    // const [trips, setTrips] = useState([]); //抓到旅行資料
+    // const [trips, setTrips] = useState([]);
     const initialSelectedDates = trips && trips.length > 0 ? trips[0].dateRange : [];
     // const [selectedTrip, setSelectedTrip] = useState(initialSelectedDates);
     const [sortedData, setSortedData] = useState();
@@ -424,11 +424,8 @@ export default function TripsSchedule() {
         const unsubscribe = onSnapshot(tripsRef, (snapshot) => {
             const newTrips = snapshot.docs.map((doc) => doc.data());
             setTrips(newTrips);
-
-            // Get the selected trip from the updated trips array
             const updatedSelectedTrip = newTrips.find((trip) => trip.tripId === selectedTrip.tripId);
 
-            // If the selected trip's data has changed, update the autoUpdateTrips state
             if (updatedSelectedTrip && JSON.stringify(updatedSelectedTrip) !== JSON.stringify(selectedTrip)) {
                 setSelectedTrip(updatedSelectedTrip);
                 setAutoUpdateTrips(updatedSelectedTrip.dates[selectedDateIndex]);

@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
+import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import LoginButton from './LoginButton';
 
 const OutSide = styled.div`
     width: 100%;
@@ -11,7 +12,6 @@ const OutSide = styled.div`
     top: 0;
     z-index: 2;
 `;
-
 const Nav = styled.div`
     width: 100%;
     height: 47px;
@@ -53,38 +53,10 @@ const LoginContainer = styled.div`
 `;
 const LoginInsideContainer = styled.div`
     display: flex;
-    border: 1px solid #2d2d2d;
     justify-content: center;
     align-items: center;
-`;
-const LogInButton = styled.div`
-    color: #2d2d2d;
-    border-right: 1px solid #2d2d2d;
-    width: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 10px;
-    line-height: 18px;
-    text-align: center;
-`;
-const LogOutButton = styled.div`
-    color: #2d2d2d;
-    width: 45px;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 12px;
-    line-height: 18px;
-    text-align: center;
 `;
 export default function Header() {
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider();
-    const { signIn, logOut } = useContext(AuthContext);
-
     return (
         <>
             <OutSide>
@@ -105,8 +77,7 @@ export default function Header() {
                         <Login>
                             <LoginContainer to='/GoogleLogin'>
                                 <LoginInsideContainer>
-                                    <LogInButton onClick={() => signIn(auth, provider)}>Login</LogInButton>
-                                    <LogOutButton onClick={() => logOut(auth)}>Logout</LogOutButton>
+                                    <LoginButton></LoginButton>
                                 </LoginInsideContainer>
                             </LoginContainer>
                         </Login>
