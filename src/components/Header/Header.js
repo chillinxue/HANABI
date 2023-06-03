@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
@@ -40,9 +40,7 @@ const HomeContainer = styled.div`
 
     color: #2d2d2d;
 `;
-const TripsContainer = styled.div``;
-const BlogContainer = styled.div``;
-const FavoritesContainer = styled.div``;
+
 const Login = styled.div`
     z-index: 2;
 `;
@@ -86,15 +84,10 @@ export default function Header() {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     const { signIn, logOut } = useContext(AuthContext);
-    // if (isLogin) {
-    //     return <button onClick={logout}>LOGOUsT</button>;
-    // }
-    // return <button onClick={login}>LOGIN</button>;
 
     return (
         <>
             <OutSide>
-                {/* <PosterContainer> */}
                 <Nav>
                     <BarContainer>
                         <Link to='/home' style={{ textDecoration: 'none' }}>
@@ -115,8 +108,6 @@ export default function Header() {
                                     <LogInButton onClick={() => signIn(auth, provider)}>Login</LogInButton>
                                     <LogOutButton onClick={() => logOut(auth)}>Logout</LogOutButton>
                                 </LoginInsideContainer>
-                                {/* <button onClick={() => signIn(auth, provider)}>Login</button>
-                <button onClick={() => logOut(auth)}>Logout</button> */}
                             </LoginContainer>
                         </Login>
                     </BarContainer>
