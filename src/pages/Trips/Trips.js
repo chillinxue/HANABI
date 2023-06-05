@@ -16,10 +16,10 @@ import { AuthContext } from '../../Context/AuthContext';
 import { TripsContext } from './tripsContext';
 
 import SearchIcon from './search.png';
+import { Route } from 'react-router-dom';
 
 const OutSide = styled.div`
     width: 100%;
-    border: 1px solid black;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -66,6 +66,7 @@ const LeftBarHeaderTitle = styled.div`
 
     color: #2d2d2d;
 `;
+const RouteOutContainer = styled.div``;
 const RouteContainer = styled.div`
     width: 210px;
     height: 40px;
@@ -164,10 +165,7 @@ const RightBarContainer = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: start;
-    /* align-items: flex-end; */
-    /* border: 1px solid black; */
     background-color: #dadada;
     transform: translateX(${(props) => (props.isOpen ? '0' : '100%')});
     transition: transform 0.3s ease;
@@ -221,6 +219,67 @@ const FavLogo = styled.div`
     line-height: 17px;
     color: #2d2d2d;
 `;
+const JoyrideStep = styled.div``;
+const JoyrideFifthStep = styled.div``;
+const JoyrideStyle = {
+    spotlightColor: 'grey',
+    options: {
+        primaryColor: '#2d2d2d',
+        borderRadius: '25px',
+    },
+    buttonSkip: {
+        backgroundColor: '#ffffff',
+        color: '#2d2d2d',
+        borderRadius: '25px',
+        paddingLeft: '15px',
+        paddingRight: '15px',
+        border: '2px #2d2d2d solid',
+    },
+    buttonNext: {
+        backgroundColor: '#2d2d2d',
+        color: '#ffffff',
+        borderRadius: '25px',
+        paddingLeft: '15px',
+        paddingRight: '15px',
+        border: 'none',
+        cursor: 'pointer',
+    },
+    tooltip: {
+        backgroundColor: '#ffffff',
+        borderRadius: '25px',
+        textAlign: 'left',
+    },
+    tooltipContainer: {
+        textAlign: 'center',
+    },
+    buttonBack: {
+        backgroundColor: '#2d2d2d',
+        color: '#ffffff',
+        borderRadius: '25px',
+        paddingLeft: '15px',
+        paddingRight: '15px',
+        border: 'none',
+    },
+    buttonPrimary: {
+        backgroundColor: '#ffffff',
+        border: 'none',
+    },
+    buttonClose: {
+        backgroundColor: 'black', // 更改關閉按鈕的背景色為藍色
+        color: 'white', // 更改關閉按鈕的文字顏色為白色
+        borderRadius: '25px',
+        border: 'none',
+    },
+    tooltipTitle: {
+        color: '#2d2d2d',
+        fontSize: '24px',
+        fontWeight: 'bold',
+        textAlign: 'center', // 將標題置中對齊
+    },
+    tooltipContent: {
+        fontSize: '16px',
+    },
+};
 
 export default function Trips() {
     const { userUID } = useContext(AuthContext);
@@ -346,13 +405,8 @@ export default function Trips() {
         }
     }, [loaded]);
 
-    //create a DirectionsService object to use the route method and get a result for our request
     const directionsService = new window.google.maps.DirectionsService(); //路線計算
-
-    //create a DirectionsRenderer object which we will use to display the route
     const directionsDisplay = new window.google.maps.DirectionsRenderer(); //路線render
-
-    //bind the DirectionsRenderer to the map
     directionsDisplay.setMap(map); //綁定到map
 
     const handleKeyDown = (event) => {
@@ -362,27 +416,19 @@ export default function Trips() {
         }
     };
     function calcRoute() {
-        //create request
-
         const request = {
             origin: from, //
-            destination: to, //存一個state 控制
+            destination: to,
             travelMode: window.google.maps.TravelMode.DRIVING, //WALKING, BYCYCLING, TRANSIT 路線模式
             unitSystem: window.google.maps.UnitSystem.METRIC, //單位
         };
 
         directionsService.route(request, function (result, status) {
-            // console.log(status);
             if (status == window.google.maps.DirectionsStatus.OK) {
                 directionsDisplay.setDirections(result); //寫路線的功能
-
-                // console.log(result);
             } else {
-                //delete route from map
                 directionsDisplay.setDirections({ routes: [] });
-                //center map in London
                 map.setCenter({ lat: 25.033964, lng: 121.564468 });
-                //show error message
             }
             console.log(result);
         });
@@ -544,49 +590,166 @@ export default function Trips() {
         run: true,
         steps: [
             {
-                content: <h2>Let's begin plan a trip</h2>,
+                content: (
+                    <>
+                        <p>
+                            You can search for routes, save favorite places, view location information, and plan your
+                            travel itineraries on this page.
+                        </p>
+                    </>
+                ),
                 locale: { skip: <strong>SKIP</strong> },
                 placement: 'center',
                 target: 'body',
+                title: "Let's start to plan a trip!",
             },
             {
-                content: <h2>Here is the first step!</h2>,
+                content: (
+                    <>
+                        You can search for routes here.
+                        <br />
+                        Enter the departure and destination first, and then click the search button.
+                        <br />
+                        (Partial text for locations is available, suggestions will be provided)
+                    </>
+                ),
                 placement: 'bottom',
                 target: '#step-1',
-                title: 'First step',
+                title: 'First Step - Use Route Search here!',
+            },
+            {
+                content: (
+                    <>
+                        You can save the destination as a favorite here.
+                        <br />
+                        Select the location type first, and then click the "Add to Favorites"button.
+                    </>
+                ),
+                placement: 'bottom',
+                target: '#step-2',
+                title: 'Second Step - Save destinations as Favorites!',
+            },
+            {
+                content: (
+                    <>
+                        You can view your favorite locations and search for saved places here.
+                        <br />
+                        Enter text to search for related places, and you can also delete them.
+                    </>
+                ),
+                placement: 'top-start',
+                target: '#step-3',
+                title: 'Third Step - View Favorites locations!',
+            },
+            {
+                content: (
+                    <>
+                        Click the Type button to show places on the map based on their types.
+                        <br />
+                        One click will display the places, and clicking again will cancel.
+                        <br />
+                        You can also click landmarks on the map to view information about the places.
+                    </>
+                ),
+                placement: 'bottom',
+                target: '#step-4',
+                title: 'Fourth Step - Show Favorites on Map by types!',
+            },
+            {
+                content: (
+                    <>
+                        Click "Add new Trip" to start planning.
+                        <br />
+                        Then, select trip name to edit travel itineraries.
+                        <br />
+                        You can also delete Trips.
+                    </>
+                ),
+                placement: 'top-right',
+                target: '#step-5',
+                title: 'Fifth Step - Add a new Trip!',
+            },
+            {
+                content: (
+                    <>
+                        Click " + ", and the place will be added to Trips on the right side.
+                        <br />
+                        Choose the places you want to go, and add them to your travel itineraries.
+                    </>
+                ),
+                placement: 'right',
+                target: '#step-6',
+                title: 'Sixth Step - Add places to your trip!',
+            },
+            {
+                content: (
+                    <>
+                        Edit the time and add notes for your itineraries.
+                        <br />
+                        Finally, Click "Done" to save them.
+                    </>
+                ),
+                placement: 'bottom',
+                target: '#step-7',
+                title: 'Seventh Step - Edit Time and Notes!',
+            },
+            {
+                content: (
+                    <>
+                        You have to log in to use all the functions.
+                        <br />
+                        Click on "Login" to start your journey!
+                    </>
+                ),
+                placement: 'top-end',
+                target: '#step-8',
+                title: "Don't forget to Login!",
             },
         ],
     });
     return (
         <>
             <OutSide>
-                <Header></Header>
-                <Joyride callback={() => {}} run={run} steps={steps} hideCloseButton></Joyride>
+                <JoyrideStep id='step-8'>
+                    <Header></Header>
+                </JoyrideStep>
+                <Joyride
+                    callback={() => {}}
+                    run={run}
+                    steps={steps}
+                    styles={JoyrideStyle}
+                    hideCloseButton
+                    scrollToFirstStep
+                    showSkipButton
+                    showProgress
+                />
                 <MainPageContainer>
                     <LeftBarContainer>
                         <LeftBar>
                             <LeftBarHeader>
                                 <LeftBarHeaderTitle>PLACE SEARCH | ROUTE SEARCH</LeftBarHeaderTitle>
-                                <RouteContainer>
-                                    <RouteInput
-                                        type='text'
-                                        ref={fromInputRef} // 使用 ref
-                                        placeholder='START 出発点'
-                                    ></RouteInput>
-                                </RouteContainer>
-                                <RouteContainer>
-                                    <RouteInput
-                                        type='text'
-                                        ref={toInputRef} // 使用 ref
-                                        placeholder='DESTINATION 终点'
-                                        onKeyDown={handleKeyDown}
-                                    ></RouteInput>
-                                    <SearchIconContainer
-                                        src={SearchIcon}
-                                        onClick={() => calcRoute()}
-                                    ></SearchIconContainer>
-                                </RouteContainer>
-                                <AddtoFavContainer>
+                                <RouteOutContainer id='step-1'>
+                                    <RouteContainer>
+                                        <RouteInput
+                                            type='text'
+                                            ref={fromInputRef} // 使用 ref
+                                            placeholder='START 出発点'
+                                        ></RouteInput>
+                                    </RouteContainer>
+                                    <RouteContainer>
+                                        <RouteInput
+                                            type='text'
+                                            ref={toInputRef} // 使用 ref
+                                            placeholder='DESTINATION 终点'
+                                            onKeyDown={handleKeyDown}
+                                        ></RouteInput>
+                                        <SearchIconContainer
+                                            src={SearchIcon}
+                                            onClick={() => calcRoute()}
+                                        ></SearchIconContainer>
+                                    </RouteContainer>
+                                </RouteOutContainer>
+                                <AddtoFavContainer id='step-2'>
                                     <SelectedTypeContainer>
                                         <SelectedType
                                             name='layerSaved'
@@ -603,23 +766,29 @@ export default function Trips() {
                                     <AddtoFav onClick={() => addToFavorites()}>Add to Favorites</AddtoFav>
                                 </AddtoFavContainer>
                             </LeftBarHeader>
-                            <FavoritesContainer>
-                                <FavoritesHeader>
-                                    <FavLogo>FAVORITES</FavLogo>
-                                </FavoritesHeader>
-                                <GetPlaceSaved
-                                    showOnMap={showOnMap}
-                                    places={places}
-                                    setPlaces={setPlaces}
-                                    setShowMarkers={setShowMarkers}
-                                />
-                            </FavoritesContainer>
+                            <JoyrideStep id='step-4'>
+                                <FavoritesContainer id='step-3'>
+                                    <JoyrideStep id='step-6'>
+                                        <FavoritesHeader>
+                                            <FavLogo>FAVORITES</FavLogo>
+                                        </FavoritesHeader>
+                                        <GetPlaceSaved
+                                            showOnMap={showOnMap}
+                                            places={places}
+                                            setPlaces={setPlaces}
+                                            setShowMarkers={setShowMarkers}
+                                        />
+                                    </JoyrideStep>
+                                </FavoritesContainer>
+                            </JoyrideStep>
                         </LeftBar>
                     </LeftBarContainer>
                     <MapInsideContainer id='map' options={mapOptions}></MapInsideContainer>
-                    <RightBarContainer isOpen={isRightBarOpen}>
-                        <TripsSchedule modalOpen={modalOpen}></TripsSchedule>
-                    </RightBarContainer>
+                    <JoyrideStep id='step-7'>
+                        <RightBarContainer id='step-5' isOpen={isRightBarOpen}>
+                            <TripsSchedule modalOpen={modalOpen}></TripsSchedule>
+                        </RightBarContainer>
+                    </JoyrideStep>
                 </MainPageContainer>
             </OutSide>
             {modalOpen ? (
