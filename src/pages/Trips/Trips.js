@@ -151,8 +151,14 @@ const Option = styled.option`
     color: #2d2d2d;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
-const MapOutContainer = styled.div``;
-
+const MapOutContainer = styled.div`
+    height: '100%';
+    width: '100%';
+`;
+const MapInsideContainer = styled(MapOutContainer)`
+    height: 100%;
+    width: 100%;
+`;
 const RightBarContainer = styled.div`
     width: 405px;
     height: 100%;
@@ -534,12 +540,28 @@ export default function Trips() {
     const closeModal = () => {
         setModalOpen(false);
     };
-
+    const [{ run, steps }, setState] = useState({
+        run: true,
+        steps: [
+            {
+                content: <h2>Let's begin plan a trip</h2>,
+                locale: { skip: <strong>SKIP</strong> },
+                placement: 'center',
+                target: 'body',
+            },
+            {
+                content: <h2>Here is the first step!</h2>,
+                placement: 'bottom',
+                target: '#step-1',
+                title: 'First step',
+            },
+        ],
+    });
     return (
         <>
             <OutSide>
                 <Header></Header>
-                {/* <Joyride callback={() => {}} run={run} steps={steps} hideCloseButton></Joyride> */}
+                <Joyride callback={() => {}} run={run} steps={steps} hideCloseButton></Joyride>
                 <MainPageContainer>
                     <LeftBarContainer>
                         <LeftBar>
@@ -594,11 +616,7 @@ export default function Trips() {
                             </FavoritesContainer>
                         </LeftBar>
                     </LeftBarContainer>
-                    <MapOutContainer
-                        id='map'
-                        style={{ height: '100%', width: '100%' }}
-                        options={mapOptions}
-                    ></MapOutContainer>
+                    <MapInsideContainer id='map' options={mapOptions}></MapInsideContainer>
                     <RightBarContainer isOpen={isRightBarOpen}>
                         <TripsSchedule modalOpen={modalOpen}></TripsSchedule>
                     </RightBarContainer>

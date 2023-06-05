@@ -3,29 +3,6 @@ import styled from 'styled-components/macro';
 import LoginButton from '../../components/Header/LoginButton';
 import Header from '../../components/Header/Header';
 
-const SecondTextSubCon = styled(TextSubCon)`
-    width: 450px;
-`;
-
-const ForthTextContent = styled(TextContent)`
-    font-size: 10px;
-    margin-top: 30px;
-`;
-
-const ThirdTextContent = styled(TextContent)`
-    font-size: 10px;
-    margin-top: 30px;
-`;
-
-const SecondTextContent = styled(TextContent)`
-    margin-top: 40px;
-`;
-
-const FirstBlockTextTitle = styled(TextTitle)`
-    font-size: 36px;
-    line-height: 60px;
-`;
-
 const HeaderStyle = styled(Header)`
     transition: transform 1s ease-out;
 `;
@@ -33,6 +10,7 @@ const HeaderStyle = styled(Header)`
 const OutSide = styled.div`
     padding-top: 45vh;
 `;
+
 const VideoContainer = styled.div`
     position: absolute;
     top: 0;
@@ -220,7 +198,28 @@ const FirstSectionBlockFourPicCon = styled.div`
     background-repeat: no-repeat;
     box-sizing: border-box;
 `;
+const SecondTextSubCon = styled(TextSubCon)`
+    width: 450px;
+`;
 
+const ForthTextContent = styled(TextContent)`
+    font-size: 10px;
+    margin-top: 30px;
+`;
+
+const ThirdTextContent = styled(TextContent)`
+    font-size: 10px;
+    margin-top: 30px;
+`;
+
+const SecondTextContent = styled(TextContent)`
+    margin-top: 40px;
+`;
+
+const FirstBlockTextTitle = styled(TextTitle)`
+    font-size: 36px;
+    line-height: 60px;
+`;
 export default function Home() {
     const [showHeader, setShowHeader] = useState(false);
 

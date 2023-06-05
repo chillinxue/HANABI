@@ -8,8 +8,6 @@ const LinkStyle = styled(Link)`
     text-decoration: none;
 `;
 
-const VideoSource = styled(Video)``;
-
 const HeaderStyle = styled(Header)`
     transition: transform 1s ease-out;
 `;
@@ -39,6 +37,8 @@ const Video = styled.video`
     left: 50%;
     transform: translate(-50%, -50%);
 `;
+const VideoSource = styled(Video)``;
+
 const Poster = styled.div`
     position: relative;
     width: 100%;

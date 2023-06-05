@@ -8,26 +8,6 @@ import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc, getDoc, getDocs 
 import { db } from '../../components/utils/firebase/firbase';
 import ArticleLikesButton from '../../components/Button/ArticleLikesButton';
 
-const GreyPicContent = styled(PicContent)`
-    color: #fafafa;
-    font-weight: 200;
-`;
-
-const GreyPicTitle = styled(PicTitle)`
-    color: #fafafa;
-    font-weight: 200;
-    margin-top: 10px;
-`;
-
-const GreyDateText = styled(DetailText)`
-    color: #fafafa;
-    font-weight: 200;
-`;
-
-const InfoDetailText = styled(DetailText)`
-    color: #2d2d2d;
-`;
-
 const NewHeader = styled(Header)`
     background-color: rgba(45, 45, 45, 0.1);
 `;
@@ -372,7 +352,25 @@ const PicPagePicTitleContainer = styled.div`
     justify-content: center;
     align-items: center;
 `;
+const GreyPicContent = styled(PicContent)`
+    color: #fafafa;
+    font-weight: 200;
+`;
 
+const GreyPicTitle = styled(PicTitle)`
+    color: #fafafa;
+    font-weight: 200;
+    margin-top: 10px;
+`;
+
+const GreyDateText = styled(DetailText)`
+    color: #fafafa;
+    font-weight: 200;
+`;
+
+const InfoDetailText = styled(DetailText)`
+    color: #2d2d2d;
+`;
 export default function BlogArticle() {
     const { userUID } = useContext(AuthContext);
     useEffect(() => {

@@ -160,7 +160,10 @@ const TodayTripHeaderTitle = styled.div`
     justify-content: center;
     align-items: center;
 `;
-const TodayTripSubContainer = styled.div``;
+const TodayTripSubContainer = styled.div`
+    overflow: scroll;
+    max-height: calc(100vh - 450px);
+`;
 
 const TripDeatailContainer = styled.div`
     display: flex;
@@ -600,7 +603,7 @@ export default function TripsSchedule() {
                     <TodayTripHeader>
                         <TodayTripHeaderTitle>今日の行程</TodayTripHeaderTitle>
                     </TodayTripHeader>
-                    <TodayTripSubContainer style={{ overflow: 'scroll', maxHeight: 'calc( 100vh - 450px)' }}>
+                    <TodayTripSubContainer>
                         <TripDeatailContainer>
                             {getNewSortedDate() &&
                                 getNewSortedDate().map((time) => (
