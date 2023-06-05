@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
-import { db } from '../firebase/firbase';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { collection, deleteDoc, doc, onSnapshot, query, where } from 'firebase/firestore';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { AuthContext } from '../../../Context/AuthContext';
 import { TripsContext } from '../../../pages/Trips/tripsContext';
+import { db } from '../firebase/firbase';
 
 const OutSide = styled.div`
     width: 325px;
@@ -45,7 +44,20 @@ const PlaceTypeButton = styled.div`
     line-height: 17px;
     color: #2d2d2d;
 `;
+// const AllLayerContainer = styled.div`
+//     border: 1px solid #fafafa;
+//     padding: 3px;
+//     box-sizing: border-box;
+//     text-align: center;
+//     font-family: 'Noto Sans JP';
+//     font-style: normal;
+//     font-weight: 700;
+//     font-size: 12px;
+//     line-height: 17px;
+//     text-align: center;
 
+//     color: #fafafa;
+// `;
 const SearchLayerInputContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -61,14 +73,14 @@ const SearchLayerInput = styled.input`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-left: 10px;
+    padding-left: 10px; /* 左邊距離10px */
     color: #2d2d2d;
     font-size: 10px;
     font-family: 'Noto Sans JP';
     font-style: normal;
     font-weight: 700;
     font-size: 10px;
-    line-height: 25px;
+    line-height: 25px; /* 與input的高度一樣 */
     opacity: 0.75;
     outline: none;
 
@@ -77,10 +89,11 @@ const SearchLayerInput = styled.input`
         font-style: normal;
         font-weight: 700;
         font-size: 10px;
-        line-height: 25px;
+        line-height: 25px; /* 與input的高度一樣 */
         color: #d7d7d7;
         opacity: 0.75;
-        text-align: start;
+        /* padding-left: 10px; 左邊距離10px */
+        text-align: start; /* 水平置中 */
     }
 `;
 const SavedBoxContainer = styled.div`
@@ -166,42 +179,41 @@ const SubContainer = styled.div`
     justify-content: space-between;
     height: calc(100vh - 353px);
 `;
+// export const handleDelete = async (id, userUID) => {
+//     const placeRef = doc(db, 'users', userUID, 'SavedPlaces', id);
+//     await deleteDoc(placeRef);
+// };
 
 export default function GetPlaceSaved({ showOnMap }) {
+    // const [places, setPlaces] = useState(null);
     const [placeType, setPlaceType] = useState(null);
     const [searchInput, setSearchInput] = useState('');
     const [showSearchInput, setShowSearchInput] = useState(true);
     const { userUID } = useContext(AuthContext);
     const { places, setPlaces, addPlaces, setAddPlaces } = useContext(TripsContext);
 
-    console.log(userUID);
-
     useEffect(() => {
         if (!userUID) {
             return;
         }
         const placeRef = collection(db, 'users', userUID, 'SavedPlaces');
-
         let q = query(placeRef);
 
         if (placeType) {
             q = query(q, where('type', '==', placeType));
         }
-
         if (searchInput) {
             q = query(q, where('name', '>=', searchInput), where('name', '<=', searchInput + '\uf8ff'));
         }
 
         const unsub = onSnapshot(q, (snapshot) => {
-            console.log('snapshot');
+            ('snapshot');
             const placeList = [];
             snapshot.docs.forEach((doc) => {
                 placeList.push({ id: doc.id, ...doc.data() });
             });
             setPlaces(placeList);
-            console.log(placeList);
         });
-        console.log(places);
         return () => {
             unsub();
         };
@@ -222,8 +234,6 @@ export default function GetPlaceSaved({ showOnMap }) {
             setShowSearchInput(true);
         }
     };
-
-    console.log(places);
     return (
         <>
             <SearchLayerInputContainer>
@@ -236,6 +246,7 @@ export default function GetPlaceSaved({ showOnMap }) {
                 )}
             </SearchLayerInputContainer>
             <SubContainer>
+                {/* <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}> */}
                 <OutSide style={{ overflow: 'scroll' }}>
                     <Inside>
                         <GetPlaceSavedContainer style={{ overflow: 'scroll' }}>
@@ -264,7 +275,7 @@ export default function GetPlaceSaved({ showOnMap }) {
                         <PlaceTypeButton
                             onClick={() => {
                                 handleFilter(null);
-                                showOnMap();
+                                showOnMap(null);
                             }}
                         >
                             ALL
@@ -272,7 +283,7 @@ export default function GetPlaceSaved({ showOnMap }) {
                         <PlaceTypeButton
                             onClick={() => {
                                 handleFilter('hotel');
-                                showOnMap();
+                                showOnMap('hotel');
                             }}
                         >
                             Hotel
@@ -280,7 +291,7 @@ export default function GetPlaceSaved({ showOnMap }) {
                         <PlaceTypeButton
                             onClick={() => {
                                 handleFilter('attraction');
-                                showOnMap();
+                                showOnMap('attraction');
                             }}
                         >
                             Attraction
@@ -288,7 +299,7 @@ export default function GetPlaceSaved({ showOnMap }) {
                         <PlaceTypeButton
                             onClick={() => {
                                 handleFilter('restaurant');
-                                showOnMap();
+                                showOnMap('restaurant');
                             }}
                         >
                             Food
@@ -296,13 +307,14 @@ export default function GetPlaceSaved({ showOnMap }) {
                         <PlaceTypeButton
                             onClick={() => {
                                 handleFilter('transportation');
-                                // showOnMap();
+                                showOnMap('transportation');
                             }}
                         >
                             Transportation
                         </PlaceTypeButton>
                     </Filter>
                 </FilterContainer>
+                {/* </div> */}
             </SubContainer>
         </>
     );

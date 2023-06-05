@@ -416,7 +416,6 @@ export default function TripsSchedule() {
     }, [selectedTrip]); //當點擊trip，產生時間順續的array
 
     useEffect(() => {
-        console.log('123');
         if (!userUID) {
             return;
         }
@@ -442,7 +441,6 @@ export default function TripsSchedule() {
 
     const openModal = () => {
         if (!userUID) {
-            // 如果用戶未登入，則顯示警告框
             alert('請先登入');
             return;
         }
