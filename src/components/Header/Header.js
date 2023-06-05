@@ -5,6 +5,10 @@ import { AuthContext } from '../../Context/AuthContext';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import LoginButton from './LoginButton';
 
+const LinkStyle = styled(Link)`
+    text-decoration: none;
+`;
+
 const OutSide = styled.div`
     width: 100%;
     background-color: #fafafa;
@@ -62,18 +66,18 @@ export default function Header() {
             <OutSide>
                 <Nav>
                     <BarContainer>
-                        <Link to='/home' style={{ textDecoration: 'none' }}>
+                        <LinkStyle to='/home'>
                             <HomeContainer>HOME 主頁</HomeContainer>
-                        </Link>
-                        <Link to='/Blog' style={{ textDecoration: 'none' }}>
+                        </LinkStyle>
+                        <LinkStyle to='/Blog'>
                             <HomeContainer>BLOG ブログ</HomeContainer>
-                        </Link>
-                        <Link to='/Trips' style={{ textDecoration: 'none' }}>
+                        </LinkStyle>
+                        <LinkStyle to='/Trips'>
                             <HomeContainer>PLAN 旅程を計画</HomeContainer>
-                        </Link>
-                        <Link to='/Profile' style={{ textDecoration: 'none' }}>
+                        </LinkStyle>
+                        <LinkStyle to='/Profile'>
                             <HomeContainer>FAVORITES 好き</HomeContainer>
-                        </Link>
+                        </LinkStyle>
                         <Login>
                             <LoginContainer to='/GoogleLogin'>
                                 <LoginInsideContainer>

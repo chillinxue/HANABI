@@ -116,25 +116,18 @@ const TripText = styled.div`
 const TripNameInput = styled.input`
     width: 200px;
     height: 40px;
-
+    padding: 15px;
     background: rgba(250, 250, 250, 0.5);
-    border-radius: 20px;
+    border-radius: 15px;
     border: none;
 `;
 const DatePickerCon = styled.div`
     display: flex;
 `;
-const datePickerStyle = {
-    border: '1px solid #FAFAFA',
-    borderRadius: '20px',
-    backgroundColor: 'transparent',
-    width: '100px',
-    height: '50px',
-};
 const AddTripStart = styled.div`
     background: rgb(250, 250, 250);
     border: 1px solid rgb(250, 250, 250);
-    border-radius: 20px;
+    border-radius: 15px;
     width: 100px;
     height: 40px;
     display: flex;
@@ -149,16 +142,19 @@ const AddTripStart = styled.div`
 `;
 
 const StyledDatePickerInput = styled(DatePicker)`
-    .react-datepicker__input-container input {
-        border: 1px solid #fafafa;
-        border-radius: 20px;
-        background-color: transparent;
-        height: 50px;
-        width: 100px;
-        padding: 0 10px;
-    }
+    border: 1px solid #fafafa;
+    border-radius: 15px;
+    background-color: transparent;
+    padding-left: 15px;
+    width: 200px;
+    height: 40px;
+    outline: none;
+    color: #fafafa;
 `;
 
+const StartedDatePicker = styled(StyledDatePickerInput)`
+    margin-right: 5px;
+`;
 export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
     const [selectedStartedDate, setSelectedStartedDate] = useState(null);
     const [selectedEndedDate, setSelectedEndedDate] = useState(null);
@@ -252,20 +248,12 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
                                     <TripNameInput id='tripname' placeholder='先為行程取一個名字吧'></TripNameInput>
                                     <TripText>Trip Date 旅遊期間 </TripText>
                                     <DatePickerCon>
-                                        <StyledDatePickerInput
-                                            style={{
-                                                border: '1px solid #FAFAFA',
-                                                borderRadius: '20px',
-                                                backgroundColor: 'transparent',
-                                                width: '100px',
-                                                height: '50px',
-                                            }}
+                                        <StartedDatePicker
                                             placeholderText='From'
                                             selected={selectedStartedDate}
                                             onChange={handleStartDateChange}
-                                        ></StyledDatePickerInput>
+                                        ></StartedDatePicker>
                                         <StyledDatePickerInput
-                                            style={datePickerStyle}
                                             placeholderText='To'
                                             selected={selectedEndedDate}
                                             onChange={handleEndDateChange}

@@ -507,7 +507,6 @@ export default function Trips() {
                 rating: rating || '',
                 url: url || '',
                 website: website || '',
-                //如果要加回去，要在上面（）填回去，下方也要加（這個導致很多地方沒辦法加入fav
                 type: type,
             });
             // console.log('Item uploaded with ID: ', docRef.id);
@@ -535,22 +534,12 @@ export default function Trips() {
     const closeModal = () => {
         setModalOpen(false);
     };
-    const [{ run, steps }, setState] = useState({
-        run: true,
-        steps: [
-            {
-                content: <h2>Let's begin to plan a trip</h2>,
-                locale: { skip: <strong>SKIP</strong> },
-                placement: 'center',
-                target: 'body',
-            },
-        ],
-    });
+
     return (
         <>
             <OutSide>
                 <Header></Header>
-                <Joyride callback={() => {}} run={run} steps={steps} hideCloseButton></Joyride>
+                {/* <Joyride callback={() => {}} run={run} steps={steps} hideCloseButton></Joyride> */}
                 <MainPageContainer>
                     <LeftBarContainer>
                         <LeftBar>
