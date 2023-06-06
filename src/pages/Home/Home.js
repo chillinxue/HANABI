@@ -1,17 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-// import FujiGif from './JapanBackground.gif';
-import { Link } from 'react-router-dom';
-import { AuthContext } from '../../Context/AuthContext';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import LoginButton from '../../components/Header/LoginButton';
-import PosterMenu from '../../components/PosterMenu/PosterMenu';
-// import PosterVideo from './JapanBackground.gif';
 import Header from '../../components/Header/Header';
 
 const OutSide = styled.div`
     padding-top: 45vh;
-    /* 給下方元素留出空間，避免覆蓋到 Poster */
 `;
 const VideoContainer = styled.div`
     position: absolute;
@@ -35,8 +28,6 @@ const Video = styled.video`
 const Poster = styled.div`
     position: relative;
     width: 100%;
-    /* background-image: url(); */
-    /* background: url() no-repeat center center fixed; */
     background-size: cover;
     height: 100vh;
     padding-top: 24px;
@@ -45,12 +36,12 @@ const Poster = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    position: fixed; /* 設置為固定定位 */
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: -1; /* 設置為-1，確保在其他元素之下 */
-    overflow: hidden; /* 隱藏超出部分的元素 */
+    z-index: -1;
+    overflow: hidden;
 `;
 
 const Login = styled.div`
@@ -59,7 +50,7 @@ const Login = styled.div`
 `;
 
 const LogoContainer = styled.div`
-    height: 100px; /* 您希望 LogoContainer 的高度 */
+    height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -82,18 +73,17 @@ const Logo = styled.div`
 const PosterTextCon = styled.div``;
 const PosterText = styled.div``;
 const MainPageContainer = styled.div`
-    /* border: 1px solid black; */
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative; /* 設置為相對定位 */
-    z-index: 1; /* 確保在下面的元素之上 */
+    position: relative;
+    z-index: 1;
     background-color: #fafafa;
 `;
 
 const MainContainer = styled.div`
-    position: relative; /* 設置為相對定位，以便一起滾動 */
+    position: relative;
 `;
 const FirstSection = styled.div`
     background-color: #fafafa;
@@ -153,7 +143,6 @@ const FirstSectionBlockTwo = styled.div`
 const FirstSectionBlockTwoPicCon = styled.div`
     width: 55%;
     height: 550px;
-    /* border: 1px solid black; */
 
     background-image: url('https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/Home%2FHomeA2FujiSan.jpg?alt=media&token=13388884-0c1a-4fdc-bc3e-cc95bfb8ab3b');
     background-size: cover;
@@ -163,7 +152,6 @@ const FirstSectionBlockTwoPicCon = styled.div`
 `;
 const FirstSectionBlockTwoTextCon = styled.div`
     width: 45%;
-    /* border: 1px solid black; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -178,7 +166,6 @@ const FirstSectionBlockThree = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    /* border: 1px solid black; */
 `;
 const FirstSectionBlockThreeTextCon = styled.div`
     width: 64%;
@@ -186,7 +173,6 @@ const FirstSectionBlockThreeTextCon = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    /* border: 1px solid black; */
 `;
 
 const FirstSectionBlockThreePicCon = styled.div`
@@ -253,14 +239,11 @@ export default function Home() {
                                 />
                             </Video>
                         </VideoContainer>
-
-                        {/* <PosterMenu /> */}
                     </Poster>
                     <LogoContainer>
                         <Logo>HANABI</Logo>
                     </LogoContainer>
                     <MainPageContainer>
-                        {/* <PlacesRecommend /> */}
                         <FirstSection>
                             <FirstSectionBlockOne>
                                 <FirstSectionBlockOneCon>

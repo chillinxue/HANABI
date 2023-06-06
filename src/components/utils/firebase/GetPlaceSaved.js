@@ -45,20 +45,7 @@ const PlaceTypeButton = styled.div`
     line-height: 17px;
     color: #2d2d2d;
 `;
-// const AllLayerContainer = styled.div`
-//     border: 1px solid #fafafa;
-//     padding: 3px;
-//     box-sizing: border-box;
-//     text-align: center;
-//     font-family: 'Noto Sans JP';
-//     font-style: normal;
-//     font-weight: 700;
-//     font-size: 12px;
-//     line-height: 17px;
-//     text-align: center;
 
-//     color: #fafafa;
-// `;
 const SearchLayerInputContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -74,14 +61,14 @@ const SearchLayerInput = styled.input`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-left: 10px; /* 左邊距離10px */
+    padding-left: 10px;
     color: #2d2d2d;
     font-size: 10px;
     font-family: 'Noto Sans JP';
     font-style: normal;
     font-weight: 700;
     font-size: 10px;
-    line-height: 25px; /* 與input的高度一樣 */
+    line-height: 25px;
     opacity: 0.75;
     outline: none;
 
@@ -90,11 +77,10 @@ const SearchLayerInput = styled.input`
         font-style: normal;
         font-weight: 700;
         font-size: 10px;
-        line-height: 25px; /* 與input的高度一樣 */
+        line-height: 25px;
         color: #d7d7d7;
         opacity: 0.75;
-        /* padding-left: 10px; 左邊距離10px */
-        text-align: start; /* 水平置中 */
+        text-align: start;
     }
 `;
 const SavedBoxContainer = styled.div`
@@ -180,13 +166,8 @@ const SubContainer = styled.div`
     justify-content: space-between;
     height: calc(100vh - 353px);
 `;
-// export const handleDelete = async (id, userUID) => {
-//     const placeRef = doc(db, 'users', userUID, 'SavedPlaces', id);
-//     await deleteDoc(placeRef);
-// };
 
 export default function GetPlaceSaved({ showOnMap }) {
-    // const [places, setPlaces] = useState(null);
     const [placeType, setPlaceType] = useState(null);
     const [searchInput, setSearchInput] = useState('');
     const [showSearchInput, setShowSearchInput] = useState(true);
@@ -200,22 +181,17 @@ export default function GetPlaceSaved({ showOnMap }) {
             return;
         }
         const placeRef = collection(db, 'users', userUID, 'SavedPlaces');
-        // let q = placeRef;
-        // let q;
-        // Initialize the base query
+
         let q = query(placeRef);
 
-        // Filter by place type
         if (placeType) {
             q = query(q, where('type', '==', placeType));
         }
 
-        // Filter by search input
         if (searchInput) {
             q = query(q, where('name', '>=', searchInput), where('name', '<=', searchInput + '\uf8ff'));
         }
 
-        // Listen to query snapshots
         const unsub = onSnapshot(q, (snapshot) => {
             console.log('snapshot');
             const placeList = [];
@@ -246,6 +222,8 @@ export default function GetPlaceSaved({ showOnMap }) {
             setShowSearchInput(true);
         }
     };
+
+    console.log(places);
     return (
         <>
             <SearchLayerInputContainer>
@@ -258,7 +236,6 @@ export default function GetPlaceSaved({ showOnMap }) {
                 )}
             </SearchLayerInputContainer>
             <SubContainer>
-                {/* <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}> */}
                 <OutSide style={{ overflow: 'scroll' }}>
                     <Inside>
                         <GetPlaceSavedContainer style={{ overflow: 'scroll' }}>
@@ -319,44 +296,14 @@ export default function GetPlaceSaved({ showOnMap }) {
                         <PlaceTypeButton
                             onClick={() => {
                                 handleFilter('transportation');
-                                showOnMap();
+                                // showOnMap();
                             }}
                         >
                             Transportation
                         </PlaceTypeButton>
                     </Filter>
                 </FilterContainer>
-                {/* </div> */}
             </SubContainer>
         </>
     );
 }
-
-// const myLatLng = [
-//     { lat: 35.503593, lng: 138.7634713 },
-//     { lat: 35.487404, lng: 138.795665 },
-//     { lat: 35.503593, lng: 138.7634713 },
-//     { lat: 35.4988753, lng: 138.76763 },
-// ];
-
-// const icons = {
-//     red: {
-//         url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/library_maps.png',
-//         scaledSize: new window.google.maps.Size(50, 50),
-//     },
-//     blue: {
-//         url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-//         scaledSize: new window.google.maps.Size(50, 50),
-//     },
-//     green: {
-//         url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/parking_lot_maps.png',
-//         scaledSize: new window.google.maps.Size(50, 50),
-//     },
-// };
-// myLatLng.forEach((location, index) => {
-//     const marker = new window.google.maps.Marker({
-//         position: location,
-//         map,
-//         icon: icons[index % 3 === 0 ? 'red' : index % 3 === 1 ? 'blue' : 'green'],
-//     });
-// });

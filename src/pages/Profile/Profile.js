@@ -1,12 +1,9 @@
 import React, { useContext, useState } from 'react';
 import Header from '../../components/Header/Header';
 import styled from 'styled-components/macro';
-import { Link } from 'react-router-dom';
-import ProfilePhoto from './ProfilePhoto.png';
 import Tokyo from './Tokyo.jpg';
 import { AuthContext } from '../../Context/AuthContext';
 import { TripsContext } from '../Trips/tripsContext';
-import { handleDelete } from '../../components/utils/firebase/GetPlaceSaved';
 
 const OutSide = styled.div`
     background-color: #fafafa;
@@ -62,9 +59,6 @@ const ProfileContainer = styled.div`
 const ProfilePic = styled.img`
     width: 150px;
     height: 150px;
-    /* background-image: url({user.photoURL});
-    background-size: cover;
-    background-position: center; */
     box-sizing: border-box;
     border-radius: 180px;
     margin-bottom: 20px;

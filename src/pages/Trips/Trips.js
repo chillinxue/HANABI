@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import styled from 'styled-components/macro';
-import { Link } from 'react-router-dom';
 import { db } from '../../components/utils/firebase/firbase';
 import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
 
@@ -8,14 +7,10 @@ import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
 import Header from '../../components/Header/Header';
 import TripsSchedule from './TripsSchedule';
 import './Trips.css';
-
-import { initializeApp } from 'firebase/app';
-import { arrayUnion, getFirestore, onSnapshot } from 'firebase/firestore';
-import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, addDoc, collection } from 'firebase/firestore';
 
 import { AuthContext } from '../../Context/AuthContext';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { TripsContextProvider } from './tripsContext';
 import { TripsContext } from './tripsContext';
 
 import SearchIcon from './search.png';
@@ -26,11 +21,9 @@ const OutSide = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* border: 1px solid white; */
 `;
 const MainPageContainer = styled.div`
     width: 100%;
-    /* height: 100vh; */
     height: 100vh;
     padding-top: 47px;
     box-sizing: border-box;
@@ -43,23 +36,18 @@ const LeftBarContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    /* border: 1px solid black; */
     background-color: #dadada;
 `;
 const LeftBar = styled.div`
     width: 100%;
-    /* height: 100%; */
-    /* border: 1px solid black; */
     box-sizing: border-box;
 `;
 const LeftBarHeader = styled.div`
     height: 220px;
-    /* border: 1px solid black; */
     padding: 31px 39px 33px 38px;
     box-sizing: border-box;
 `;
 const LeftBarHeaderTitle = styled.div`
-    /* border: 1px solid black; */
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -116,7 +104,6 @@ const SelectedType = styled.select`
     width: 115px;
     height: 25px;
     background-color: transparent;
-    /* padding: 7px; */
     border-radius: 5px;
     opacity: 0.5;
     border: 1px solid #2d2d2d;
@@ -161,10 +148,7 @@ const RightBarContainer = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: start;
-    /* align-items: flex-end; */
-    /* border: 1px solid black; */
     background-color: #dadada;
     transform: translateX(${(props) => (props.isOpen ? '0' : '100%')});
     transition: transform 0.3s ease;
@@ -228,8 +212,8 @@ export default function Trips() {
 
     let cachedScripts = [];
     const mapOptions = {
-        disableDefaultUI: true, // 移除地圖的預設控制介面
-        streetViewControl: false, // 移除街景控制功能
+        disableDefaultUI: true,
+        streetViewControl: false,
     };
     console.log(process.env.REACT_APP_GOOGlE_MAPS_API_KEY);
     const [loaded, error] = useScript(
@@ -237,9 +221,8 @@ export default function Trips() {
     );
     //憑證
     function useScript(src) {
-        // Keeping track of script loaded and error state   //load SDK 初始資料 （收）
         useEffect(() => {
-            window.scrollTo(0, 0); // 在页面加载完成或页面切换时滚动到顶部
+            window.scrollTo(0, 0);
         }, []);
 
         const [state, setState] = useState({
@@ -287,7 +270,7 @@ export default function Trips() {
         return [state.loaded, state.error];
     }
     const [map, setDataMap] = useState();
-    const [from, setFrom] = useState(''); //起始地點，要加個to
+    const [from, setFrom] = useState(''); //起始地點
     const fromInputRef = useRef(null); // 新增起點 ref
     const toInputRef = useRef(null); // 新增終點 ref
     const [to, setTo] = useState(''); // 新增終點 state
@@ -308,13 +291,11 @@ export default function Trips() {
 
     useEffect(() => {
         if (loaded) {
-            //load到才會執行
             const myLatLng = [{ lat: 35.682518, lng: 139.765804 }];
             const map = new window.google.maps.Map(document.getElementById('map'), {
-                //div render map
                 zoom: 10, //zoom in
-                center: myLatLng[0], //初始經緯度 （替換）
-                mapTypeId: window.google.maps.MapTypeId.ROADMAP, //一般地圖
+                center: myLatLng[0],
+                mapTypeId: window.google.maps.MapTypeId.ROADMAP,
                 mapTypeControl: false,
                 streetViewControl: false,
                 rotateControl: false,
@@ -343,13 +324,10 @@ export default function Trips() {
         }
     }, [loaded]);
 
-    //create a DirectionsService object to use the route method and get a result for our request
     const directionsService = new window.google.maps.DirectionsService(); //路線計算
 
-    //create a DirectionsRenderer object which we will use to display the route
     const directionsDisplay = new window.google.maps.DirectionsRenderer(); //路線render
 
-    //bind the DirectionsRenderer to the map
     directionsDisplay.setMap(map); //綁定到map
 
     const handleKeyDown = (event) => {
@@ -364,22 +342,16 @@ export default function Trips() {
         const request = {
             origin: from, //
             destination: to, //存一個state 控制
-            travelMode: window.google.maps.TravelMode.DRIVING, //WALKING, BYCYCLING, TRANSIT 路線模式
-            unitSystem: window.google.maps.UnitSystem.METRIC, //單位
+            travelMode: window.google.maps.TravelMode.DRIVING,
+            unitSystem: window.google.maps.UnitSystem.METRIC,
         };
 
         directionsService.route(request, function (result, status) {
-            // console.log(status);
             if (status == window.google.maps.DirectionsStatus.OK) {
                 directionsDisplay.setDirections(result); //寫路線的功能
-
-                // console.log(result);
             } else {
-                //delete route from map
                 directionsDisplay.setDirections({ routes: [] });
-                //center map in London
                 map.setCenter({ lat: 25.033964, lng: 121.564468 });
-                //show error message
             }
             console.log(result);
         });
@@ -476,11 +448,9 @@ export default function Trips() {
 
     function addToFavorites() {
         if (to) {
-            // setFavorites((prevFavorites) => [...prevFavorites, to]);
             console.log(locationInfo);
             const favoriteList = [...favorites, locationInfo];
             setFavorites(favoriteList);
-            // console.log(favoriteList[favoriteList.length - 1].place_id);
             uploadItems(
                 locationInfo.name,
                 locationInfo.place_id,
@@ -496,7 +466,6 @@ export default function Trips() {
     }
 
     async function uploadItems(name, id, address, phone, rating, url, website, type) {
-        //存入user sub-collection Places
         try {
             const itemsRef = doc(db, 'users', userUID);
             console.log(itemsRef);
@@ -509,10 +478,8 @@ export default function Trips() {
                 rating: rating || '',
                 url: url || '',
                 website: website || '',
-                //如果要加回去，要在上面（）填回去，下方也要加（這個導致很多地方沒辦法加入fav
                 type: type,
             });
-            // console.log('Item uploaded with ID: ', docRef.id);
         } catch (e) {
             console.error('Error uploading item: ', e);
         }
@@ -526,10 +493,8 @@ export default function Trips() {
             markers.forEach((marker) => marker.setMap(null));
         }
     }
-    // const [modalOpen, setModalOpen] = useState(false);
     const openModal = () => {
         if (!userUID) {
-            // 如果用戶未登入，則顯示警告框
             alert('請先登入');
             return;
         }
@@ -587,14 +552,12 @@ export default function Trips() {
                                 <FavoritesHeader>
                                     <FavLogo>FAVORITES</FavLogo>
                                 </FavoritesHeader>
-                                {/* <div style={{ overflowY: 'auto', height: '100%' }}> */}
                                 <GetPlaceSaved
                                     showOnMap={showOnMap}
                                     places={places}
                                     setPlaces={setPlaces}
                                     setShowMarkers={setShowMarkers}
                                 />
-                                {/* </div> */}
                             </FavoritesContainer>
                         </LeftBar>
                     </LeftBarContainer>
@@ -609,10 +572,6 @@ export default function Trips() {
                 </MainPageContainer>
             </OutSide>
             {modalOpen ? (
-                // <div>
-                //     <ModalOverlay onClick={closeModal} />
-                //     <ModalContainer onClick={(e) => e.stopPropagation()}></ModalContainer>
-                // </div>
                 <AddTripPopUpModal
                     modalOpen={modalOpen}
                     setModalOpen={setModalOpen}

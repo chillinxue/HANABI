@@ -7,7 +7,6 @@ import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc } from 'firebase/
 import { db } from '../../components/utils/firebase/firbase';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { AuthContext } from '../../Context/AuthContext';
-import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
 
 const TripsContainer = styled.div`
     width: 100%;
@@ -97,7 +96,6 @@ const DateBoxContainer = styled.div`
     display: flex;
     overflow-x: auto;
     gap: 10px;
-    /* padding: 10px 20px 10px 0px; */
     box-sizing: border-box;
     margin: 20px 43px 0px 43px;
     &::-webkit-scrollbar {
@@ -136,7 +134,6 @@ const TodayTripContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* border: 1px solid black; */
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -163,9 +160,7 @@ const TodayTripHeaderTitle = styled.div`
     justify-content: center;
     align-items: center;
 `;
-const TodayTripSubContainer = styled.div`
-    /* height: 320px; */
-`;
+const TodayTripSubContainer = styled.div``;
 
 const TripDeatailContainer = styled.div`
     display: flex;
@@ -653,13 +648,6 @@ export default function TripsSchedule() {
                     </AddTripDetailBox>
                 </AddTripDetailContainer>
             </TodayTripContainer>
-            {/* {modalOpen ? (
-                // <div>
-                //     <ModalOverlay onClick={closeModal} />
-                //     <ModalContainer onClick={(e) => e.stopPropagation()}></ModalContainer>
-                // </div>
-                <AddTripPopUpModal modalOpen={modalOpen} setModalOpen={setModalOpen}></AddTripPopUpModal>
-            ) : null} */}
         </>
     );
 }

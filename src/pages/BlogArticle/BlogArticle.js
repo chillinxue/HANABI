@@ -8,13 +8,16 @@ import { doc, setDoc, addDoc, collection, updateDoc, deleteDoc, getDoc, getDocs 
 import { db } from '../../components/utils/firebase/firbase';
 import ArticleLikesButton from '../../components/Button/ArticleLikesButton';
 
+const NewHeader = styled(Header)`
+    background-color: rgba(45, 45, 45, 0.1);
+`;
+
 const OutSide = styled.div`
     width: 100%;
     border: 1px solid black;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* border: 1px solid white; */
 `;
 const InsideOutline = styled.div`
     width: 100%;
@@ -24,31 +27,25 @@ const InsideOutline = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* border: 1px solid white; */
 `;
 const SummarySection = styled.div`
     display: flex;
     height: 688px;
     padding-top: 47px;
-    /* border: 1px solid black; */
     box-sizing: border-box;
     align-items: center;
 `;
 
-const SummaryCon = styled.div`
-    /* border: 1px solid white; */
-`;
+const SummaryCon = styled.div``;
 const SummarySubCon = styled.div`
     width: 600px;
     display: flex;
     flex-direction: column;
-    /* border: 1px solid white; */
 `;
 
 const TitleCon = styled.div`
     width: 520px;
     height: 220px;
-    /* border: 1px solid white; */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -59,7 +56,6 @@ const ArticleNum = styled.div`
     width: 100%;
     height: 25px;
     margin-top: 40px;
-    /* border: 1px solid white; */
     text-align: start;
 
     font-family: 'Noto Sans JP';
@@ -81,9 +77,7 @@ const Title = styled.div`
     font-style: normal;
     font-weight: 400;
     font-size: 22.5px;
-    /* identical to box height */
 
-    /* text-align: center; */
     color: #fafafa;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     display: flex;
@@ -95,7 +89,6 @@ const AttractionCon = styled.div`
     height: 340px;
     display: flex;
     flex-direction: column;
-    /* border: 1px solid black; */
     box-sizing: border-box;
     padding: 40px 20px 20px 20px;
 `;
@@ -127,7 +120,6 @@ const PicContainer = styled.div`
 const PicSubCon = styled.img`
     width: 400px;
     height: 350px;
-    /* border: 1px solid black; */
     object-fit: cover;
     display: block;
     margin: auto;
@@ -136,24 +128,19 @@ const ArticleSectionConOne = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
-    /* align-items: center; */
 `;
 const ArticleSection = styled.div`
     height: 688px;
     display: flex;
-    /* border: 1px solid black; */
 `;
 const MainInfoCon = styled.div`
     width: 60%;
-    /* border: 1px solid black; */
 `;
 const MainInfo = styled.div`
     width: 680px;
-    /* border: 1px solid black; */
 
     display: flex;
     flex-direction: column;
-    /* margin: 40px 0px 55px 85px; */
 `;
 const MainInfoHeader = styled.div`
     width: 100%;
@@ -170,8 +157,6 @@ const InfoTitle = styled.div`
     font-weight: 400;
     font-size: 22.5px;
     line-height: 33px;
-    /* identical to box height */
-
     color: #2d2d2d;
     margin-top: 70px;
 `;
@@ -190,7 +175,6 @@ const InfoDetail = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    /* border: 1px solid black; */
     justify-content: center;
     gap: 3px;
     margin-top: 10px;
@@ -208,10 +192,8 @@ const DetailText = styled.div`
 `;
 const MainPicContainer = styled.div`
     display: flex;
-    /* border: 1px solid black; */
     width: 100%;
     overflow: auto;
-    /* 隱藏滾動條 */
     &::-webkit-scrollbar {
         display: none;
     }
@@ -219,9 +201,7 @@ const MainPicContainer = styled.div`
 `;
 const PicBox = styled.div`
     width: 275px;
-    /* border: 1px solid Black; */
     margin-right: 25px;
-    /* border: 1px solid black; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -233,13 +213,11 @@ const Pic = styled.img`
     object-fit: cover;
     display: block;
     margin: auto;
-    /* border: 1px solid black; */
 `;
 const PicTitleContainer = styled.div`
     width: 230px;
     padding: 2px;
     box-sizing: border-box;
-    /* border: 1px solid black; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -271,18 +249,14 @@ const PicContent = styled.div`
     line-height: 14px;
 
     color: #2d2d2d;
-    /* border: 1px solid black; */
 `;
 const MainArticleCon = styled.div`
-    /* border: 1px solid black; */
     width: 100%;
-    /* border: 1px solid black; */
     display: flex;
     justify-content: center;
     align-items: center;
 `;
 const MainArticleSubCon = styled.div`
-    /* border: 1px solid black; */
     width: 100%;
     height: 620px;
     display: flex;
@@ -294,14 +268,12 @@ const MainArticleSubCon = styled.div`
 const MainArticle = styled.div`
     width: 100%;
     height: 505px;
-    /* border: 1px solid black; */
     &::-webkit-scrollbar {
         display: none;
     }
 `;
 const MainArticleTitle = styled.div`
     width: 387px;
-    /* height: 65px; */
     margin-top: 20px;
     margin-bottom: 43px;
 
@@ -312,7 +284,6 @@ const MainArticleTitle = styled.div`
     line-height: 35px;
 
     color: #2d2d2d;
-    /* border: 1px solid black; */
 `;
 const MainArticleContent = styled.div`
     width: 405px;
@@ -322,42 +293,33 @@ const MainArticleContent = styled.div`
     font-weight: 200;
     font-size: 14px;
     line-height: 30px;
-    /* or 214% */
 
     color: #2d2d2d;
-    /* border: 1px solid black; */
 `;
 const ArticleSectionConTwo = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
-    /* align-items: center; */
 `;
 const PicPageContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 900px;
-    /* border: 1px solid #fafafa; */
 `;
-const PicPageHeader = styled.div`
-    /* border: 1px solid #fafafa; */
-`;
+const PicPageHeader = styled.div``;
 const PicPageTitle = styled.div`
     font-family: 'Noto Sans JP';
     font-style: normal;
     font-weight: 200;
     font-size: 20px;
     line-height: 35px;
-    /* identical to box height */
 
     color: #fafafa;
 `;
 const PicPagePicContainer = styled.div`
     display: flex;
-    /* border: 1px solid black; */
     width: 100%;
     overflow: auto;
-    /* 隱藏滾動條 */
     &::-webkit-scrollbar {
         display: none;
     }
@@ -383,7 +345,6 @@ const PicPagePicTitleContainer = styled.div`
     width: 300px;
     padding: 2px;
     box-sizing: border-box;
-    /* border: 1px solid white; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -393,7 +354,7 @@ const PicPagePicTitleContainer = styled.div`
 export default function BlogArticle() {
     const { userUID } = useContext(AuthContext);
     useEffect(() => {
-        window.scrollTo(0, 0); // 在页面加载完成或页面切换时滚动到顶部
+        window.scrollTo(0, 0);
     }, []);
 
     const recommendation = [
@@ -440,20 +401,9 @@ export default function BlogArticle() {
     };
 
     async function uploadItems(data) {
-        //存入user sub-collection Places
         try {
             const itemsRef = doc(db, 'users', userUID);
             await setDoc(doc(itemsRef, 'SavedPlaces', data.placeId), data);
-            // {
-            //     name: name,
-            //     placeId: id,
-            //     formatted_address: address,
-            //     rating: rating,
-            //     url: url,
-            //     website: website,
-            //     type: type,
-            // }
-            // console.log('Item uploaded with ID: ', docRef.id);
         } catch (e) {
             console.error('Error uploading item: ', e);
         }
@@ -463,15 +413,6 @@ export default function BlogArticle() {
         await deleteDoc(placeRef);
     };
 
-    // useEffect(() => {
-    //     if (isLiked) {
-    //         uploadItems();
-    //     } else {
-    //         deleteItems();
-    //     }
-    // }, [isLiked]);
-
-    // console.log(recommendation);
     const [article, setArticle] = useState();
     useEffect(() => {
         const getDocumentData = async () => {
@@ -482,7 +423,6 @@ export default function BlogArticle() {
             setArticle(readableSnap);
         };
 
-        // 调用函数以获取文档数据
         getDocumentData();
     }, []);
 
@@ -494,7 +434,6 @@ export default function BlogArticle() {
             docSnap.forEach((doc) => articles.push(doc.data()));
             console.log(articles);
         };
-        // 调用函数以获取文档数据
         getDocumentData();
     }, []);
 
@@ -504,7 +443,7 @@ export default function BlogArticle() {
     return (
         <>
             <OutSide>
-                <Header style={{ backgroundColor: 'rgba(45, 45, 45, 0.1);' }}></Header>
+                <NewHeader></NewHeader>
                 <InsideOutline>
                     <SummarySection>
                         <SummaryCon>
@@ -589,12 +528,10 @@ export default function BlogArticle() {
                         <MainArticleCon>
                             <MainArticleSubCon>
                                 <MainArticle style={{ overflow: 'scroll', maxHeight: '505px' }}>
-                                    {/* <ScrollCon> */}
                                     <MainArticleTitle>{article.blockA.article[0]}</MainArticleTitle>
                                     <MainArticleContent>{article.blockA.article[1]}</MainArticleContent>
                                     <MainArticleTitle>{article.blockA.article[2]}</MainArticleTitle>
                                     <MainArticleContent>{article.blockA.article[3]}</MainArticleContent>
-                                    {/* </ScrollCon> */}
                                 </MainArticle>
                             </MainArticleSubCon>
                         </MainArticleCon>
@@ -605,12 +542,10 @@ export default function BlogArticle() {
                         <MainArticleCon>
                             <MainArticleSubCon>
                                 <MainArticle style={{ overflow: 'scroll', maxHeight: '505px' }}>
-                                    {/* <ScrollCon> */}
                                     <MainArticleTitle>{article.blockB.article[0]}</MainArticleTitle>
                                     <MainArticleContent>{article.blockB.article[1]}</MainArticleContent>
                                     <MainArticleTitle>{article.blockB.article[2]}</MainArticleTitle>
                                     <MainArticleContent>{article.blockB.article[3]}</MainArticleContent>
-                                    {/* </ScrollCon> */}
                                 </MainArticle>
                             </MainArticleSubCon>
                         </MainArticleCon>

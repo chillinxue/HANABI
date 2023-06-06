@@ -3,23 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Auth, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { collection, setDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../components/utils/firebase/firbase';
-import { DocumentData } from 'firebase/firestore';
 import { useLocation } from 'react-router-dom';
-
-// export interface User {
-//     name: string;
-//     email: string;
-//     userUID: string;
-// }
-
-// interface AuthContextType {
-//     isLogin: boolean;
-//     user: User;
-//     loading: boolean;
-//     userUID: string;
-//     signIn: (auth: Auth, provider: GoogleAuthProvider) => Promise<void>;
-//     logOut: (auth: Auth) => Promise<void>;
-// }
 
 export const AuthContext = createContext({
     isLogin: false,
@@ -58,7 +42,6 @@ export const AuthContextProvider = ({ children }) => {
         const auth = getAuth();
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is signed in, see docs for a list of available properties
                 const getUser = await getUsers(user.uid);
                 setUserUID(user.uid);
                 if (getUser) {

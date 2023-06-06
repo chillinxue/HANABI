@@ -1,5 +1,4 @@
-import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
 import { AuthContext } from '../../Context/AuthContext';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import styled from 'styled-components';
@@ -50,8 +49,6 @@ export default function LoginButton() {
                     <LogInButton onClick={() => signIn(auth, provider)}>Login</LogInButton>
                     <LogOutButton onClick={() => logOut(auth)}>Logout</LogOutButton>
                 </LoginInsideContainer>
-                {/* <button onClick={() => signIn(auth, provider)}>Login</button>
-                <button onClick={() => logOut(auth)}>Logout</button> */}
             </LoginContainer>
         </>
     );

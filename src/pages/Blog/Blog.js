@@ -7,10 +7,9 @@ import { Link } from 'react-router-dom';
 
 const OutSide = styled.div`
     padding-top: 70px;
-    /* 給下方元素留出空間，避免覆蓋到 Poster */
 `;
 const MainContainer = styled.div`
-    position: relative; /* 設置為相對定位，以便一起滾動 */
+    position: relative;
 `;
 const VideoContainer = styled.div`
     position: absolute;
@@ -34,8 +33,6 @@ const Video = styled.video`
 const Poster = styled.div`
     position: relative;
     width: 100%;
-    /* background-image: url(); */
-    /* background: url() no-repeat center center fixed; */
     background-size: cover;
     height: 100vh;
     padding-top: 24px;
@@ -44,12 +41,12 @@ const Poster = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    position: fixed; /* 設置為固定定位 */
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: -1; /* 設置為-1，確保在其他元素之下 */
-    overflow: hidden; /* 隱藏超出部分的元素 */
+    z-index: -1;
+    overflow: hidden;
 `;
 
 const Login = styled.div`
@@ -57,7 +54,7 @@ const Login = styled.div`
 `;
 
 const LogoContainer = styled.div`
-    height: 100px; /* 您希望 LogoContainer 的高度 */
+    height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -115,16 +112,13 @@ const BlogTitle = styled.div`
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     z-index: 2;
 `;
-
-const BlogBanner = styled.div``;
 const MainPageContainer = styled.div`
-    /* border: 1px solid black; */
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative; /* 設置為相對定位 */
-    z-index: 1; /* 確保在下面的元素之上 */
+    position: relative;
+    z-index: 1;
     background-color: #446b94;
 `;
 const SectionOne = styled.div`
@@ -133,7 +127,6 @@ const SectionOne = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: end;
-    /* border: 1px solid black; */
 `;
 const SectionCon = styled.div`
     width: 83%;
@@ -166,10 +159,8 @@ const SectionSubTitle = styled.div`
 `;
 const PicContainer = styled.div`
     display: flex;
-    /* border: 1px solid black; */
     width: 100%;
     overflow: auto;
-    /* 隱藏滾動條 */
     &::-webkit-scrollbar {
         display: none;
     }
@@ -177,7 +168,6 @@ const PicContainer = styled.div`
 
 const PicBox = styled.div`
     width: 380px;
-    /* border: 1px solid Black; */
     margin-right: 25px;
 `;
 
@@ -222,7 +212,7 @@ const SectionTwo = styled.div`
 export default function Blog() {
     const [showHeader, setShowHeader] = useState(false);
     useEffect(() => {
-        window.scrollTo(0, 0); // 在页面加载完成或页面切换时滚动到顶部
+        window.scrollTo(0, 0);
     }, []);
 
     useEffect(() => {
@@ -269,8 +259,6 @@ export default function Blog() {
                                 />
                             </Video>
                         </VideoContainer>
-
-                        {/* <PosterMenu /> */}
                     </Poster>
                     <LogoContainer>
                         <Logo></Logo>

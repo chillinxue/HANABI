@@ -2,18 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/macro';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-// import firebase from 'firebase/app';
-// import 'firebase/firestore';
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { AuthContext } from '../../Context/AuthContext';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../utils/firebase/firbase';
 import FujiLawson from './FujiLawson.jpg';
-
-// import { StrictMode } from 'react';
-// import { createRoot } from 'react-dom/client';
 
 const ModalOutSide = styled.div`
     position: absolute;
@@ -216,14 +209,14 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
             alert('請選擇旅遊期間');
             return;
         }
-        // const formattedDateRange = dateRange.map((date) => {date:date.toLocaleDateString()});
+
         let dateArray = [];
         dateRange.map((date) => dateArray.push({ date: date.toLocaleDateString() }));
         const tripId = uuidv4();
         const tripRef = doc(db, 'users', userUID, 'trips', tripId);
         setDoc(tripRef, {
             tripname: tripname,
-            // dateRange: formattedDateRange,
+
             tripId: tripId,
             dates: dateArray,
         })
@@ -259,25 +252,6 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
                                     <TripNameInput id='tripname' placeholder='先為行程取一個名字吧'></TripNameInput>
                                     <TripText>Trip Date 旅遊期間 </TripText>
                                     <DatePickerCon>
-                                        {/* <DatePicker
-                                        style={{
-                                            border: '1px solid #FAFAFA',
-                                            borderRadius: '20px',
-                                            backgroundColor: 'transparent',
-                                            width: '100px',
-                                            height: '50px',
-                                        }}
-                                        placeholderText='From'
-                                        selected={selectedStartedDate}
-                                        onChange={handleStartDateChange}
-                                    />
-                                    <DatePicker
-                                        style={datePickerStyle}
-                                        placeholderText='To'
-                                        selected={selectedEndedDate}
-                                        onChange={handleEndDateChange}
-                                        minDate={selectedStartedDate}
-                                    /> */}
                                         <StyledDatePickerInput
                                             style={{
                                                 border: '1px solid #FAFAFA',
@@ -309,26 +283,7 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
                                     Start
                                 </AddTripStart>
                             </AddTripLeftContainer>
-                            <AddTripRightContainer>
-                                {/* <h1>預計旅遊期間</h1>
-                                <p>開始日期</p>
-                                <DatePicker selected={selectedStartedDate} onChange={handleStartDateChange} />
-                                <p>結束日期</p>
-                                <DatePicker
-                                    selected={selectedEndedDate}
-                                    onChange={handleEndDateChange}
-                                    minDate={selectedStartedDate}
-                                /> */}
-                                {/* <button
-                                    onClick={() => {
-                                        console.log(dateRange);
-                                        closeModal();
-                                        handleSaveTrip();
-                                    }}
-                                >
-                                    開始規劃旅程
-                                </button> */}
-                            </AddTripRightContainer>
+                            <AddTripRightContainer></AddTripRightContainer>
                         </AddTripFooter>
                     </AddTripContainer>
                 </OutSide>
@@ -336,83 +291,3 @@ export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
         </ModalOutSide>
     );
 }
-// async function getDates() {
-//     const tripsRef = collection(db, `users/${userUID}/dates`);
-//     const querySnapshot = await getDoc(tripsRef);
-//     querySnapshot.data();
-//     console.log(querySnapshot.data());
-// }
-// getDates();
-
-// export default function MenuPopUpModal({ modalOpen, setModalOpen }) {
-//     const [selectedStartedDate, setSelectedStartedDate] = useState(null);
-//     const [selectedEndedDate, setSelectedEndedDate] = useState(null);
-
-//     const handleStartDateChange = (date) => {
-//         setSelectedStartedDate(date);
-
-//         if (selectedEndedDate && date.getTime() > selectedEndedDate.getTime()) {
-//             setSelectedEndedDate(date);
-//         }
-//     };
-
-//     const handleEndDateChange = (date) => {
-//         if (selectedStartedDate && date.getTime() >= selectedStartedDate.getTime()) {
-//             setSelectedEndedDate(date);
-//         }
-//     };
-//     const openModal = () => {
-//         setModalOpen(true);
-//     };
-
-//     const closeModal = () => {
-//         setModalOpen(false);
-//     };
-
-//     const handlePlanTrip = () => {
-//         if (selectedStartedDate && selectedEndedDate) {
-//             const oneDay = 24 * 60 * 60 * 1000; // milliseconds
-//             const daysBetween = Math.round(Math.abs((selectedStartedDate - selectedEndedDate) / oneDay)) + 1;
-//             const dates = [];
-//             for (let i = 0; i < daysBetween; i++) {
-//                 const date = new Date(selectedStartedDate.getTime() + i * oneDay);
-//                 dates.push(date);
-//             }
-//             // 設定日期區間
-//             setModalOpen(false); // 關閉Modal
-//             setSelectedStartedDate(null);
-//             setSelectedEndedDate(null);
-//         }
-//         const tripName = document.getElementById('tripname').value;
-//         console.log('行程名稱：', tripName);
-//         console.log('開始日期：', selectedStartedDate);
-//         console.log('結束日期：', selectedEndedDate);
-//     };
-
-//     return (
-//         <div>
-//             <ModalOverlay onClick={closeModal} />
-//             <ModalContainer onClick={(e) => e.stopPropagation()}>
-//                 <AddTripContainer>
-//                     <AddTripLeftContainer>
-//                         <h1>旅行名稱</h1>
-//                         <input id='tripname' placeholder='先為行程取一個名字吧'></input>
-//                     </AddTripLeftContainer>
-//                     <AddTripRightContainer>
-//                         <h1>預計旅遊期間</h1>
-//                         <p>開始日期</p>
-//                         <DatePicker id='starteddate' selected={selectedStartedDate} onChange={handleStartDateChange} />
-//                         <p>結束日期</p>
-//                         <DatePicker
-//                             id='endeddate'
-//                             selected={selectedEndedDate}
-//                             onChange={(date) => setSelectedEndedDate(date)}
-//                             minDate={selectedStartedDate}
-//                         />
-//                         <button onClick={handlePlanTrip}>開始規劃旅程</button>
-//                     </AddTripRightContainer>
-//                 </AddTripContainer>
-//             </ModalContainer>
-//         </div>
-//     );
-// }
