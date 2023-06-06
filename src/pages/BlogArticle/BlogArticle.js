@@ -268,6 +268,8 @@ const MainArticleSubCon = styled.div`
 const MainArticle = styled.div`
     width: 100%;
     height: 505px;
+    overflow: 'scroll';
+    maxheight: '505px';
     &::-webkit-scrollbar {
         display: none;
     }
@@ -350,7 +352,25 @@ const PicPagePicTitleContainer = styled.div`
     justify-content: center;
     align-items: center;
 `;
+const GreyPicContent = styled(PicContent)`
+    color: #fafafa;
+    font-weight: 200;
+`;
 
+const GreyPicTitle = styled(PicTitle)`
+    color: #fafafa;
+    font-weight: 200;
+    margin-top: 10px;
+`;
+
+const GreyDateText = styled(DetailText)`
+    color: #fafafa;
+    font-weight: 200;
+`;
+
+const InfoDetailText = styled(DetailText)`
+    color: #2d2d2d;
+`;
 export default function BlogArticle() {
     const { userUID } = useContext(AuthContext);
     useEffect(() => {
@@ -495,9 +515,9 @@ export default function BlogArticle() {
                                 <MainInfoHeader>
                                     <InfoTitle># {article.blockA.placeName}</InfoTitle>
                                     <InfoDetail>
-                                        <DetailText style={{ color: '#2d2d2d' }}>Open Time</DetailText>
-                                        <DetailText style={{ color: '#2d2d2d' }}>Tickets</DetailText>
-                                        <DetailText style={{ color: '#2d2d2d' }}>Station</DetailText>
+                                        <InfoDetailText>Open Time</InfoDetailText>
+                                        <InfoDetailText>Tickets</InfoDetailText>
+                                        <InfoDetailText>Station</InfoDetailText>
                                     </InfoDetail>
                                 </MainInfoHeader>
                                 <MainPicContainer>
@@ -527,7 +547,7 @@ export default function BlogArticle() {
                         </MainInfoCon>
                         <MainArticleCon>
                             <MainArticleSubCon>
-                                <MainArticle style={{ overflow: 'scroll', maxHeight: '505px' }}>
+                                <MainArticle>
                                     <MainArticleTitle>{article.blockA.article[0]}</MainArticleTitle>
                                     <MainArticleContent>{article.blockA.article[1]}</MainArticleContent>
                                     <MainArticleTitle>{article.blockA.article[2]}</MainArticleTitle>
@@ -541,7 +561,7 @@ export default function BlogArticle() {
                     <ArticleSection>
                         <MainArticleCon>
                             <MainArticleSubCon>
-                                <MainArticle style={{ overflow: 'scroll', maxHeight: '505px' }}>
+                                <MainArticle>
                                     <MainArticleTitle>{article.blockB.article[0]}</MainArticleTitle>
                                     <MainArticleContent>{article.blockB.article[1]}</MainArticleContent>
                                     <MainArticleTitle>{article.blockB.article[2]}</MainArticleTitle>
@@ -554,9 +574,9 @@ export default function BlogArticle() {
                                 <MainInfoHeader>
                                     <InfoTitle># {article.blockB.placeName}</InfoTitle>
                                     <InfoDetail>
-                                        <DetailText style={{ color: '#2d2d2d' }}>Open Time</DetailText>
-                                        <DetailText style={{ color: '#2d2d2d' }}>Tickets</DetailText>
-                                        <DetailText style={{ color: '#2d2d2d' }}>Station</DetailText>
+                                        <InfoDetailText>Open Time</InfoDetailText>
+                                        <InfoDetailText>Tickets</InfoDetailText>
+                                        <InfoDetailText>Station</InfoDetailText>
                                     </InfoDetail>
                                 </MainInfoHeader>
                                 <MainPicContainer>
@@ -590,54 +610,36 @@ export default function BlogArticle() {
                     <SummarySection>
                         <PicPageContainer>
                             <PicPageHeader>
-                                <DetailText style={{ color: '#fafafa', fontWeight: '200' }}>
-                                    Date: {article.greyBlockA.date}
-                                </DetailText>
+                                <GreyDateText>Date: {article.greyBlockA.date}</GreyDateText>
                                 <PicPageTitle>{article.greyBlockA.mainTitle}</PicPageTitle>
                             </PicPageHeader>
                             <PicPagePicContainer>
                                 <PicPagePicBox>
                                     <PicPagePic src={article.greyBlockA.photo.photoA.photoURL}></PicPagePic>
                                     <PicPagePicTitleContainer>
-                                        <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # {article.greyBlockA.photo.photoA.photoTitle}
-                                        </PicTitle>
-                                        <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            {article.greyBlockA.photo.photoA.photoInfo}
-                                        </PicContent>
+                                        <GreyPicTitle># {article.greyBlockA.photo.photoA.photoTitle}</GreyPicTitle>
+                                        <GreyPicContent>{article.greyBlockA.photo.photoA.photoInfo}</GreyPicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
                                 <PicPagePicBox>
                                     <PicPagePic src={article.greyBlockA.photo.photoB.photoURL}></PicPagePic>
                                     <PicPagePicTitleContainer>
-                                        <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # {article.greyBlockA.photo.photoB.photoTitle}
-                                        </PicTitle>
-                                        <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            {article.greyBlockA.photo.photoB.photoInfo}
-                                        </PicContent>
+                                        <GreyPicTitle># {article.greyBlockA.photo.photoB.photoTitle}</GreyPicTitle>
+                                        <GreyPicContent>{article.greyBlockA.photo.photoB.photoInfo}</GreyPicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
                                 <PicPagePicBox>
                                     <PicPagePic src={article.greyBlockA.photo.photoC.photoURL}></PicPagePic>
                                     <PicPagePicTitleContainer>
-                                        <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # {article.greyBlockA.photo.photoC.photoTitle}
-                                        </PicTitle>
-                                        <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            {article.greyBlockA.photo.photoC.photoInfo}
-                                        </PicContent>
+                                        <GreyPicTitle># {article.greyBlockA.photo.photoC.photoTitle}</GreyPicTitle>
+                                        <GreyPicContent>{article.greyBlockA.photo.photoC.photoInfo}</GreyPicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
                                 <PicPagePicBox>
                                     <PicPagePic src={article.greyBlockA.photo.photoD.photoURL}></PicPagePic>
                                     <PicPagePicTitleContainer>
-                                        <PicTitle style={{ color: '#fafafa', fontWeight: '200', marginTop: '10px' }}>
-                                            # {article.greyBlockA.photo.photoD.photoTitle}
-                                        </PicTitle>
-                                        <PicContent style={{ color: '#fafafa', fontWeight: '200' }}>
-                                            {article.greyBlockA.photo.photoD.photoInfo}
-                                        </PicContent>
+                                        <GreyPicTitle># {article.greyBlockA.photo.photoD.photoTitle}</GreyPicTitle>
+                                        <GreyPicContent>{article.greyBlockA.photo.photoD.photoInfo}</GreyPicContent>
                                     </PicPagePicTitleContainer>
                                 </PicPagePicBox>
                             </PicPagePicContainer>

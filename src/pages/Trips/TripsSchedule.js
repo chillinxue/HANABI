@@ -160,7 +160,10 @@ const TodayTripHeaderTitle = styled.div`
     justify-content: center;
     align-items: center;
 `;
-const TodayTripSubContainer = styled.div``;
+const TodayTripSubContainer = styled.div`
+    overflow: scroll;
+    max-height: calc(100vh - 450px);
+`;
 
 const TripDeatailContainer = styled.div`
     display: flex;
@@ -396,11 +399,11 @@ export default function TripsSchedule() {
     const [selectedTrip, setSelectedTrip] = useState({});
     const [selectedTripDate, setSelectedTripDate] = useState(undefined);
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
-    const [time, setTime] = useState(''); //時間選擇器
+    const [time, setTime] = useState('');
     const [enterDescription, setEnterDescription] = useState('');
     const [tripUpdated, setTripUpdated] = useState(false);
 
-    // const [trips, setTrips] = useState([]); //抓到旅行資料
+    // const [trips, setTrips] = useState([]);
     const initialSelectedDates = trips && trips.length > 0 ? trips[0].dateRange : [];
     // const [selectedTrip, setSelectedTrip] = useState(initialSelectedDates);
     const [sortedData, setSortedData] = useState();
@@ -416,7 +419,6 @@ export default function TripsSchedule() {
     }, [selectedTrip]); //當點擊trip，產生時間順續的array
 
     useEffect(() => {
-        console.log('123');
         if (!userUID) {
             return;
         }
@@ -424,11 +426,8 @@ export default function TripsSchedule() {
         const unsubscribe = onSnapshot(tripsRef, (snapshot) => {
             const newTrips = snapshot.docs.map((doc) => doc.data());
             setTrips(newTrips);
-
-            // Get the selected trip from the updated trips array
             const updatedSelectedTrip = newTrips.find((trip) => trip.tripId === selectedTrip.tripId);
 
-            // If the selected trip's data has changed, update the autoUpdateTrips state
             if (updatedSelectedTrip && JSON.stringify(updatedSelectedTrip) !== JSON.stringify(selectedTrip)) {
                 setSelectedTrip(updatedSelectedTrip);
                 setAutoUpdateTrips(updatedSelectedTrip.dates[selectedDateIndex]);
@@ -445,7 +444,6 @@ export default function TripsSchedule() {
 
     const openModal = () => {
         if (!userUID) {
-            // 如果用戶未登入，則顯示警告框
             alert('請先登入');
             return;
         }
@@ -605,7 +603,7 @@ export default function TripsSchedule() {
                     <TodayTripHeader>
                         <TodayTripHeaderTitle>今日の行程</TodayTripHeaderTitle>
                     </TodayTripHeader>
-                    <TodayTripSubContainer style={{ overflow: 'scroll', maxHeight: 'calc( 100vh - 450px)' }}>
+                    <TodayTripSubContainer>
                         <TripDeatailContainer>
                             {getNewSortedDate() &&
                                 getNewSortedDate().map((time) => (

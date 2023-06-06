@@ -1,29 +1,33 @@
-import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
-import { db } from '../../components/utils/firebase/firbase';
 import AddTripPopUpModal from '../../components/PopUpModal/AddTripPopUpModal';
+import { db } from '../../components/utils/firebase/firbase';
+import Joyride, { STATUS } from 'react-joyride';
 
-import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
 import Header from '../../components/Header/Header';
-import TripsSchedule from './TripsSchedule';
+import GetPlaceSaved from '../../components/utils/firebase/GetPlaceSaved';
 import './Trips.css';
-import { doc, addDoc, collection } from 'firebase/firestore';
+import TripsSchedule from './TripsSchedule';
 
-import { AuthContext } from '../../Context/AuthContext';
+import { addDoc, collection, doc } from 'firebase/firestore';
+
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { AuthContext } from '../../Context/AuthContext';
 import { TripsContext } from './tripsContext';
 
 import SearchIcon from './search.png';
+import { Route } from 'react-router-dom';
 
 const OutSide = styled.div`
     width: 100%;
-    border: 1px solid black;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* border: 1px solid white; */
 `;
 const MainPageContainer = styled.div`
     width: 100%;
+    /* height: 100vh; */
     height: 100vh;
     padding-top: 47px;
     box-sizing: border-box;
@@ -36,18 +40,23 @@ const LeftBarContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    /* border: 1px solid black; */
     background-color: #dadada;
 `;
 const LeftBar = styled.div`
     width: 100%;
+    /* height: 100%; */
+    /* border: 1px solid black; */
     box-sizing: border-box;
 `;
 const LeftBarHeader = styled.div`
     height: 220px;
+    /* border: 1px solid black; */
     padding: 31px 39px 33px 38px;
     box-sizing: border-box;
 `;
 const LeftBarHeaderTitle = styled.div`
+    /* border: 1px solid black; */
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -57,6 +66,7 @@ const LeftBarHeaderTitle = styled.div`
 
     color: #2d2d2d;
 `;
+const RouteOutContainer = styled.div``;
 const RouteContainer = styled.div`
     width: 210px;
     height: 40px;
@@ -104,6 +114,7 @@ const SelectedType = styled.select`
     width: 115px;
     height: 25px;
     background-color: transparent;
+    /* padding: 7px; */
     border-radius: 5px;
     opacity: 0.5;
     border: 1px solid #2d2d2d;
@@ -141,8 +152,14 @@ const Option = styled.option`
     color: #2d2d2d;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
-const MapOutContainer = styled.div``;
-
+const MapOutContainer = styled.div`
+    height: '100%';
+    width: '100%';
+`;
+const MapInsideContainer = styled(MapOutContainer)`
+    height: 100%;
+    width: 100%;
+`;
 const RightBarContainer = styled.div`
     width: 405px;
     height: 100%;
@@ -202,6 +219,67 @@ const FavLogo = styled.div`
     line-height: 17px;
     color: #2d2d2d;
 `;
+const JoyrideStep = styled.div``;
+const JoyrideFifthStep = styled.div``;
+const JoyrideStyle = {
+    spotlightColor: 'grey',
+    options: {
+        primaryColor: '#2d2d2d',
+        borderRadius: '25px',
+    },
+    buttonSkip: {
+        backgroundColor: '#ffffff',
+        color: '#2d2d2d',
+        borderRadius: '25px',
+        paddingLeft: '15px',
+        paddingRight: '15px',
+        border: '2px #2d2d2d solid',
+    },
+    buttonNext: {
+        backgroundColor: '#2d2d2d',
+        color: '#ffffff',
+        borderRadius: '25px',
+        paddingLeft: '15px',
+        paddingRight: '15px',
+        border: 'none',
+        cursor: 'pointer',
+    },
+    tooltip: {
+        backgroundColor: '#ffffff',
+        borderRadius: '25px',
+        textAlign: 'left',
+    },
+    tooltipContainer: {
+        textAlign: 'center',
+    },
+    buttonBack: {
+        backgroundColor: '#2d2d2d',
+        color: '#ffffff',
+        borderRadius: '25px',
+        paddingLeft: '15px',
+        paddingRight: '15px',
+        border: 'none',
+    },
+    buttonPrimary: {
+        backgroundColor: '#ffffff',
+        border: 'none',
+    },
+    buttonClose: {
+        backgroundColor: 'black', // 更改關閉按鈕的背景色為藍色
+        color: 'white', // 更改關閉按鈕的文字顏色為白色
+        borderRadius: '25px',
+        border: 'none',
+    },
+    tooltipTitle: {
+        color: '#2d2d2d',
+        fontSize: '24px',
+        fontWeight: 'bold',
+        textAlign: 'center', // 將標題置中對齊
+    },
+    tooltipContent: {
+        fontSize: '16px',
+    },
+};
 
 export default function Trips() {
     const { userUID } = useContext(AuthContext);
@@ -212,8 +290,8 @@ export default function Trips() {
 
     let cachedScripts = [];
     const mapOptions = {
-        disableDefaultUI: true,
-        streetViewControl: false,
+        disableDefaultUI: true, // 移除地圖的預設控制介面
+        streetViewControl: false, // 移除街景控制功能
     };
     console.log(process.env.REACT_APP_GOOGlE_MAPS_API_KEY);
     const [loaded, error] = useScript(
@@ -221,8 +299,9 @@ export default function Trips() {
     );
     //憑證
     function useScript(src) {
+        // Keeping track of script loaded and error state   //load SDK 初始資料 （收）
         useEffect(() => {
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0); // 在页面加载完成或页面切换时滚动到顶部
         }, []);
 
         const [state, setState] = useState({
@@ -270,7 +349,7 @@ export default function Trips() {
         return [state.loaded, state.error];
     }
     const [map, setDataMap] = useState();
-    const [from, setFrom] = useState(''); //起始地點
+    const [from, setFrom] = useState(''); //起始地點，要加個to
     const fromInputRef = useRef(null); // 新增起點 ref
     const toInputRef = useRef(null); // 新增終點 ref
     const [to, setTo] = useState(''); // 新增終點 state
@@ -291,11 +370,13 @@ export default function Trips() {
 
     useEffect(() => {
         if (loaded) {
+            //load到才會執行
             const myLatLng = [{ lat: 35.682518, lng: 139.765804 }];
             const map = new window.google.maps.Map(document.getElementById('map'), {
+                //div render map
                 zoom: 10, //zoom in
-                center: myLatLng[0],
-                mapTypeId: window.google.maps.MapTypeId.ROADMAP,
+                center: myLatLng[0], //初始經緯度 （替換）
+                mapTypeId: window.google.maps.MapTypeId.ROADMAP, //一般地圖
                 mapTypeControl: false,
                 streetViewControl: false,
                 rotateControl: false,
@@ -325,9 +406,7 @@ export default function Trips() {
     }, [loaded]);
 
     const directionsService = new window.google.maps.DirectionsService(); //路線計算
-
     const directionsDisplay = new window.google.maps.DirectionsRenderer(); //路線render
-
     directionsDisplay.setMap(map); //綁定到map
 
     const handleKeyDown = (event) => {
@@ -337,13 +416,11 @@ export default function Trips() {
         }
     };
     function calcRoute() {
-        //create request
-
         const request = {
             origin: from, //
-            destination: to, //存一個state 控制
-            travelMode: window.google.maps.TravelMode.DRIVING,
-            unitSystem: window.google.maps.UnitSystem.METRIC,
+            destination: to,
+            travelMode: window.google.maps.TravelMode.DRIVING, //WALKING, BYCYCLING, TRANSIT 路線模式
+            unitSystem: window.google.maps.UnitSystem.METRIC, //單位
         };
 
         directionsService.route(request, function (result, status) {
@@ -357,9 +434,10 @@ export default function Trips() {
         });
     }
 
-    async function fetchData() {
+    async function fetchData(placeType) {
         const apiKey = 'AIzaSyCszxEdzSyD5fLI9-m_nRiUr6GEbeIfTG4';
-        const addresses = cachedPlaces.map((place) => place.formatted_address);
+        const filteredPlaces = placeType ? places.filter((place) => place.type === placeType) : places;
+        const addresses = filteredPlaces.map((place) => place.formatted_address);
         const promises = addresses.map(async (address) => {
             const response = await fetch(
                 `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`
@@ -448,9 +526,11 @@ export default function Trips() {
 
     function addToFavorites() {
         if (to) {
+            // setFavorites((prevFavorites) => [...prevFavorites, to]);
             console.log(locationInfo);
             const favoriteList = [...favorites, locationInfo];
             setFavorites(favoriteList);
+            // console.log(favoriteList[favoriteList.length - 1].place_id);
             uploadItems(
                 locationInfo.name,
                 locationInfo.place_id,
@@ -466,6 +546,7 @@ export default function Trips() {
     }
 
     async function uploadItems(name, id, address, phone, rating, url, website, type) {
+        //存入user sub-collection Places
         try {
             const itemsRef = doc(db, 'users', userUID);
             console.log(itemsRef);
@@ -480,19 +561,21 @@ export default function Trips() {
                 website: website || '',
                 type: type,
             });
+            // console.log('Item uploaded with ID: ', docRef.id);
         } catch (e) {
             console.error('Error uploading item: ', e);
         }
     }
 
-    function showOnMap() {
+    function showOnMap(placeType) {
         setShowMarkers(!showMarkers);
         if (!showMarkers) {
-            fetchData();
+            fetchData(placeType);
         } else {
             markers.forEach((marker) => marker.setMap(null));
         }
     }
+
     const openModal = () => {
         if (!userUID) {
             alert('請先登入');
@@ -503,35 +586,170 @@ export default function Trips() {
     const closeModal = () => {
         setModalOpen(false);
     };
+    const [{ run, steps }, setState] = useState({
+        run: true,
+        steps: [
+            {
+                content: (
+                    <>
+                        <p>
+                            You can search for routes, save favorite places, view location information, and plan your
+                            travel itineraries on this page.
+                        </p>
+                    </>
+                ),
+                locale: { skip: <strong>SKIP</strong> },
+                placement: 'center',
+                target: 'body',
+                title: "Let's start to plan a trip!",
+            },
+            {
+                content: (
+                    <>
+                        You can search for routes here.
+                        <br />
+                        Enter the departure and destination first, and then click the search button.
+                        <br />
+                        (Partial text for locations is available, suggestions will be provided)
+                    </>
+                ),
+                placement: 'bottom',
+                target: '#step-1',
+                title: 'First Step - Use Route Search here!',
+            },
+            {
+                content: (
+                    <>
+                        You can save the destination as a favorite here.
+                        <br />
+                        Select the location type first, and then click the "Add to Favorites"button.
+                    </>
+                ),
+                placement: 'bottom',
+                target: '#step-2',
+                title: 'Second Step - Save destinations as Favorites!',
+            },
+            {
+                content: (
+                    <>
+                        You can view your favorite locations and search for saved places here.
+                        <br />
+                        Enter text to search for related places, and you can also delete them.
+                    </>
+                ),
+                placement: 'top-start',
+                target: '#step-3',
+                title: 'Third Step - View Favorites locations!',
+            },
+            {
+                content: (
+                    <>
+                        Click the Type button to show places on the map based on their types.
+                        <br />
+                        One click will display the places, and clicking again will cancel.
+                        <br />
+                        You can also click landmarks on the map to view information about the places.
+                    </>
+                ),
+                placement: 'bottom',
+                target: '#step-4',
+                title: 'Fourth Step - Show Favorites on Map by types!',
+            },
+            {
+                content: (
+                    <>
+                        Click "Add new Trip" to start planning.
+                        <br />
+                        Then, select trip name to edit travel itineraries.
+                        <br />
+                        You can also delete Trips.
+                    </>
+                ),
+                placement: 'top-right',
+                target: '#step-5',
+                title: 'Fifth Step - Add a new Trip!',
+            },
+            {
+                content: (
+                    <>
+                        Click " + ", and the place will be added to Trips on the right side.
+                        <br />
+                        Choose the places you want to go, and add them to your travel itineraries.
+                    </>
+                ),
+                placement: 'right',
+                target: '#step-6',
+                title: 'Sixth Step - Add places to your trip!',
+            },
+            {
+                content: (
+                    <>
+                        Edit the time and add notes for your itineraries.
+                        <br />
+                        Finally, Click "Done" to save them.
+                    </>
+                ),
+                placement: 'bottom',
+                target: '#step-7',
+                title: 'Seventh Step - Edit Time and Notes!',
+            },
+            {
+                content: (
+                    <>
+                        You have to log in to use all the functions.
+                        <br />
+                        Click on "Login" to start your journey!
+                    </>
+                ),
+                placement: 'top-end',
+                target: '#step-8',
+                title: "Don't forget to Login!",
+            },
+        ],
+    });
     return (
         <>
             <OutSide>
-                <Header></Header>
+                <JoyrideStep id='step-8'>
+                    <Header></Header>
+                </JoyrideStep>
+                <Joyride
+                    callback={() => {}}
+                    run={run}
+                    steps={steps}
+                    styles={JoyrideStyle}
+                    hideCloseButton
+                    scrollToFirstStep
+                    showSkipButton
+                    showProgress
+                />
                 <MainPageContainer>
                     <LeftBarContainer>
                         <LeftBar>
                             <LeftBarHeader>
                                 <LeftBarHeaderTitle>PLACE SEARCH | ROUTE SEARCH</LeftBarHeaderTitle>
-                                <RouteContainer>
-                                    <RouteInput
-                                        type='text'
-                                        ref={fromInputRef} // 使用 ref
-                                        placeholder='START 出発点'
-                                    ></RouteInput>
-                                </RouteContainer>
-                                <RouteContainer>
-                                    <RouteInput
-                                        type='text'
-                                        ref={toInputRef} // 使用 ref
-                                        placeholder='DESTINATION 终点'
-                                        onKeyDown={handleKeyDown}
-                                    ></RouteInput>
-                                    <SearchIconContainer
-                                        src={SearchIcon}
-                                        onClick={() => calcRoute()}
-                                    ></SearchIconContainer>
-                                </RouteContainer>
-                                <AddtoFavContainer>
+                                <RouteOutContainer id='step-1'>
+                                    <RouteContainer>
+                                        <RouteInput
+                                            type='text'
+                                            ref={fromInputRef} // 使用 ref
+                                            placeholder='START 出発点'
+                                        ></RouteInput>
+                                    </RouteContainer>
+                                    <RouteContainer>
+                                        <RouteInput
+                                            type='text'
+                                            ref={toInputRef} // 使用 ref
+                                            placeholder='DESTINATION 终点'
+                                            onKeyDown={handleKeyDown}
+                                        ></RouteInput>
+                                        <SearchIconContainer
+                                            src={SearchIcon}
+                                            onClick={() => calcRoute()}
+                                        ></SearchIconContainer>
+                                    </RouteContainer>
+                                </RouteOutContainer>
+                                <AddtoFavContainer id='step-2'>
                                     <SelectedTypeContainer>
                                         <SelectedType
                                             name='layerSaved'
@@ -548,27 +766,29 @@ export default function Trips() {
                                     <AddtoFav onClick={() => addToFavorites()}>Add to Favorites</AddtoFav>
                                 </AddtoFavContainer>
                             </LeftBarHeader>
-                            <FavoritesContainer>
-                                <FavoritesHeader>
-                                    <FavLogo>FAVORITES</FavLogo>
-                                </FavoritesHeader>
-                                <GetPlaceSaved
-                                    showOnMap={showOnMap}
-                                    places={places}
-                                    setPlaces={setPlaces}
-                                    setShowMarkers={setShowMarkers}
-                                />
-                            </FavoritesContainer>
+                            <JoyrideStep id='step-4'>
+                                <FavoritesContainer id='step-3'>
+                                    <JoyrideStep id='step-6'>
+                                        <FavoritesHeader>
+                                            <FavLogo>FAVORITES</FavLogo>
+                                        </FavoritesHeader>
+                                        <GetPlaceSaved
+                                            showOnMap={showOnMap}
+                                            places={places}
+                                            setPlaces={setPlaces}
+                                            setShowMarkers={setShowMarkers}
+                                        />
+                                    </JoyrideStep>
+                                </FavoritesContainer>
+                            </JoyrideStep>
                         </LeftBar>
                     </LeftBarContainer>
-                    <MapOutContainer
-                        id='map'
-                        style={{ height: '100%', width: '100%' }}
-                        options={mapOptions}
-                    ></MapOutContainer>
-                    <RightBarContainer isOpen={isRightBarOpen}>
-                        <TripsSchedule modalOpen={modalOpen}></TripsSchedule>
-                    </RightBarContainer>
+                    <MapInsideContainer id='map' options={mapOptions}></MapInsideContainer>
+                    <JoyrideStep id='step-7'>
+                        <RightBarContainer id='step-5' isOpen={isRightBarOpen}>
+                            <TripsSchedule modalOpen={modalOpen}></TripsSchedule>
+                        </RightBarContainer>
+                    </JoyrideStep>
                 </MainPageContainer>
             </OutSide>
             {modalOpen ? (

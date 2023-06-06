@@ -1,9 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
-import StorySearchBar from '../../components/SearchBar/StorySearchBar';
 import styled from 'styled-components/macro';
 import Header from '../../components/Header/Header';
 import LoginButton from '../../components/Header/LoginButton';
 import { Link } from 'react-router-dom';
+
+const LinkStyle = styled(Link)`
+    text-decoration: none;
+`;
+
+const HeaderStyle = styled(Header)`
+    transition: transform 1s ease-out;
+`;
 
 const OutSide = styled.div`
     padding-top: 70px;
@@ -30,6 +37,8 @@ const Video = styled.video`
     left: 50%;
     transform: translate(-50%, -50%);
 `;
+const VideoSource = styled(Video)``;
+
 const Poster = styled.div`
     position: relative;
     width: 100%;
@@ -236,28 +245,21 @@ export default function Blog() {
                 <StorySearchBar></StorySearchBar>
             </SearchContainer> */}
                 <MainContainer>
-                    {showHeader && (
-                        <Header
-                            style={{
-                                transform: showHeader ? 'translateY(0%) scale(1)' : 'translateY(-100%) scale(0.8)',
-                                transition: 'transform 1s ease-out',
-                            }}
-                        />
-                    )}
+                    {showHeader && <HeaderStyle />}
                     <Poster>
                         <Login>
                             <LoginButton />
                         </Login>
                         <PosterTextCon></PosterTextCon>
                         <VideoContainer>
-                            <Video autoPlay muted loop>
+                            <VideoSource autoPlay muted loop>
                                 <source
                                     src={
                                         'https://firebasestorage.googleapis.com/v0/b/hanabi-f5ee3.appspot.com/o/Blog%2FBlogBackgroundVideo.mp4?alt=media&token=d4c7f504-f50e-4c33-a44d-2c53a9adc508'
                                     }
                                     type='video/mp4'
                                 />
-                            </Video>
+                            </VideoSource>
                         </VideoContainer>
                     </Poster>
                     <LogoContainer>
@@ -278,7 +280,7 @@ export default function Blog() {
                                     </SectionSubTitle>
                                 </SectionTitleCon>
                                 <PicContainer>
-                                    <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
+                                    <LinkStyle to='/BlogArticle'>
                                         <PicBox>
                                             <Pic
                                                 src={
@@ -292,8 +294,8 @@ export default function Blog() {
                                                 </PicContent>
                                             </PicTitleContainer>
                                         </PicBox>
-                                    </Link>
-                                    <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
+                                    </LinkStyle>
+                                    <LinkStyle to='/BlogArticle'>
                                         <PicBox>
                                             <Pic
                                                 src={
@@ -307,8 +309,8 @@ export default function Blog() {
                                                 </PicContent>
                                             </PicTitleContainer>
                                         </PicBox>
-                                    </Link>
-                                    <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
+                                    </LinkStyle>
+                                    <LinkStyle to='/BlogArticle'>
                                         <PicBox>
                                             <Pic
                                                 src={
@@ -320,8 +322,8 @@ export default function Blog() {
                                                 <PicContent>一生に一度は見ておきたい非日常の東大寺</PicContent>
                                             </PicTitleContainer>
                                         </PicBox>
-                                    </Link>
-                                    <Link to='/BlogArticle' style={{ textDecoration: 'none' }}>
+                                    </LinkStyle>
+                                    <LinkStyle to='/BlogArticle'>
                                         <PicBox>
                                             <Pic
                                                 src={
@@ -333,7 +335,7 @@ export default function Blog() {
                                                 <PicContent>明治神宮と人々の関係は切っても切れないものです</PicContent>
                                             </PicTitleContainer>
                                         </PicBox>
-                                    </Link>
+                                    </LinkStyle>
                                 </PicContainer>
                             </SectionCon>
                             <SectionCon>

@@ -2,13 +2,6 @@ import React, { useState } from 'react';
 import './ArticleLikesButton.css';
 
 export default function ArticleLikesButton({ onChange }) {
-    // const [isLiked, setIsLiked] = useState(false);
-
-    // const handleLikeButtonClick = () => {
-    //     setIsLiked(!isLiked);
-
-    // };
-
     return (
         <div className='con-like'>
             <input title='like' type='checkbox' className='like' onChange={onChange} />
